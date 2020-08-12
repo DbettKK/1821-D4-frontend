@@ -1,5 +1,8 @@
 <template>
     <el-container class="Info_Container">
+        <el-header>
+            <span><i class="el-icon-s-custom"></i>&nbsp;个人信息查看与修改</span>
+        </el-header>
         <el-container class="Inner_container">
             <el-aside width="30%">
                 <div class="Inner_aside">
@@ -14,7 +17,7 @@
                         <el-input v-model="form.name" prefix-icon="el-icon-user-solid" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="密码">
-                        <el-input v-model="form.password" prefix-icon="el-icon-key" type=password></el-input>
+                        <el-input v-model="form.password" placeholder="请输入新密码" prefix-icon="el-icon-key" type=password></el-input>
                     </el-form-item>
                     <el-form-item label="手机">
                         <el-input v-model="form.phone" prefix-icon="el-icon-phone" clearable></el-input>
@@ -46,22 +49,25 @@
                 </el-form>
             </el-main>
         </el-container>
+        <el-footer></el-footer>
     </el-container>
 </template>
 
 <script>
+//import QS from "qs";
 import Vue from 'vue'
 export default {
     name: "Userinfo",
     data(){
-        return {
+        return { 
             form: {
                 name: 'Y',
-                password: '156as4d8e',
-                phone: '17812112605',
-                email:'ema.buaa.edu.cn',
+                password: '',
+                phone: '',
+                email:'',
                 type: '普通用户',
-                ID: '115099',
+                ID: 11,
+                token:'',
                 old_pwd:''
             },
             dialogFormVisible: false,
@@ -69,6 +75,7 @@ export default {
         }
     },
     created: function(){
+        this.token=window.sessionStorage.getItem('token');
         this.GetInfo();
     },
     watch:{
@@ -77,17 +84,20 @@ export default {
     methods:{
         CheckPwd(){
             this.dialogFormVisible = false;
+            console.log('old_password='+this.form.old_pwd);
             Vue.axios.post(
-                "http://175.24.121.113:8000/myapp/user/modify",
-                {
-                    old_password:this.old_pwd
-                },
+                'http://175.24.121.113:8000/myapp/user/modify/',
+                this.$qs.stringify({
+                    old_password: this.form.old_pwd
+                }),
                 {
                     headers: {
-                        token: this.$store.state.token
+                        'token': this.token
                     }
                 }).then(res => {
-                    if(res.code === 200){
+                    console.log(res);
+                    if(this.form.password==''){
+                        this.form.password=this.form.old_pwd;
                         this.ChangeInfo();
                     }
                 }).catch(res => {
@@ -96,20 +106,18 @@ export default {
         },
         ChangeInfo(){
             Vue.axios.post(
-                "http://175.24.121.113:8000/myapp/user/modify",
-                {
-                    new_password:this.password,
-                    email:this.email,
-                    phone_num:this.phone
-                },
+                "http://175.24.121.113:8000/myapp/user/info/",this.$qs.stringify({
+                    new_password:this.form.password,
+                    email:this.form.email,
+                    phone_num:this.form.phone
+                }),
                 {
                     headers: {
-                        token: this.$store.state.token
+                        token: this.token
                     }
-                }).then(res => {
-                    if(res.code === 200){
-                        this.ChangeInfo();
-                    }
+                }).then(function(res)  {
+                    console.log(res);
+                    console.log('success');
                 }).catch(res => {
                     console.log(res);
             });
@@ -119,17 +127,17 @@ export default {
                 'http://175.24.121.113:8000/myapp/user/info',
                 {
                 headers:{
-                    token:this.$store.state.token
+                    token:this.token
                     }
                 }
-            ).then(function(res){
-                this.form.name=res.data.username;
-                this.form.phone=res.data.phone_num;
-                this.form.ID=res.data.id;
-                this.form.email=res.data.email;
-                this.form.old_pwd='';
+            ).then(res=>{
+                this.form.name=res.data.data.username;
+                this.form.phone=res.data.data.phone_num;
+                this.form.ID=res.data.data.id;
+                this.form.email=res.data.data.email;
+                console.log(res.data.data);
             }).catch(function(error){
-                console.log(error,Response);
+                console.log(error);
             })
         }
     }
@@ -140,21 +148,16 @@ export default {
     .Info_Container{
         background-color:#F2F6FC;
         text-align: center;
-        margin-top: 5%;
-        height:85%;
+        height:100%;
         padding-left: 20%;
         padding-right: 20%;
     }
     .Inner_container{
         width: 90%;
-        height: 80%;
+        height: 0%;
         background-color:#FFFFFF;
         box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
         vertical-align: middle;
-        margin-top: 5%;
-        padding-top: 2%;
-        padding-right: 20%;
-        padding-left: 15%;
     }
     .Inner_aside{
         padding-top: 60%;
@@ -171,6 +174,12 @@ export default {
         margin: 8px;
         vertical-align: middle;
         position: relative;
+    }
+    .el-header{
+        text-align: center;
+        display:flex;
+        justify-content:center;
+        align-items:center;
     }
     .a{
         text-decoration: none;

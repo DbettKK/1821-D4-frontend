@@ -47,9 +47,15 @@ const router = new Router({
         {path: '/myproduction', component: Myproduction,meta:{title:'金刚石文档编辑器'}},
         {path: '/favorite', component: Favorite,meta:{title:'金刚石文档编辑器'}},
         {path: '/trashbin', component: Trashbin,meta:{title:'金刚石文档编辑器'}},
-        {path: '/changeInfo', component: User, name:'ChangeInfo',meta:{title:'金刚石文档编辑器'}},
+        {path: '/changeInfo', component: User, name:'ChangeInfo',meta:{title:'金刚石文档编辑器:个人信息'}},
       ]
     },
+    /*{
+      path: '/changeInfo', 
+      component: User, 
+      name:'ChangeInfo',
+      meta:{title:'金刚石文档编辑器'}
+    },*/
     {
       path:'/Edit',
       component:Ue,

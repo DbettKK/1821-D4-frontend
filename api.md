@@ -952,27 +952,19 @@ POST方式
     "code": 200,
     "data": [
         {
-            "id": 7,
+            "id": 11,
             "file_name": "无标题",
             "person_name": "lisi",
-            "last_modified": "2020-08-12T10:16:02.383497",
-            "file": 6,
+            "kept_time": "2020-08-12T10:50:38.861698",
+            "file": 5,
             "person": 10
         },
         {
-            "id": 6,
+            "id": 8,
             "file_name": "无标题",
             "person_name": "lisi",
-            "last_modified": "2020-08-12T10:09:39.770432",
-            "file": 8,
-            "person": 10
-        },
-        {
-            "id": 1,
-            "file_name": "tt",
-            "person_name": "lisi",
-            "last_modified": "2020-08-11T08:28:00.898769",
-            "file": 2,
+            "kept_time": "2020-08-11T16:37:34.893179",
+            "file": 3,
             "person": 10
         }
     ]
@@ -986,6 +978,185 @@ POST方式
 | info   | string | 返回信息                       |
 | code   | int    | 返回状态码                     |
 | data   | dic    | 返回用户收藏的文档以及收藏时间 |
+
+##### 返回状态码
+
+200——成功
+
+403——token问题
+
+### 15. 把文件添加到回收站 or 从回收站恢复
+
+##### 描述
+
+是否在回收站
+
+##### 请求URL
+
+- ` http://175.24.121.113:8000/file/isdelete`
+
+##### 请求方式
+
+- Get
+##### 参数
+
+| 参数名  | 必选 | 类型 | 说明             |
+| :------ | :--- | :--- | ---------------- |
+| file_id | 是   | int  | 文件id |
+| is_delete | 是   | Boolean  | True为回收，False为恢复  |
+
+##### 返回示例 
+
+``` 
+{
+    "info": "success",
+    "code": 200,
+}
+```
+
+##### 返回参数说明 
+
+| 参数名 | 类型   | 说明             |
+| :----- | :----- | ---------------- |
+| info   | string | 返回信息         |
+| code   | int    | 返回状态码       |
+
+##### 返回状态码
+
+200——成功
+403——token问题或者文件不存在
+
+
+### 16. 从回收站中彻底删除文件
+
+##### 描述
+
+这次文件真的没了
+
+##### 请求URL
+
+- ` http://175.24.121.113:8000/file/realdelete`
+
+##### 请求方式
+
+- GET
+
+##### 参数
+
+| 参数名  | 必选 | 类型 | 说明             |
+| :------ | :--- | :--- | ---------------- |
+| file_id | 是   | int  | 想要删除的文件id |
+
+##### 返回示例 
+
+``` 
+{
+    "info": "success",
+    "code": 200,
+}
+```
+
+##### 返回参数说明 
+
+| 参数名 | 类型   | 说明             |
+| :----- | :----- | ---------------- |
+| info   | string | 返回信息         |
+| code   | int    | 返回状态码       |
+
+##### 返回状态码
+
+200——成功
+403——token问题或者文件不存在
+
+****
+
+### 17. 获取用户创建的所有文档接口
+
+##### 描述
+
+获取用户创建的所有文档
+
+##### 请求URL
+
+- ` http://175.24.121.113:8000/myapp/file/create/all/get/`
+
+##### 请求方式
+
+- GET
+
+##### 参数
+
+无
+
+##### 返回示例 
+
+``` 
+{
+    "info": "success",
+    "code": 200,
+    "data": [
+        {
+            "id": 35,
+            "file_title": "无标题",
+            "file_content": "",
+            "create_time": "2020-08-12T15:28:23.336737",
+            "last_modified": "2020-08-12T15:28:23.336766",
+            "is_delete": false,
+            "modified_times": 0,
+            "type": "private",
+            "permission": 5,
+            "team_permission": null,
+            "share": null,
+            "creator": 10,
+            "team_belong": null,
+            "modified_user": [],
+            "comments": []
+        },
+        {
+            "id": 34,
+            "file_title": "无标题",
+            "file_content": "",
+            "create_time": "2020-08-12T15:27:25.199551",
+            "last_modified": "2020-08-12T15:27:25.199578",
+            "is_delete": false,
+            "modified_times": 0,
+            "type": "private",
+            "permission": 5,
+            "team_permission": null,
+            "share": null,
+            "creator": 10,
+            "team_belong": null,
+            "modified_user": [],
+            "comments": []
+        },
+        {
+            "id": 33,
+            "file_title": "无标题",
+            "file_content": "",
+            "create_time": "2020-08-12T15:27:03.942496",
+            "last_modified": "2020-08-12T15:27:03.942523",
+            "is_delete": false,
+            "modified_times": 0,
+            "type": "private",
+            "permission": 5,
+            "team_permission": null,
+            "share": null,
+            "creator": 10,
+            "team_belong": null,
+            "modified_user": [],
+            "comments": []
+        }
+    ]
+}
+```
+
+##### 返回参数说明 
+
+| 参数名 | 类型   | 说明                   |
+| :----- | :----- | ---------------------- |
+| info   | string | 返回信息               |
+| code   | int    | 返回状态码             |
+| data   | dic    | 返回用户创建的所有文档 |
 
 ##### 返回状态码
 
