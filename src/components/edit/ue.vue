@@ -57,9 +57,9 @@
             </div>
           </quill-editor>
         </el-main>
-        <el-footer>
+        <!-- el-footer>
           <el-button type="primary" round @click="Submit">确认提交</el-button>
-        </el-footer>
+        </el-footer-->
       </el-container>
     </el-card>
     <Footer></Footer>

@@ -1,5 +1,8 @@
 <template>
     <el-container class="Info_Container">
+        <el-header>
+            <span><i class="el-icon-s-custom"></i>&nbsp;个人信息查看与修改</span>
+        </el-header>
         <el-container class="Inner_container">
             <el-aside width="30%">
                 <div class="Inner_aside">
@@ -14,7 +17,7 @@
                         <el-input v-model="form.name" prefix-icon="el-icon-user-solid" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="密码">
-                        <el-input v-model="form.password" prefix-icon="el-icon-key" type=password></el-input>
+                        <el-input v-model="form.password" placeholder="请输入新密码" prefix-icon="el-icon-key" type=password></el-input>
                     </el-form-item>
                     <el-form-item label="手机">
                         <el-input v-model="form.phone" prefix-icon="el-icon-phone" clearable></el-input>
@@ -46,6 +49,7 @@
                 </el-form>
             </el-main>
         </el-container>
+        <el-footer></el-footer>
     </el-container>
 </template>
 
@@ -58,7 +62,7 @@ export default {
         return { 
             form: {
                 name: 'Y',
-                password: '136671zxc',
+                password: '',
                 phone: '',
                 email:'',
                 type: '普通用户',
@@ -79,6 +83,7 @@ export default {
     },
     methods:{
         CheckPwd(){
+            this.dialogFormVisible = false;
             console.log('old_password='+this.form.old_pwd);
             Vue.axios.post(
                 'http://175.24.121.113:8000/myapp/user/modify/',
@@ -91,13 +96,15 @@ export default {
                     }
                 }).then(res => {
                     console.log(res);
-                    this.ChangeInfo();
+                    if(this.form.password==''){
+                        this.form.password=this.form.old_pwd;
+                        this.ChangeInfo();
+                    }
                 }).catch(res => {
                     console.log(res);
             });
         },
         ChangeInfo(){
-            this.dialogFormVisible = false;
             Vue.axios.post(
                 "http://175.24.121.113:8000/myapp/user/info/",this.$qs.stringify({
                     new_password:this.form.password,
@@ -141,21 +148,16 @@ export default {
     .Info_Container{
         background-color:#F2F6FC;
         text-align: center;
-        margin-top: 5%;
-        height:85%;
+        height:100%;
         padding-left: 20%;
         padding-right: 20%;
     }
     .Inner_container{
         width: 90%;
-        height: 80%;
+        height: 0%;
         background-color:#FFFFFF;
         box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
         vertical-align: middle;
-        margin-top: 5%;
-        padding-top: 2%;
-        padding-right: 20%;
-        padding-left: 15%;
     }
     .Inner_aside{
         padding-top: 60%;
@@ -172,6 +174,12 @@ export default {
         margin: 8px;
         vertical-align: middle;
         position: relative;
+    }
+    .el-header{
+        text-align: center;
+        display:flex;
+        justify-content:center;
+        align-items:center;
     }
     .a{
         text-decoration: none;

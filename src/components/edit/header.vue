@@ -11,15 +11,13 @@
                 </el-breadcrumb>
             </div>
         </el-col>
-        <el-col :span="1">
-          <div class="grid-content bg-purple">
-             <el-tooltip class="item" effect="light" content="用户收藏" placement="bottom">
-              <i v-if="show_collect" class="el-icon-star-on" @click="Collect"></i>
-              <i v-else class="el-icon-star-off" @click="Collect"></i>
-             </el-tooltip>
-          </div>
-        </el-col>
         <el-col :span="11"></el-col>
+        <el-col :span="1">
+             <el-tooltip class="item" effect="light" content="用户收藏" placement="bottom">
+              <el-button class="share-button" icon="el-icon-star-on" type="primary" v-if="show_collect" @click="Collect"></el-button>
+              <el-button class="share-button" type="primary" v-else icon="el-icon-star-off" @click="Collect"></el-button>
+             </el-tooltip>
+        </el-col>
         <el-col :span="1">
           <el-tooltip class="item" effect="light" content="添加到团队中" placement="bottom-end">
             <el-button class="share-button" icon="el-icon-folder-add" type="primary" @click="Add_G"></el-button>
@@ -75,10 +73,20 @@
     },
     methods: {
       Collect() {
-        if(this.show_collect == true)
+        if(this.show_collect == true){
+          this.$message({
+            message: '您已取消收藏',
+            type: 'warning'
+          });
             this.show_collect=false;
-        else    
+        }
+        else    {
             this.show_collect=true;
+            this.$message({
+              message: '您已成功收藏',
+              type: 'success'
+            });
+        }
       },
       ToInfo(){
         this.$router.push(
