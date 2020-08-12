@@ -21,8 +21,11 @@
                     <el-dropdown trigger="click" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item icon="el-icon-star-on">收藏</el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-delete-solid">移动到回收站</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-star-on" @click.native="addFavorite(item.id)">收藏</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-s-custom">设置文档权限</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-delete-solid" @click.native="toTrash(item.id)">移动到回收站</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-s-tools" v-if="item.type=='team'">设置文档为私人文档</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-s-tools" v-if="item.type=='private'">设置文档为团队文档</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
                   </div>
@@ -66,19 +69,36 @@ export default {
     },
     recently() {
             this.$router.push('/recently')
-        },
-        myproduction() {
-            this.$router.push('/myproduction')
-        },
-        favorite() {
-            this.$router.push('/favorite')
-        },
-        trashbin() {
-            this.$router.push('/trashbin')
+    },
+    myproduction() {
+        this.$router.push('/myproduction')
+    },
+    favorite() {
+        this.$router.push('/favorite')
+    },
+    trashbin() {
+        this.$router.push('/trashbin')
     },
     time(a) {
       this.doctime = a.toString().substr(0, 10)
          return this.doctime
+    },
+    addFavorite(file_id){
+      this.$http.get('http://175.24.121.113:8000/myapp/file/favorite/',
+              {
+                headers: {token: window.sessionStorage.getItem("token")},
+                params:{file_id: file_id}
+                }
+      ).then(function (res) {
+        console.log(res.data);
+      }).catch(function (error) {
+        console.log(error.response.data);
+        console.log(window.sessionStorage.getItem("token"))
+      })
+    },
+    toTrash(file_id){
+      // 这里的后端还有些bug 交互暂缓
+      return file_id;
     }
   },
   computed: {

@@ -24,7 +24,7 @@
             <el-aside :width="isCollapse ? '64px' : '250px'" style="background-color: rgb(238, 241, 246)">
                 <div class="toggle-button" @click="toggleCollapse">|||</div>
                 <el-menu :unique-opened="true" :collapse="isCollapse" :collapse-transition="false" style="background-color: rgb(238, 241, 246)">
-                    <el-menu-item index="1" @click="dashboard"><i class="el-icon-menu"></i><span>工作站</span></el-menu-item>
+                    <el-menu-item index="1" @click="recently"><i class="el-icon-menu"></i><span>工作站</span></el-menu-item>
                     <el-submenu index="2" style="background-color: rgb(238, 241, 246)">
                         <template slot="title"><i class="el-icon-user-solid"></i><span>个人空间</span></template>
                         <el-menu-item-group style="background-color: rgb(238, 241, 246)">
