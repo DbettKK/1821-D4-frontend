@@ -4,36 +4,48 @@
             <div class="name_place">
                 <span class="name">金刚石文档</span>
             </div>
-            <div class="ue">
-                <el-button type="primary" icon="el-icon-circle-plus" @click="ue"><strong>新建</strong></el-button>
-            </div>
+<!--            <div class="ue">-->
+<!--                <el-button type="primary" icon="el-icon-circle-plus" @click="ue"><strong>新建</strong></el-button>-->
+<!--            </div>-->
             <div>
-                <span style="margin-right:100px" class="user">你好，{{userinfo.username}}!</span>
-                <el-dropdown trigger="click">
-                    <i class="el-icon-setting" style="margin-right: 10px"></i>
-                    <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
-                        <el-dropdown-item @click.native="changeInfo">修改密码及个人信息</el-dropdown-item>
-                        <el-dropdown-item>注销账号</el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
+                <el-dropdown trigger="hover" >
+                    <span class="el-dropdown-link">
+                        <i class="el-icon-user-solid el-icon--right icon-user"></i>
+                        <!--  <span style="font-size: 27px;margin-right: 20px;">欢迎您，{{userinfo.username}}</span>-->
+                    </span>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item>你好，{{userinfo.username}}</el-dropdown-item>
+                    <el-dropdown-item @click.native="changeInfo">修改密码及个人信息</el-dropdown-item>
+
+                </el-dropdown-menu>
+            </el-dropdown>
+            <el-dropdown trigger="hover" >
+                <span class="el-dropdown-link">
+                    <i class="el-icon-s-tools el-icon--right icon-setting"></i>
+                    <!--   <span style="font-size: 27px;margin-right: 20px;">欢迎您，{{userinfo.username}}</span>-->
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
+                    <el-dropdown-item>注销账号</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
             </div>
         </el-header>
         
         <el-container>
-            <el-aside :width="isCollapse ? '64px' : '250px'" style="background-color: rgb(238, 241, 246)">
+            <el-aside :width="isCollapse ? '64px' : '250px'" style="background-color: #EDEEEF;">
                 <div class="toggle-button" @click="toggleCollapse">|||</div>
-                <el-menu :unique-opened="true" :collapse="isCollapse" :collapse-transition="false" style="background-color: rgb(238, 241, 246)">
+                <el-menu :unique-opened="true" :collapse="isCollapse" :collapse-transition="false" style="background-color: #EDEEEF;">
                     <el-menu-item index="1" @click="recently"><i class="el-icon-menu"></i><span>工作站</span></el-menu-item>
-                    <el-submenu index="2" style="background-color: rgb(238, 241, 246)">
+                    <el-submenu index="2" style="background-color: #EDEEEF">
                         <template slot="title"><i class="el-icon-user-solid"></i><span>个人空间</span></template>
-                        <el-menu-item-group style="background-color: rgb(238, 241, 246)">
+                        <el-menu-item-group style="background-color: #EDEEEF">
                             <template slot="title">个人信息</template>
                             <el-menu-item index="2-1">个人详情</el-menu-item>
                             <el-menu-item index="2-2">消息通知</el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
-                    <el-submenu index="3" style="background-color: rgb(238, 241, 246)">
+                    <el-submenu index="3" style="background-color: #EDEEEF">
                         <template slot="title">
                             <i class="el-icon-s-claim"></i><span>团队空间</span>
                             <i class="el-icon-circle-plus" @click="createTeamVisible=true" style="margin-right:10px"></i>
@@ -152,7 +164,7 @@ export default {
 
 <style lang="less" scoped>
 .el-header {
-    background-color: rgb(130, 255, 213);
+    background-color: #FFFFFF;
     color: #333;
     line-height: 60px;
     display: flex;
@@ -180,7 +192,7 @@ export default {
 }
 
 .toggle-button {
-    background-color: rgb(238, 241, 246);
+    background-color: #EDEEEF;
     font-size: 10px;
     line-height: 24px;
     color: #333;
@@ -189,6 +201,16 @@ export default {
     cursor: pointer;
 }
 .el-menu-item {
-    background-color: rgb(238, 241, 246)
+    background-color: #EDEEEF
+}
+.icon-user{
+    font-size:30px;
+    margin-top: 15px;
+    margin-right: 10px;
+ }
+.icon-setting{
+    font-size:30px;
+    margin-top: 15px;
+    margin-right: 20px;
 }
 </style>
