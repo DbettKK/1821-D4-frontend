@@ -27,7 +27,7 @@
                     </el-dropdown>
                   </div>
                   <div class="bottom clearfix">
-                    <time class="time" style="margin-right: 40px;" >{{item.last_modified}}</time>
+                    <time class="time" style="margin-right: 40px;">{{time(item.last_modified)}}</time>
                     <span style="font-size: 13px; color: #999;">最近浏览：</span>
                     <span style="font-size: 13px; color: #999;">{{item.person_name}}</span>
                   </div>
@@ -75,6 +75,10 @@ export default {
         },
         trashbin() {
             this.$router.push('/trashbin')
+    },
+    time(a) {
+         this.doctime = this.$config(a).format("YYYY-MM-DD HH:mm:ss")
+         return this.doctime
     }
   },
   computed: {
