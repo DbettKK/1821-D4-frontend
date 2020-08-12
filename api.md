@@ -952,27 +952,19 @@ POST方式
     "code": 200,
     "data": [
         {
-            "id": 7,
+            "id": 11,
             "file_name": "无标题",
             "person_name": "lisi",
-            "last_modified": "2020-08-12T10:16:02.383497",
-            "file": 6,
+            "kept_time": "2020-08-12T10:50:38.861698",
+            "file": 5,
             "person": 10
         },
         {
-            "id": 6,
+            "id": 8,
             "file_name": "无标题",
             "person_name": "lisi",
-            "last_modified": "2020-08-12T10:09:39.770432",
-            "file": 8,
-            "person": 10
-        },
-        {
-            "id": 1,
-            "file_name": "tt",
-            "person_name": "lisi",
-            "last_modified": "2020-08-11T08:28:00.898769",
-            "file": 2,
+            "kept_time": "2020-08-11T16:37:34.893179",
+            "file": 3,
             "person": 10
         }
     ]
