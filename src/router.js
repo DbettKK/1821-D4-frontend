@@ -17,12 +17,6 @@ Vue.use(Router)
 const router = new Router({
   routes: [
     {
-      path: '/changeInfo', 
-      component: User, 
-      name:'ChangeInfo',
-      meta:{title:'修改密码及个人信息'}
-    },
-    {
       path: '/Login', 
       component: Login,
       name: 'Login',
@@ -45,7 +39,8 @@ const router = new Router({
         {path: '/recently', component: Recently,meta:{title:'金刚石文档编辑器'}},
         {path: '/myproduction', component: Myproduction,meta:{title:'金刚石文档编辑器'}},
         {path: '/favorite', component: Favorite,meta:{title:'金刚石文档编辑器'}},
-        {path: '/trashbin', component: Trashbin,meta:{title:'金刚石文档编辑器'}}
+        {path: '/trashbin', component: Trashbin,meta:{title:'金刚石文档编辑器'}},
+        {path: '/changeInfo', component: User, name:'ChangeInfo',meta:{title:'金刚石文档编辑器'}},
       ]
     },
     {

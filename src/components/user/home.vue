@@ -4,12 +4,16 @@
             <div class="name_place">
                 <span class="name">金刚石文档</span>
             </div>
+            <div class="ue">
+                <el-button type="primary" icon="el-icon-circle-plus" @click="ue"><strong>新建</strong></el-button>
+            </div>
             <div>
+                <span style="margin-right:100px" class="user">你好，{{userinfo.username}}!</span>
                 <el-dropdown trigger="click">
                     <i class="el-icon-setting" style="margin-right: 10px"></i>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
-                        <el-dropdown-item><router-link to="/changeinfo" class="a">修改密码及个人信息</router-link></el-dropdown-item>
+                        <el-dropdown-item @click.native="changeInfo">修改密码及个人信息</el-dropdown-item>
                         <el-dropdown-item>注销账号</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
@@ -18,36 +22,24 @@
         </el-header>
         
         <el-container>
-            <el-aside :width="isCollapse ? '64px' : '200px'" style="background-color: rgb(238, 241, 246)">
+            <el-aside :width="isCollapse ? '64px' : '250px'" style="background-color: rgb(238, 241, 246)">
                 <div class="toggle-button" @click="toggleCollapse">|||</div>
-                <el-menu :default-openeds="['1', '3']" :unique-opened="true" :collapse="isCollapse" :collapse-transition="false" style="background-color: rgb(238, 241, 246)">
-                    <el-menu-item index="2-1" @click="recently"><i class="el-icon-menu"></i><span>工作站</span></el-menu-item>
-                    <el-submenu index="1" style="background-color: rgb(238, 241, 246)">
+                <el-menu :unique-opened="true" :collapse="isCollapse" :collapse-transition="false" style="background-color: rgb(238, 241, 246)">
+                    <el-menu-item index="1" @click="recently"><i class="el-icon-menu"></i><span>工作站</span></el-menu-item>
+                    <el-submenu index="2" style="background-color: rgb(238, 241, 246)">
                         <template slot="title"><i class="el-icon-user-solid"></i><span>个人空间</span></template>
                         <el-menu-item-group style="background-color: rgb(238, 241, 246)">
                             <template slot="title">个人信息</template>
-                            <el-menu-item index="1-1">个人详情</el-menu-item>
-                            <el-menu-item index="1-2">消息通知</el-menu-item>
+                            <el-menu-item index="2-1">个人详情</el-menu-item>
+                            <el-menu-item index="2-2">消息通知</el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
                     <el-submenu index="3" style="background-color: rgb(238, 241, 246)">
                         <template slot="title"><i class="el-icon-s-claim"></i><span>团队空间</span></template>
-                        <el-menu-item index="3-1" @click="joinTeamVisible=true">加入团队</el-menu-item>
-                        <el-menu-item index="3-2" @click="createTeamVisible=true">创建团队</el-menu-item>
+                        <el-menu-item index="3-1" @click="createTeamVisible=true">创建团队</el-menu-item>
                     </el-submenu>
                 </el-menu>
             </el-aside>
-                        <el-dialog title="加入团队" :visible.sync="joinTeamVisible" width="400px">
-                        <el-form :model="join">
-                            <el-form-item label="要加入的团队ID" :label-width="formLabelWidth">
-                                <el-input v-model="join.team_id" autocomplete="off"></el-input>
-                            </el-form-item>
-                            <div>
-                                <el-button @click="joinTeamVisible = false">取 消</el-button>
-                                <el-button type="primary" @click="joinTeam()">确 定</el-button>
-                            </div>
-                        </el-form>
-                        </el-dialog>
                         <el-dialog title="创建团队" :visible.sync="createTeamVisible" width="400px">
                         <el-form :model="create">
                             <el-form-item label="要创建的团队名称" :label-width="formLabelWidth">
@@ -71,12 +63,13 @@ import Vue from 'vue'
 export default {
     data() {
         return {
-            userinfo: [],
-            isCollapse: false,
-            joinTeamVisible:false,
-            join:{
-                team_id:0
+            userinfo: {
+                id:111,
+                username:"cxc",
+                email:"xxa@buqq.edu.cn",
+                phone_num:"1222233",
             },
+            isCollapse: false,
             createTeamVisible:false,
             create:{
                 team_name:""
@@ -101,30 +94,6 @@ export default {
         toggleCollapse() {
             this.isCollapse = !this.isCollapse
         },
-        joinTeam(){
-            this.joinTeamVisible=false;
-            Vue.axios.get(
-                "http://175.24.121.113:8000/myapp/team/join/",
-                {
-                    team_id:this.joinTeam.team_id
-                },
-                {
-                    headers: {
-                        token: this.$store.state.token
-                    }
-                }
-            ).then(res=>{
-                if(res.code===200){
-                    alert(res.info);
-                }
-                else if(res.code===400){
-                    alert(res.info);
-                }
-            }
-            ).catch(res=>{
-                console.log(res);
-            })
-        },
         createTeam(){
             this.createTeamVisible=false;
             Vue.axios.post(
@@ -146,6 +115,9 @@ export default {
                 console.log(res);
             });
         },
+        ue(){
+            this.$router.push('/Edit')
+        },
         recently() {
             this.$router.push('/recently')
         },
@@ -157,6 +129,9 @@ export default {
         },
         trashbin() {
             this.$router.push('/trashbin')
+        },
+        changeInfo(){
+            this.$router.push('/changeInfo')
         }
     }
 }
@@ -183,7 +158,10 @@ export default {
     display: flex;
     align-items: center;
 }
-  
+.user{
+    color: #333;
+    font-size: 20px;
+}
 .el-aside {
     color: #333;
 }
@@ -199,9 +177,5 @@ export default {
 }
 .el-menu-item {
     background-color: rgb(238, 241, 246)
-}
-.a{
-    text-decoration: none;
-    color:#333;
 }
 </style>
