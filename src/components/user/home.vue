@@ -47,9 +47,10 @@
                     </el-submenu>
                     <el-submenu index="3" style="background-color: #EDEEEF">
                         <template slot="title">
-                            <i class="el-icon-s-claim"></i><span>团队空间</span>
-                            <i class="el-icon-circle-plus" @click="createTeamVisible=true" style="margin-right:10px"></i>
+                            <i class="el-icon-s-claim"></i><span style="margin-right: 50px">团队空间</span>
+                            <i class="el-icon-circle-plus" @click="createTeamVisible=true" ></i>
                         </template>
+
                     </el-submenu>
                 </el-menu>
             </el-aside>
