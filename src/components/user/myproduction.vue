@@ -27,7 +27,7 @@
                     </el-dropdown>
                   </div>
                   <div class="bottom clearfix">
-                    <time class="time" style="margin-right: 40px;" >{{time(item.last_modified)}} 我 打开</time>
+                    <time class="time" style="margin-right: 40px;" >创建时间：{{time(item.create_time)}}</time>
                     <span style="font-size: 13px; color: #999;">类型：</span>
                     <span style="font-size: 13px; color: #999;">{{item.type}}</span>
                   </div>
