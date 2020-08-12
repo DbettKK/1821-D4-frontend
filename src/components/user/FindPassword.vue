@@ -8,24 +8,18 @@
         <el-form-item  label="用户名" prop="username">
           <el-input v-model="loginForm.username" prefix-icon="el-icon-user"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="loginForm.password" prefix-icon="el-icon-lock" type="password"></el-input>
-        </el-form-item>
-        <el-form-item label="确认密码" prop="password2">
-          <el-input v-model="loginForm.password2" prefix-icon="el-icon-lock" ></el-input>
-        </el-form-item>
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="loginForm.email" prefix-icon="el-icon-lock"></el-input>
         </el-form-item>
-        <el-form-item label="手机号" prop="phone_num">
-          <el-input v-model="loginForm.phone_num" prefix-icon="el-icon-lock"></el-input>
+        <el-form-item label="新密码" prop="password">
+          <el-input v-model="loginForm.password_new" prefix-icon="el-icon-lock" type="password"></el-input>
         </el-form-item>
         <el-form-item label="验证码" prop="code">
           <el-input v-model="loginForm.code" prefix-icon="el-icon-lock"></el-input>
         </el-form-item>
         <el-form-item class="btns">
-          <el-button style="margin-right:110px" type="info" @click="sendEmail">获取验证码</el-button>
-          <el-button type="primary" @click="submitForm">注册</el-button>
+          <el-button style="margin-right:10px" type="primary" @click="sendEmail">获取验证码</el-button>
+          <el-button type="primary" @click="submitForm">找回密码</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -36,15 +30,14 @@
 import QS from "qs";
 import Vue from 'vue'
 export default {
-    name: "Register",
+    name: "FindPassword",
   data () {
+      //很大程度参照了login的写法
     return {
       loginForm: {
         username: '',
-        password: '',
-        password2: '',
         email: '',
-        phone_num:'',
+        password_new: '',
         code: ''
       },
 
@@ -53,26 +46,7 @@ export default {
           { required: true, message: '请输入用户名', trigger: 'blur' },
           { min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
         ],
-        password: [
-          {
-            required: true,
-            message: "密码不能为空。",
-            trigger: "blur"
-          },
-          {
-            min: 6,
-            max: 20,
-            message: "密码必须介于6-20个字符之间。",
-            trigger: "blur"
-          },
-          {
-            type: "string",
-            pattern: /^[a-zA-Z0-9_-]{6,20}$/,
-            message: "格式不正确。",
-            trigger: "blur"
-          }
-        ],
-        password2: [
+         password_new: [
           {
             required: true,
             message: "密码不能为空。",
@@ -109,24 +83,6 @@ export default {
             trigger: "blur"
           },
         ],
-        phone_num: [
-          {
-            //required: false,
-            message: "手机号码不能为空。",
-            trigger: "blur"
-          },
-          {
-            len: 11,
-            message: "手机号码必须是11个字符。",
-            trigger: "blur"
-          },
-          {
-            type: "string",
-            pattern: /^1\d{10}$/,
-            message: "格式不正确。",
-            trigger: "blur"
-          },
-        ],
         code: [
           {
             len: 16,
@@ -141,9 +97,11 @@ export default {
   methods: {
     sendEmail() {
       Vue.axios
-        .post('http://175.24.121.113:8000/myapp/email/', QS.stringify(this.loginForm))
+        .post('http://175.24.121.113:8000/myapp/email2/', QS.stringify(this.loginForm))
         .then(response => {
               if (response.data.emailed) {
+                // 发送成功
+              //  this.$router.replace("/");
                 this.$message({
                     message: "发送成功",
                     type: "success",
@@ -177,21 +135,22 @@ export default {
         if (valid) {
           // 指定请求为正式提交表单
           Vue.axios
-            .post('http://175.24.121.113:8000/myapp/register/', QS.stringify(this.loginForm))
+            .post('http://175.24.121.113:8000/myapp/findpassword/', QS.stringify(this.loginForm))
             .then(response => {
-              if (response.data.registered) {
-                // 注册成功
+              if (response.data.code==200) {
+                // 成功找回
                 this.$router.replace("/");
                 this.$message({
-                    message: response.data.data.username,
+                    message: response.data.info,
                     type: "success",
                     customClass: "c-msg",
                     showClose: true
                   }); 
               } else {
-                // 注册失败
+                // 失败
                   this.$message({
-                    message: response.data.info,
+                //    message: response.info,
+                  message:response.data.info,
                     type: "error",
                     customClass: "c-msg",
                     showClose: true
@@ -200,7 +159,8 @@ export default {
             })
             .catch(error => {
               this.$message({
-                message: error.response.data.info,
+                
+                message: "该页面出了点状况",
                 type: "error",
                 customClass: "c-msg",
                 duration: 0,
@@ -225,12 +185,12 @@ export default {
 
 .login_box {
   width: 450px;
-  height: 530px;
+  height: 450px;
   background-color: #fff;
   border-radius: 3px;
   position: absolute;
   left: 50%;
-  top: 55%;
+  top: 50%;
   transform: translate(-50%, -50%);
 
   .avatar_box {
@@ -266,3 +226,4 @@ export default {
   }
 }
 </style>
+

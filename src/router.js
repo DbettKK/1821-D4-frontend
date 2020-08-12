@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from './components/user/login.vue'
 import Register from './components/user/register.vue'
+import FindPassword from './components/user/FindPassword.vue'
 import User from './components/user/UserInfo.vue'
 import Home from './components/user/home.vue'
 import Welcome from './components/user/welcome.vue'
@@ -27,6 +28,12 @@ const router = new Router({
       component: Register,
       name: 'Register',
       meta:{title:'用户注册'}
+    },
+    {
+      path:'/FindPassword',
+      component:FindPassword,
+      name:'FindPassword',
+      meta:{title:'找回密码'}
     },
     {
       path: '/', 
