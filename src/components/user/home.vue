@@ -85,7 +85,7 @@ export default {
         },
         async getUserInfo() {
             Vue.axios.get(
-                'http://175.24.121.113:8000/myapp/user/info',
+                'http://175.24.121.113:8000/myapp/user/info/',
                 {
                 headers:{
                     token:window.sessionStorage.getItem("token")
