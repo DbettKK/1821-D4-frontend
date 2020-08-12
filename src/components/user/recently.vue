@@ -27,9 +27,9 @@
                     </el-dropdown>
                   </div>
                   <div class="bottom clearfix">
-                    <time class="time" style="margin-right: 40px;">{{time(item.last_modified)}}</time>
-                    <span style="font-size: 13px; color: #999;">最近浏览：</span>
-                    <span style="font-size: 13px; color: #999;">{{item.person_name}}</span>
+                    <time class="time" style="margin-right: 40px;">{{time(item.last_modified)}} 我 打开</time>
+                    <span style="font-size: 13px; color: #999;">该文档创建者：</span>
+                    <span style="font-size: 13px; color: #999;">{{item.file_creator_name}}</span>
                   </div>
                 </div>
               </el-card>
@@ -52,10 +52,10 @@ export default {
     this.getDoclist()
   },
   methods: {
-    async getDoclist() {
+    getDoclist() {
       var that = this;
-      await Vue.axios.get(
-        'http://175.24.121.113:8000/myapp/file/browse/get',
+      Vue.axios.get(
+        'http://175.24.121.113:8000/myapp/file/browse/get/',
         {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(function(res){
         console.log(res);
@@ -77,7 +77,7 @@ export default {
             this.$router.push('/trashbin')
     },
     time(a) {
-         this.doctime = this.$config(a).format("YYYY-MM-DD HH:mm:ss")
+         this.doctime = a.toString().substr(0, 10)
          return this.doctime
     }
   },
