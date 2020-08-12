@@ -1,8 +1,12 @@
 <template>
-  <el-container style="height: 100%; width: 100%; border: 0px">
+    <el-container style="height: 100%; width: 100%; border: 0px">
         <el-header style="text-align: left; font-size: 20px">
-            <span class="title">最近使用</span>
-            <el-divider></el-divider>
+          <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+            <el-menu-item index="1" @click="recently">最近使用</el-menu-item>
+            <el-menu-item index="2" @click="myproduction">我创建的</el-menu-item>
+            <el-menu-item index="3" @click="favorite">我的收藏</el-menu-item>
+            <el-menu-item index="4" @click="trashbin">回收站</el-menu-item>
+          </el-menu>
         </el-header>
         <el-main>
           <el-row v-for="(page, index) of pages" :key="index" style="margin-bottom: 40px;">
@@ -10,7 +14,10 @@
               <el-card :body-style="{ padding: '0px' }" shadow="hover">
                 <div style="padding: 14px;">
                   <div class="top">
-                    <span>{{item.file_name}}</span>
+                    <div style="display: flex; align-items: start;">
+                      <div class="docicon"><i class="el-icon-document"></i></div>
+                      <span>{{item.file_name}}</span>
+                    </div>
                     <el-dropdown trigger="click" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
@@ -29,7 +36,7 @@
             </el-col>
           </el-row>
         </el-main>
-  </el-container>
+    </el-container>
 </template>
 
 <script>
@@ -37,44 +44,37 @@ import Vue from 'vue'
 export default {
   data() {
     return {
-      doclist: [{
-            "id": 7,
-            "file_name": "无标题",
-            "person_name": "lisi",
-            "last_modified": "2020-08-12T10:16:02.383497",
-            "file": 6,
-            "person": 10
-        },
-        {
-            "id": 6,
-            "file_name": "无标题",
-            "person_name": "lisi",
-            "last_modified": "2020-08-12T10:09:39.770432",
-            "file": 8,
-            "person": 10
-        },
-        {
-            "id": 1,
-            "file_name": "tt",
-            "person_name": "lisi",
-            "last_modified": "2020-08-11T08:28:00.898769",
-            "file": 2,
-            "person": 10
-        }]
+      activeIndex:'1',
+      doclist: []
     };
   },
   created() {
-    //this.getDoclist()
+    this.getDoclist()
   },
   methods: {
-    getDoclist() {
-      Vue.axios.get(
-        'http://175.24.121.113:8000/myapp/file/browse/get'
+    async getDoclist() {
+      var that = this;
+      await Vue.axios.get(
+        'http://175.24.121.113:8000/myapp/file/browse/get',
+        {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(function(res){
-        this.doclist=res.data;
+        console.log(res);
+        that.doclist=res.data.data;
       }).catch(function(error){
         console.log(error,Response);
       })
+    },
+    recently() {
+            this.$router.push('/recently')
+        },
+        myproduction() {
+            this.$router.push('/myproduction')
+        },
+        favorite() {
+            this.$router.push('/favorite')
+        },
+        trashbin() {
+            this.$router.push('/trashbin')
     }
   },
   computed: {
@@ -105,6 +105,11 @@ export default {
 }
 .time {
   font-size: 13px;
+  color: #999;
+}
+
+.docicon {
+  margin-right: 12px;
   color: #999;
 }
 
