@@ -243,7 +243,7 @@ POST
 ##### 请求方式
 - GET——用于请求用户详情信息
 - POST——用于修改用户信息
-**注：在POST此页面之前请先POST`http://175.24.121.113:8000/myapp/user/info`页面输入旧密码后再POST此页面**
+**注：在POST此页面之前请先POST`http://175.24.121.113:8000/myapp/user/modify`页面输入旧密码后再POST此页面**
 
 ##### 参数
 GET方式
@@ -287,7 +287,7 @@ POST请求和GET请求都返回详细信息，只是POST请求返回的是修改
 
 200——成功
 
-403——token有问题
+403——token有问题、新旧密码相同
 
 ****
 
@@ -344,7 +344,7 @@ POST方式
 
 400——参数不完整
 
-403——token问题、新旧密码相同
+403——token问题
 
 ****
 
@@ -374,14 +374,12 @@ POST方式
 {
     "info": "success",
     "code": 200,
-    "data": [
-        {
-            "id": 3,
-            "file_id": 2,
-            "person_id": 10,
-            "kept_time": "2020-08-11T10:02:30.366545"
-        }
-    ]
+    "data": {
+        "id": 10,
+        "kept_time": "2020-08-11T16:48:35.248745",
+        "file": 10,
+        "person": 10
+    }
 }
 ```
 
@@ -408,7 +406,7 @@ POST方式
 
 ****
 
-### 4. 用户收藏文档接口
+### 4. 用户取消收藏文档接口
 
 ##### 描述
 
@@ -434,11 +432,12 @@ POST方式
 {
     "info": "success",
     "code": 200,
-    "data": [
-        {
-            "file_id": 2
-        }
-    ]
+    "data": {
+        "id": 10,
+        "kept_time": "2020-08-11T16:48:35.248745",
+        "file": 10,
+        "person": 10
+    }
 }
 ```
 
@@ -489,22 +488,23 @@ POST方式
 {
     "info": "success",
     "code": 200,
-    "data": [
-        {
-            "id": 4,
-            "file_title": "无标题",
-            "file_content": "",
-            "create_time": "2020-08-11T11:25:47.165467",
-            "last_modified": "2020-08-11T11:25:47.165467",
-            "modified_times": 0,
-            "type": "private",
-            "permission": 5,
-            "team_permission": null,
-            "creator_id": 10,
-            "team_belong_id": null,
-            "share": null
-        }
-    ]
+    "data": {
+        "id": 18,
+        "file_title": "无标题",
+        "file_content": "",
+        "create_time": "2020-08-11T16:47:19.604996",
+        "last_modified": "2020-08-11T16:47:19.604996",
+        "is_delete": false,
+        "modified_times": 0,
+        "type": "private",
+        "permission": "5",
+        "team_permission": null,
+        "share": null,
+        "creator": 10,
+        "team_belong": null,
+        "modified_user": [],
+        "comments": []
+    }
 }
 ```
 
@@ -552,22 +552,23 @@ POST方式
 {
     "info": "success",
     "code": 200,
-    "data": [
-        {
-            "id": 4,
-            "file_title": "无标题",
-            "file_content": "",
-            "create_time": "2020-08-11T11:25:47.165467",
-            "last_modified": "2020-08-11T11:25:47.165467",
-            "modified_times": 0,
-            "type": "team",
-            "permission": 5,
-            "team_permission": 5,
-            "creator_id": 10,
-            "team_belong_id": 1,
-            "share": null
-        }
-    ]
+    "data": {
+        "id": 19,
+        "file_title": "无标题",
+        "file_content": "",
+        "create_time": "2020-08-11T16:47:47.181876",
+        "last_modified": "2020-08-11T16:47:47.181876",
+        "is_delete": false,
+        "modified_times": 0,
+        "type": "team",
+        "permission": "5",
+        "team_permission": "5",
+        "share": null,
+        "creator": 10,
+        "team_belong": 3,
+        "modified_user": [],
+        "comments": []
+    }
 }
 ```
 
@@ -615,14 +616,13 @@ POST方式
 {
     "info": "success",
     "code": 200,
-    "data": [
-        {
-            "id": 2,
-            "creator_id": 10,
-            "name": "wo are a team",
-            "create_time": "2020-08-11T11:40:41.492048"
-        }
-    ]
+    "data": {
+        "id": 4,
+        "name": "wo are team team ",
+        "create_time": "2020-08-11T16:46:43.842592",
+        "creator": 10,
+        "members": []
+    }
 }
 ```
 
@@ -668,15 +668,13 @@ POST方式
 {
     "info": "success",
     "code": 200,
-    "data": [
-        {
-            "id": 1,
-            "team_id": 2,
-            "member_id": 10,
-            "join_time": "2020-08-11T14:37:58.355800",
-            "permission": 5
-        }
-    ]
+    "data": {
+        "id": 2,
+        "join_time": "2020-08-11T16:42:20.758774",
+        "permission": 5,
+        "team": 3,
+        "member": 10
+    }
 }
 ```
 
@@ -724,11 +722,13 @@ POST方式
 {
     "info": "success",
     "code": 200,
-    "data": [
-        {
-            "team_id": 2,
-        }
-    ]
+    "data": {
+        "id": 2,
+        "join_time": "2020-08-11T16:42:20.758774",
+        "permission": 5,
+        "team": 3,
+        "member": 10
+    }
 }
 ```
 
@@ -804,26 +804,27 @@ POST方式
 
 403——token问题
 
-### 11. 把文件添加到回收站 or 从回收站恢复
+****
+
+### 11. 用户浏览文档接口
 
 ##### 描述
 
-是否在回收站
+用户点击文档进行浏览时调用
 
 ##### 请求URL
 
-- ` http://175.24.121.113:8000/file/isdelete`
+- ` http://175.24.121.113:8000/myapp/file/browse`
 
 ##### 请求方式
 
-- POSt
+- GET
 
 ##### 参数
 
-| 参数名  | 必选 | 类型 | 说明             |
-| :------ | :--- | :--- | ---------------- |
-| file_id | 是   | int  | 文件id |
-| is_delete | 是   | Boolean  | True为回收，False为恢复  |
+| 参数名  | 必选 | 类型 | 说明                                           |
+| :------ | :--- | :--- | ---------------------------------------------- |
+| file_id | 是   | int  | 所浏览文档的id，可根据前端所传参数进行相应调整 |
 
 ##### 返回示例 
 
@@ -831,41 +832,48 @@ POST方式
 {
     "info": "success",
     "code": 200,
+    "data": {
+        "id": 6,
+        "last_modified": "2020-08-12T10:09:39.770432",
+        "file": 8,
+        "person": 10
+    }
 }
 ```
 
 ##### 返回参数说明 
 
-| 参数名 | 类型   | 说明             |
-| :----- | :----- | ---------------- |
-| info   | string | 返回信息         |
-| code   | int    | 返回状态码       |
+| 参数名 | 类型   | 说明                                 |
+| :----- | :----- | ------------------------------------ |
+| info   | string | 返回信息                             |
+| code   | int    | 返回状态码                           |
+| data   | dic    | 返回用户最近浏览文档时间以及相关信息 |
 
 ##### 返回状态码
 
 200——成功
-403——token问题或者文件不存在
 
+403——token问题
 
-### 12. 从回收站中彻底删除文件
+****
+
+### 12. 获取用户浏览的近10日文档接口
 
 ##### 描述
 
-这次文件真的没了
+获取用户近10日浏览的文档
 
 ##### 请求URL
 
-- ` http://175.24.121.113:8000/file/realdelete`
+- ` http://175.24.121.113:8000/myapp/file/browse/get`
 
 ##### 请求方式
 
-- POSt
+- GET
 
 ##### 参数
 
-| 参数名  | 必选 | 类型 | 说明             |
-| :------ | :--- | :--- | ---------------- |
-| file_id | 是   | int  | 想要加入的团队id |
+无
 
 ##### 返回示例 
 
@@ -873,17 +881,114 @@ POST方式
 {
     "info": "success",
     "code": 200,
+    "data": [
+        {
+            "id": 7,
+            "file_name": "无标题",
+            "person_name": "lisi",
+            "last_modified": "2020-08-12T10:16:02.383497",
+            "file": 6,
+            "person": 10
+        },
+        {
+            "id": 6,
+            "file_name": "无标题",
+            "person_name": "lisi",
+            "last_modified": "2020-08-12T10:09:39.770432",
+            "file": 8,
+            "person": 10
+        },
+        {
+            "id": 1,
+            "file_name": "tt",
+            "person_name": "lisi",
+            "last_modified": "2020-08-11T08:28:00.898769",
+            "file": 2,
+            "person": 10
+        }
+    ]
 }
 ```
 
 ##### 返回参数说明 
 
-| 参数名 | 类型   | 说明             |
-| :----- | :----- | ---------------- |
-| info   | string | 返回信息         |
-| code   | int    | 返回状态码       |
+| 参数名 | 类型   | 说明                               |
+| :----- | :----- | ---------------------------------- |
+| info   | string | 返回信息                           |
+| code   | int    | 返回状态码                         |
+| data   | dic    | 返回用户最近浏览的文档内容以及时间 |
 
 ##### 返回状态码
 
 200——成功
-403——token问题或者文件不存在
+
+403——token问题
+
+****
+
+### 13. 获取用户收藏文档接口
+
+##### 描述
+
+获取用户收藏的文档
+
+##### 请求URL
+
+- ` http://175.24.121.113:8000/myapp/file/favorite/get`
+
+##### 请求方式
+
+- GET
+
+##### 参数
+
+无
+
+##### 返回示例 
+
+``` 
+{
+    "info": "success",
+    "code": 200,
+    "data": [
+        {
+            "id": 7,
+            "file_name": "无标题",
+            "person_name": "lisi",
+            "last_modified": "2020-08-12T10:16:02.383497",
+            "file": 6,
+            "person": 10
+        },
+        {
+            "id": 6,
+            "file_name": "无标题",
+            "person_name": "lisi",
+            "last_modified": "2020-08-12T10:09:39.770432",
+            "file": 8,
+            "person": 10
+        },
+        {
+            "id": 1,
+            "file_name": "tt",
+            "person_name": "lisi",
+            "last_modified": "2020-08-11T08:28:00.898769",
+            "file": 2,
+            "person": 10
+        }
+    ]
+}
+```
+
+##### 返回参数说明 
+
+| 参数名 | 类型   | 说明                           |
+| :----- | :----- | ------------------------------ |
+| info   | string | 返回信息                       |
+| code   | int    | 返回状态码                     |
+| data   | dic    | 返回用户收藏的文档以及收藏时间 |
+
+##### 返回状态码
+
+200——成功
+
+403——token问题
