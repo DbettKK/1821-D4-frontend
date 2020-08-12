@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from './components/user/login.vue'
 import Register from './components/user/register.vue'
+import FindPassword from './components/user/FindPassword.vue'
 import User from './components/user/UserInfo.vue'
 import Home from './components/user/home.vue'
 import Welcome from './components/user/welcome.vue'
@@ -29,6 +30,12 @@ const router = new Router({
       meta:{title:'用户注册'}
     },
     {
+      path:'/FindPassword',
+      component:FindPassword,
+      name:'FindPassword',
+      meta:{title:'找回密码'}
+    },
+    {
       path: '/', 
       component: Home,
       name: 'Home',
@@ -40,9 +47,15 @@ const router = new Router({
         {path: '/myproduction', component: Myproduction,meta:{title:'金刚石文档编辑器'}},
         {path: '/favorite', component: Favorite,meta:{title:'金刚石文档编辑器'}},
         {path: '/trashbin', component: Trashbin,meta:{title:'金刚石文档编辑器'}},
-        {path: '/changeInfo', component: User, name:'ChangeInfo',meta:{title:'金刚石文档编辑器'}},
+        {path: '/changeInfo', component: User, name:'ChangeInfo',meta:{title:'金刚石文档编辑器:个人信息'}},
       ]
     },
+    /*{
+      path: '/changeInfo', 
+      component: User, 
+      name:'ChangeInfo',
+      meta:{title:'金刚石文档编辑器'}
+    },*/
     {
       path:'/Edit',
       component:Ue,

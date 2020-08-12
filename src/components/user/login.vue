@@ -15,6 +15,7 @@
           <el-button type="primary" @click="login">登录</el-button>
           <el-button type="info" @click="resetloginForm">重置</el-button>
           <el-form-item><router-link to="/register" class=a>还未拥有账号？前往注册</router-link></el-form-item>
+        <el-form-item><router-link to="/FindPassword" class=a>已经忘记密码？前往找回</router-link></el-form-item>
         </el-form-item>
       </el-form>
     </div>
@@ -107,7 +108,7 @@ export default {
 
 .login_box {
   width: 450px;
-  height: 300px;
+  height: 380px;
   background-color: #fff;
   border-radius: 3px;
   position: absolute;

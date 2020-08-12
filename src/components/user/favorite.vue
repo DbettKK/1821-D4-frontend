@@ -1,108 +1,70 @@
 <template>
-    <div height=100%>
-        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-          <el-menu-item index="1" @click="recently">最近使用</el-menu-item>
-          <el-menu-item index="2" @click="myproduction">我创建的</el-menu-item>
-          <el-menu-item index="3" @click="favorite">我的收藏</el-menu-item>
-          <el-menu-item index="4" @click="trashbin">回收站</el-menu-item>
-        </el-menu>
-        <el-divider></el-divider>
-        <el-table :data="tableData" height=734px style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}">
-            <el-table-column type="expand">
-                <template slot-scope="props">
-                    <el-form label-position="left" class="demo-table-expand">
-                        <el-form-item label="最近一次修改">
-                            <span>{{ props.row.modification_date }}</span>
-                        </el-form-item>
-                        <el-form-item label="修改人">
-                            <span>{{ props.row.modifier }}</span>
-                        </el-form-item>
-                        <el-form-item label="修改次数">
-                            <span>{{ props.row.modification_times }}</span>
-                        </el-form-item>
-                    </el-form>
-                </template>
-            </el-table-column>
-            <el-table-column prop="date" label="创建日期" width="180"></el-table-column>
-            <el-table-column prop="author" label="作者" width="180"></el-table-column>
-            <el-table-column prop="name" label="文件名称" @contextmenu.prevent=""></el-table-column>
-            <el-table-column label="操作">
-                <template slot-scope="scope">
-                    <el-tooltip class="item" effect="dark" content="移动到回收站" placement="right">
-                        <el-button type="warning" icon="el-icon-star-off" circle @click="handleDelete(scope.$index, scope.row)"></el-button>
-                    </el-tooltip>
-                </template>
-            </el-table-column>
-        </el-table>
-    </div>
+    <el-container style="height: 100%; width: 100%; border: 0px">
+        <el-header style="text-align: left; font-size: 20px">
+          <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+            <el-menu-item index="1" @click="recently">最近使用</el-menu-item>
+            <el-menu-item index="2" @click="myproduction">我创建的</el-menu-item>
+            <el-menu-item index="3" @click="favorite">我的收藏</el-menu-item>
+            <el-menu-item index="4" @click="trashbin">回收站</el-menu-item>
+          </el-menu>
+        </el-header>
+        <el-main>
+          <el-row v-for="(page, index) of pages" :key="index" style="margin-bottom: 40px;">
+            <el-col :span="8" align="left" v-for="(item, innerindex) of page" :key="item.id" :offset="innerindex > 0 ? 2 : 0" style="margin-right: -60px;">
+              <el-card :body-style="{ padding: '0px' }" shadow="hover">
+                <div style="padding: 14px;">
+                  <div class="top">
+                    <div style="display: flex; align-items: start;">
+                      <div class="docicon"><i class="el-icon-document"></i></div>
+                      <span>{{item.file_name}}</span>
+                    </div>
+                    <el-dropdown trigger="click" style="font-size: 1px; color: #999;" placement="bottom-start">
+                      <span class="el-dropdown-link">···</span>
+                      <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item icon="el-icon-star-on">取消收藏</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-delete-solid">移动到回收站</el-dropdown-item>
+                      </el-dropdown-menu>
+                    </el-dropdown>
+                  </div>
+                  <div class="bottom clearfix">
+                    <time class="time" style="margin-right: 40px;" >{{time(item.kept_time)}}</time>
+                    <span style="font-size: 13px; color: #999;">收藏人：</span>
+                    <span style="font-size: 13px; color: #999;">{{item.person_name}}</span>
+                  </div>
+                </div>
+              </el-card>
+            </el-col>
+          </el-row>
+        </el-main>
+    </el-container>
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        activeIndex:'3',
-        tableData: [{
-          date: '2016-05-03',
-          author: '王小虎',
-          name: '金刚石文档内容描述',
-          modification_date: '2020-08-10',
-          modifier: '笪昊凡',
-          modification_times: '1'
-        }, {
-          date: '2016-05-04',
-          author: '王小虎',
-          name: '金刚石文档内容描述',
-          modification_date: '2020-08-10',
-          modifier: '笪昊凡',
-          modification_times: '1'
-        }, {
-          date: '2016-05-05',
-          author: '王小虎',
-          name: '金刚石文档内容描述',
-          modification_date: '2020-08-10',
-          modifier: '笪昊凡',
-          modification_times: '1'
-        }, {
-          date: '2016-05-06',
-          author: '王小虎',
-          name: '金刚石文档内容描述',
-          modification_date: '2020-08-10',
-          modifier: '笪昊凡',
-          modification_times: '1'
-        }, {
-          date: '2016-05-07',
-          author: '王小虎',
-          name: '金刚石文档内容描述',
-          modification_date: '2020-08-10',
-          modifier: '笪昊凡',
-          modification_times: '1'
-        }, {
-          date: '2016-05-08',
-          author: '王小虎',
-          name: '金刚石文档内容描述',
-          modification_date: '2020-08-10',
-          modifier: '笪昊凡',
-          modification_times: '1'
-        }, {
-          date: '2016-05-09',
-          author: '王小虎',
-          name: '金刚石文档内容描述',
-          modification_date: '2020-08-10',
-          modifier: '笪昊凡',
-          modification_times: '1'
-        }, {
-          date: '2016-05-10',
-          author: '王小虎',
-          name: '金刚石文档内容描述',
-          modification_date: '2020-08-10',
-          modifier: '笪昊凡',
-          modification_times: '1'
-        }]
-      }
+import Vue from 'vue'
+export default {
+  data() {
+    return {
+      activeIndex:'3',
+      doclist: []
+    };
+  },
+  created() {
+    this.getDoclist()
+  },
+  methods: {
+    async getDoclist() {
+      var that = this;
+      await Vue.axios.get(
+        'http://175.24.121.113:8000/myapp/file/favorite/get',
+        {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(function(res){
+        console.log(res);
+        that.doclist=res.data.data;
+      }).catch(function(error){
+        console.log(error,Response);
+      })
     },
-    methods:{
-      recently() {
+    recently() {
             this.$router.push('/recently')
         },
         myproduction() {
@@ -113,9 +75,26 @@
         },
         trashbin() {
             this.$router.push('/trashbin')
+    },
+    time(a) {
+         this.doctime = this.$config(a).format("YYYY-MM-DD HH:mm:ss")
+         return this.doctime
+    }
+  },
+  computed: {
+    pages () {
+      const pages = []
+      this.doclist.forEach((item, index) => {
+        const page = Math.floor(index / 2)
+        if (!pages[page]) {
+          pages[page] = []
         }
+        pages[page].push(item)
+      })
+      return pages
     }
   }
+}
 </script>
 
 <style lang="less" scoped>
@@ -128,17 +107,37 @@
     align-items: center;
     font-family: "Microsoft YaHei", "微软雅黑", "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", Arial, sans-serif;
 }
-.demo-table-expand {
-    font-size: 0;
+.time {
+  font-size: 13px;
+  color: #999;
 }
-.demo-table-expand label {
-    width: 90px;
-    color: #99a9bf;
+
+.docicon {
+  margin-right: 12px;
+  color: #999;
 }
-.demo-table-expand .el-form-item {
-    color: rgb(180, 180, 180);
-    margin-right: 0;
-    margin-bottom: 0;
-    width: 20%;
+
+.top {
+  display: flex;
+  justify-content: space-between;
+}
+  
+.bottom {
+  margin-top: 13px;
+  line-height: 12px;
+}
+
+.el-dropdown-link {
+  cursor: pointer;
+}
+
+.clearfix:before,
+.clearfix:after {
+    display: table;
+    content: "";
+}
+  
+.clearfix:after {
+    clear: both
 }
 </style>

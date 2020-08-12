@@ -4,15 +4,23 @@
       <div class="avatar_box">
         <img src="../../assets/logo_new.png" alt="">
       </div>
-              <div class="biaoti"> 
-               <p>注 册</p>
+             <div class="biaoti"> 
+               <p>找回密码</p>
              </div>
       <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" label-width="100px" class="login_form">
-        <el-form-item  label="用户名" prop="username" >
-          <el-input v-model="loginForm.username" prefix-icon="el-icon-user" placeholder="长度应在3~15个字符"></el-input>
+            <div>
+
+            </div>
+        <el-form-item  label="用户名" prop="username">
+          <el-input v-model="loginForm.username" prefix-icon="el-icon-user" placeholder="注册时的用户名"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password" v-if="visible">
-          <el-input v-model="loginForm.password" prefix-icon="el-icon-lock"  type="password" placeholder="密码必须介于6-20个字符之间">
+        <el-form-item label="邮  箱" prop="email" >
+          <el-input v-model="loginForm.email" prefix-icon="el-icon-message" placeholder="验证码将发往邮箱"></el-input>
+        </el-form-item>
+        
+
+         <el-form-item label="新密码" prop="password_new" v-if="visible">
+          <el-input v-model="loginForm.password_new" prefix-icon="el-icon-lock"  type="password" placeholder="新密码必须介于6-20个字符之间">
             <i slot="suffix" title="显示密码" @click="changePass" style="cursor:pointer;"
                class="el-icon-view"></i>
                <!--
@@ -20,38 +28,27 @@
                    -->
           </el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password" v-else>
-          <el-input v-model="loginForm.password" prefix-icon="el-icon-lock" type="text" placeholder="密码应介于6-20个字符之间" >
+        <el-form-item label="新密码" prop="password_new" v-else>
+          <el-input v-model="loginForm.password_new" prefix-icon="el-icon-lock" type="text" placeholder="新密码应介于6-20个字符之间" >
             <i slot="suffix" title="隐藏密码" @click="changePass" style="cursor:pointer;"
                class="el-icon-more"></i>
                <!--
                  class="el-input__icon iconfont el-icon-off"></i>
                  -->
           </el-input>
-        </el-form-item>
 
+<!--
+        <el-form-item label="新密码" prop="password_new">
+          <el-input v-model="loginForm.password_new" prefix-icon="el-icon-lock" type="password"></el-input>
+-->
 
-
-        <!--
-        <el-form-item label="确认密码" prop="password2">
-          <el-input v-model="loginForm.password2" prefix-icon="el-icon-lock" ></el-input>
-        </el-form-item>
-        -->
-        <el-form-item label="邮箱" prop="email" >
-          <el-input v-model="loginForm.email" prefix-icon="el-icon-message" placeholder="邮箱将接收验证码"></el-input>
-        </el-form-item>
-        <el-form-item label="手机号" prop="phone_num">
-          <el-input v-model="loginForm.phone_num" prefix-icon="el-icon-phone" placeholder="手机号应为11位数字"></el-input>
         </el-form-item>
         <el-form-item label="验证码" prop="code">
           <el-input v-model="loginForm.code" prefix-icon="el-icon-document" style="width:55%"></el-input>
           <el-button style="float:right" type="info" @click="sendEmail">获取验证码</el-button>
         </el-form-item>
         <el-form-item class="btns">
-          <!--
-          <el-button style="margin-right:110px" type="info" @click="sendEmail">获取验证码</el-button>
-          -->
-          <el-button type="shenhui" @click="submitForm" style="width:300px">注册</el-button>
+          <el-button type="shenhui" @click="submitForm" style="width:300px">修改密码</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -62,25 +59,25 @@
 import QS from "qs";
 import Vue from 'vue'
 export default {
-    name: "Register",
+    name: "FindPassword",
   data () {
+      //很大程度参照了login的写法
     return {
       loginForm: {
         username: '',
-        password: '',
-        password2: '',
         email: '',
-        phone_num:'',
+        password_new: '',
         code: ''
       },
-      visible: true//控制密码可见与否,
-      ,
+       visible: true//控制密码可见与否,
+       ,
+
       loginFormRules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
           { min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
         ],
-        password: [
+         password_new: [
           {
             required: true,
             message: "密码不能为空。",
@@ -99,27 +96,6 @@ export default {
             trigger: "blur"
           }
         ],
-        /*
-        password2: [
-          {
-            required: true,
-            message: "密码不能为空。",
-            trigger: "blur"
-          },
-          {
-            min: 6,
-            max: 20,
-            message: "密码必须介于6-20个字符之间。",
-            trigger: "blur"
-          },
-          {
-            type: "string",
-            pattern: /^[a-zA-Z0-9_-]{6,20}$/,
-            message: "格式不正确。",
-            trigger: "blur"
-          }
-        ],
-        */
         email: [
           {
             required: true,
@@ -134,24 +110,6 @@ export default {
           {
             type: "string",
             pattern: /(^(\w-*\.*)+@(\w-?)+(\.\w{2,})+)|(1\d{10})$/,
-            message: "格式不正确。",
-            trigger: "blur"
-          },
-        ],
-        phone_num: [
-          {
-            required: true,
-            message: "手机号码不能为空。",
-            trigger: "blur"
-          },
-          {
-            len: 11,
-            message: "手机号码必须是11个字符。",
-            trigger: "blur"
-          },
-          {
-            type: "string",
-            pattern: /^1\d{10}$/,
             message: "格式不正确。",
             trigger: "blur"
           },
@@ -174,9 +132,11 @@ export default {
       ,
     sendEmail() {
       Vue.axios
-        .post('http://175.24.121.113:8000/myapp/email/', QS.stringify(this.loginForm))
+        .post('http://175.24.121.113:8000/myapp/email2/', QS.stringify(this.loginForm))
         .then(response => {
               if (response.data.emailed) {
+                // 发送成功
+              //  this.$router.replace("/");
                 this.$message({
                     message: "发送成功",
                     type: "success",
@@ -210,21 +170,22 @@ export default {
         if (valid) {
           // 指定请求为正式提交表单
           Vue.axios
-            .post('http://175.24.121.113:8000/myapp/register/', QS.stringify(this.loginForm))
+            .post('http://175.24.121.113:8000/myapp/findpassword/', QS.stringify(this.loginForm))
             .then(response => {
-              if (response.data.registered) {
-                // 注册成功
+              if (response.data.code==200) {
+                // 成功找回
                 this.$router.replace("/");
                 this.$message({
-                    message: response.data.data.username,
+                    message: response.data.info,
                     type: "success",
                     customClass: "c-msg",
                     showClose: true
                   }); 
               } else {
-                // 注册失败
+                // 失败
                   this.$message({
-                    message: response.data.info,
+                //    message: response.info,
+                  message:response.data.info,
                     type: "error",
                     customClass: "c-msg",
                     showClose: true
@@ -233,7 +194,8 @@ export default {
             })
             .catch(error => {
               this.$message({
-                message: error.response.data.info,
+                
+                message: "该页面出了点状况",
                 type: "error",
                 customClass: "c-msg",
                 duration: 0,
@@ -255,28 +217,45 @@ export default {
   background-color: rgb(132,133,135);
   height: 100%;
 }
-.biaoti
-{
-  position:relative; 
-text-align:center;//居中
-top:55px;
-font-size:26px;//调整字体大小
-}
+
+
 .login_box {
   width: 450px;
-  height: 500px;
+  height: 450px;
   background-color: #fff;
   border-radius: 3px;
   position: absolute;
   left: 50%;
-  top: 55%;
+  top: 50%;
   transform: translate(-50%, -50%);
-  //登录按钮的定制
+    //登录按钮的定制
 .el-button--shenhui {
   background-color: rgb(73, 74, 75);
   border-color:  rgb(73, 74, 75);;
   color: #fff;
 }
+.biaoti
+{
+  position:relative; 
+text-align:center;
+top:55px;
+font-size:26px
+}
+/*.
+.biaoti
+{
+background-color: white;
+    margin-left: 0.6rem;
+    border-radius: 0.36rem;
+    font-size: 1.5rem;
+    height:1rem;
+    width:1.5rem;
+    display: -webkit-inline-box;
+    font-weight: 300;
+    text-align:center;
+ // background-color: #ccc;
+}
+.*/
   .avatar_box {
     height: 130px;
     width: 130px;
@@ -310,3 +289,4 @@ font-size:26px;//调整字体大小
   }
 }
 </style>
+
