@@ -2,24 +2,53 @@
   <div class="login_container">
     <div class="login_box">
       <div class="avatar_box">
-        <img src="../../assets/logo.png" alt="">
+        <img src="../../assets/logo_new.png" alt="">
       </div>
+             <div class="biaoti"> 
+               <p>找回密码</p>
+             </div>
       <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" label-width="100px" class="login_form">
+            <div>
+
+            </div>
         <el-form-item  label="用户名" prop="username">
-          <el-input v-model="loginForm.username" prefix-icon="el-icon-user"></el-input>
+          <el-input v-model="loginForm.username" prefix-icon="el-icon-user" placeholder="注册时的用户名"></el-input>
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="loginForm.email" prefix-icon="el-icon-lock"></el-input>
+        <el-form-item label="邮  箱" prop="email" >
+          <el-input v-model="loginForm.email" prefix-icon="el-icon-message" placeholder="验证码将发往邮箱"></el-input>
         </el-form-item>
-        <el-form-item label="新密码" prop="password">
+        
+
+         <el-form-item label="新密码" prop="password_new" v-if="visible">
+          <el-input v-model="loginForm.password_new" prefix-icon="el-icon-lock"  type="password" placeholder="新密码必须介于6-20个字符之间">
+            <i slot="suffix" title="显示密码" @click="changePass" style="cursor:pointer;"
+               class="el-icon-view"></i>
+               <!--
+                   class="el-input__icon iconfont el-icon-open"></i>
+                   -->
+          </el-input>
+        </el-form-item>
+        <el-form-item label="新密码" prop="password_new" v-else>
+          <el-input v-model="loginForm.password_new" prefix-icon="el-icon-lock" type="text" placeholder="新密码应介于6-20个字符之间" >
+            <i slot="suffix" title="隐藏密码" @click="changePass" style="cursor:pointer;"
+               class="el-icon-more"></i>
+               <!--
+                 class="el-input__icon iconfont el-icon-off"></i>
+                 -->
+          </el-input>
+
+<!--
+        <el-form-item label="新密码" prop="password_new">
           <el-input v-model="loginForm.password_new" prefix-icon="el-icon-lock" type="password"></el-input>
+-->
+
         </el-form-item>
         <el-form-item label="验证码" prop="code">
-          <el-input v-model="loginForm.code" prefix-icon="el-icon-lock"></el-input>
+          <el-input v-model="loginForm.code" prefix-icon="el-icon-document" style="width:55%"></el-input>
+          <el-button style="float:right" type="info" @click="sendEmail">获取验证码</el-button>
         </el-form-item>
         <el-form-item class="btns">
-          <el-button style="margin-right:10px" type="primary" @click="sendEmail">获取验证码</el-button>
-          <el-button type="primary" @click="submitForm">找回密码</el-button>
+          <el-button type="shenhui" @click="submitForm" style="width:300px">修改密码</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -40,6 +69,8 @@ export default {
         password_new: '',
         code: ''
       },
+       visible: true//控制密码可见与否,
+       ,
 
       loginFormRules: {
         username: [
@@ -67,7 +98,7 @@ export default {
         ],
         email: [
           {
-            //required: true,
+            required: true,
             message: "此处不能为空。",
             trigger: "blur"
           },
@@ -95,6 +126,10 @@ export default {
   },
   
   methods: {
+    changePass() {
+        this.visible = !(this.visible);
+      }    //判断渲染，true:暗文显示，false:明文显示
+      ,
     sendEmail() {
       Vue.axios
         .post('http://175.24.121.113:8000/myapp/email2/', QS.stringify(this.loginForm))
@@ -179,9 +214,10 @@ export default {
 
 <style lang="less" scoped>
 .login_container {
-  background-color: rgb(0, 194, 129);
+  background-color: rgb(132,133,135);
   height: 100%;
 }
+
 
 .login_box {
   width: 450px;
@@ -192,7 +228,34 @@ export default {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-
+    //登录按钮的定制
+.el-button--shenhui {
+  background-color: rgb(73, 74, 75);
+  border-color:  rgb(73, 74, 75);;
+  color: #fff;
+}
+.biaoti
+{
+  position:relative; 
+text-align:center;
+top:55px;
+font-size:26px
+}
+/*.
+.biaoti
+{
+background-color: white;
+    margin-left: 0.6rem;
+    border-radius: 0.36rem;
+    font-size: 1.5rem;
+    height:1rem;
+    width:1.5rem;
+    display: -webkit-inline-box;
+    font-weight: 300;
+    text-align:center;
+ // background-color: #ccc;
+}
+.*/
   .avatar_box {
     height: 130px;
     width: 130px;

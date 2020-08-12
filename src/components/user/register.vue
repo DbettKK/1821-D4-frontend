@@ -2,30 +2,56 @@
   <div class="login_container">
     <div class="login_box">
       <div class="avatar_box">
-        <img src="../../assets/logo.png" alt="">
+        <img src="../../assets/logo_new.png" alt="">
       </div>
+              <div class="biaoti"> 
+               <p>注 册</p>
+             </div>
       <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" label-width="100px" class="login_form">
-        <el-form-item  label="用户名" prop="username">
-          <el-input v-model="loginForm.username" prefix-icon="el-icon-user"></el-input>
+        <el-form-item  label="用户名" prop="username" >
+          <el-input v-model="loginForm.username" prefix-icon="el-icon-user" placeholder="长度应在3~15个字符"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="loginForm.password" prefix-icon="el-icon-lock" type="password"></el-input>
+        <el-form-item label="密码" prop="password" v-if="visible">
+          <el-input v-model="loginForm.password" prefix-icon="el-icon-lock"  type="password" placeholder="密码必须介于6-20个字符之间">
+            <i slot="suffix" title="显示密码" @click="changePass" style="cursor:pointer;"
+               class="el-icon-view"></i>
+               <!--
+                   class="el-input__icon iconfont el-icon-open"></i>
+                   -->
+          </el-input>
         </el-form-item>
+        <el-form-item label="密码" prop="password" v-else>
+          <el-input v-model="loginForm.password" prefix-icon="el-icon-lock" type="text" placeholder="密码应介于6-20个字符之间" >
+            <i slot="suffix" title="隐藏密码" @click="changePass" style="cursor:pointer;"
+               class="el-icon-more"></i>
+               <!--
+                 class="el-input__icon iconfont el-icon-off"></i>
+                 -->
+          </el-input>
+        </el-form-item>
+
+
+
+        <!--
         <el-form-item label="确认密码" prop="password2">
           <el-input v-model="loginForm.password2" prefix-icon="el-icon-lock" ></el-input>
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="loginForm.email" prefix-icon="el-icon-lock"></el-input>
+        -->
+        <el-form-item label="邮箱" prop="email" >
+          <el-input v-model="loginForm.email" prefix-icon="el-icon-message" placeholder="邮箱将接收验证码"></el-input>
         </el-form-item>
         <el-form-item label="手机号" prop="phone_num">
-          <el-input v-model="loginForm.phone_num" prefix-icon="el-icon-lock"></el-input>
+          <el-input v-model="loginForm.phone_num" prefix-icon="el-icon-phone" placeholder="手机号应为11位数字"></el-input>
         </el-form-item>
         <el-form-item label="验证码" prop="code">
-          <el-input v-model="loginForm.code" prefix-icon="el-icon-lock"></el-input>
+          <el-input v-model="loginForm.code" prefix-icon="el-icon-document" style="width:55%"></el-input>
+          <el-button style="float:right" type="info" @click="sendEmail">获取验证码</el-button>
         </el-form-item>
         <el-form-item class="btns">
+          <!--
           <el-button style="margin-right:110px" type="info" @click="sendEmail">获取验证码</el-button>
-          <el-button type="primary" @click="submitForm">注册</el-button>
+          -->
+          <el-button type="shenhui" @click="submitForm" style="width:300px">注册</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -47,7 +73,8 @@ export default {
         phone_num:'',
         code: ''
       },
-
+      visible: true//控制密码可见与否,
+      ,
       loginFormRules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -72,6 +99,7 @@ export default {
             trigger: "blur"
           }
         ],
+        /*
         password2: [
           {
             required: true,
@@ -91,9 +119,10 @@ export default {
             trigger: "blur"
           }
         ],
+        */
         email: [
           {
-            //required: true,
+            required: true,
             message: "此处不能为空。",
             trigger: "blur"
           },
@@ -111,7 +140,7 @@ export default {
         ],
         phone_num: [
           {
-            //required: false,
+            required: true,
             message: "手机号码不能为空。",
             trigger: "blur"
           },
@@ -139,6 +168,10 @@ export default {
   },
   
   methods: {
+    changePass() {
+        this.visible = !(this.visible);
+      }    //判断渲染，true:暗文显示，false:明文显示
+      ,
     sendEmail() {
       Vue.axios
         .post('http://175.24.121.113:8000/myapp/email/', QS.stringify(this.loginForm))
@@ -219,20 +252,31 @@ export default {
 
 <style lang="less" scoped>
 .login_container {
-  background-color: rgb(0, 194, 129);
+  background-color: rgb(132,133,135);
   height: 100%;
 }
-
+.biaoti
+{
+  position:relative; 
+text-align:center;//居中
+top:55px;
+font-size:26px;//调整字体大小
+}
 .login_box {
   width: 450px;
-  height: 530px;
+  height: 500px;
   background-color: #fff;
   border-radius: 3px;
   position: absolute;
   left: 50%;
   top: 55%;
   transform: translate(-50%, -50%);
-
+  //登录按钮的定制
+.el-button--shenhui {
+  background-color: rgb(73, 74, 75);
+  border-color:  rgb(73, 74, 75);;
+  color: #fff;
+}
   .avatar_box {
     height: 130px;
     width: 130px;
