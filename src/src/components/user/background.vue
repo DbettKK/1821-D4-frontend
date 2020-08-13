@@ -29,11 +29,12 @@ export default {
       width: 100%
   }
   .login_container {
-    padding-top: 400px;
-    padding-right: 400px;
-    margin-right: 800px;
-    background-color:#e4ddd0;
-    opacity: 20%;
-    height:320px;
-  }
+  padding-top: 400px;
+  padding-right: 400px;
+  margin-right: 900px;
+  background-color:#e4ddd0;
+  
+  opacity: 20%;
+  height:320px;
+}
 </style>
