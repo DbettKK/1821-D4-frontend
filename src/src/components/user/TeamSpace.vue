@@ -13,7 +13,7 @@
         <el-main>
           <el-row v-for="(page, index) of pages" :key="index" style="margin-bottom: 40px;">
             <el-col :span="8" align="left" v-for="(item, innerindex) of page" :key="item.id" :offset="innerindex > 0 ? 2 : 0" style="margin-right: -60px;">
-              <el-card :body-style="{ padding: '0px' }" shadow="hover">
+              <el-card :body-style="{ padding: '0px' }" shadow="hover" @click.native="edit(item.id)">
                 <div style="padding: 14px;">
                   <div class="top">
                     <div style="display: flex; align-items: start;">
@@ -65,18 +65,42 @@ export default {
   data() {
     return {
       activeIndex:'1',
-      doclist: []
+      doclist: [],
+      five:0
     };
   },
   created() {
     this.getDoclist()
   },
+  watch: {//监听下个访问的东西是不是还是teamspace，是则重新获取
+    '$route' (to, from) {
+        if(to.name === 'Teamspace'){
+           this.getDoclist();
+        }
+        if(from.name==='post')//纯粹为了避免unused
+        {
+            this.five++;
+        }
+    }
+},
   methods: {
+          edit(file_id){
+      this.$router.push('/edit/' + file_id)
+    },
     getDoclist() {
       var that = this;
       Vue.axios.get(
-        'http://175.24.121.113:8000/myapp/file/browse/get/',
-        {headers: {token: window.sessionStorage.getItem("token")}}
+        'http://175.24.121.113:8000/myapp/file/team/get/',
+        {
+        headers: {
+                        'token': window.sessionStorage.getItem('token')
+                    },
+                    params:{
+                      team_id: this.$route.query.id.toString()
+                    }
+        }
+
+       // {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(function(res){
         console.log(res);
         that.doclist=res.data.data;
@@ -182,6 +206,7 @@ display: flex;
 {
     
     margin-bottom: 40px;
+    margin-top:100px;
     width: 160px;
     top:100px;
     left:50px;
@@ -194,7 +219,7 @@ display: flex;
 {
     top:40px;
      margin-top: 20px;
-     length:60px;
+  //   length:60px;
     position: absolute;
 
 }
