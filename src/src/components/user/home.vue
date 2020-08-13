@@ -77,7 +77,6 @@
                 <router-view></router-view>
             </el-main>
         </el-container>
-
     </el-container>
 </template>
 
@@ -95,7 +94,6 @@ export default {
             },
             isLogin: false,
             isCollapse: false,
-    
             createTeamVisible:false,
             createTeam_name:"",
             Teams:

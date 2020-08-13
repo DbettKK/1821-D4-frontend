@@ -1,13 +1,22 @@
 <template>
     <el-container style="height: 100%; width: 100%; border: 0px">
-        <el-header style="text-align: left; font-size: 20px">
+      <el-header style="text-align: left; font-size: 20px; display: flex; justify-content: space-between;" >
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
             <el-menu-item index="1" @click="recently">最近使用</el-menu-item>
             <el-menu-item index="2" @click="myproduction">我创建的</el-menu-item>
             <el-menu-item index="3" @click="favorite">我的收藏</el-menu-item>
             <el-menu-item index="4" @click="trashbin">回收站</el-menu-item>
           </el-menu>
+        <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="dialog1=true">
+          <i class="el-icon-circle-plus bt">新建文档</i>
+        </el-card>
         </el-header>
+      <el-dialog title="是否新建私人文档" :visible.sync="dialog1" width="30%">
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialog1=false">取 消</el-button>
+          <el-button type="primary" @click="submit1()" >确 定</el-button>
+        </div>
+      </el-dialog>
         <el-main>
           <el-row v-for="(page, index) of pages" :key="index" style="margin-bottom: 40px;">
             <el-col :span="8" align="left" v-for="(item, innerindex) of page" :key="item.id" :offset="innerindex > 0 ? 2 : 0" style="margin-right: -60px;">
@@ -22,11 +31,13 @@
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item icon="el-icon-star-on" @click.native="addFavorite(item.id)">收藏</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-edit" @click.native="renameClick(item.id)">重命名</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-s-custom" @click.native="selectPrivi(item.id)">设置文档权限</el-dropdown-item>
 
                         <el-dropdown-item icon="el-icon-delete-solid" @click.native="toTrash(item.id)">移动到回收站</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-s-tools" v-if="item.type=='team'">设置文档为私人文档</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-s-tools" v-if="item.type=='private'">设置文档为团队文档</el-dropdown-item>
+
                       </el-dropdown-menu>
                     </el-dropdown>
                   </div>
@@ -59,6 +70,21 @@
                     <el-button type="primary" @click="submit()" >确定</el-button>
                   </div>
               </el-dialog>
+              <el-dialog
+                      title="重命名文档"
+                      :visible.sync="dialog2"
+                      width="30%"
+              >
+                <el-form>
+                  <el-form-item>
+                    <el-input v-model="file_name" placeholder="请输入文档名字"></el-input>
+                  </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                  <el-button @click="dialog=false">取 消</el-button>
+                  <el-button type="primary" @click="renameFile" >确定</el-button>
+                </div>
+              </el-dialog>
             </el-col>
           </el-row>
         </el-main>
@@ -71,11 +97,13 @@ export default {
   inject: ['reload'],
   data() {
     return {
+      file_name: '',
       file_id_tmp: null,
       activeIndex:'2',
       doclist: [],
       privilege: '',
       dialog: false,
+      dialog2: false,
       permission: ['仅查看','可编辑','可评论','可分享']
     };
   },
@@ -158,6 +186,28 @@ export default {
       });
       this.dialog=false;
       this.reload();
+    },
+    submit1(){
+      this.$http.get('http://175.24.121.113:8000/myapp/file/create/pri/',
+              {headers: {token: window.sessionStorage.getItem("token")}})
+    },
+    renameFile(){
+      this.$http.post('http://175.24.121.113:8000/myapp/file/rename/',this.$qs.stringify({
+                file_id: this.file_id_tmp,
+                file_name: this.file_name
+              }), {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(function (res) {
+        console.log(res.data);
+      }).catch(function (error) {
+        console.log(error.response);
+      });
+      this.dialog2=false;
+      this.getDoclist();
+      this.reload();
+    },
+    renameClick(file_id){
+      this.dialog2 = true;
+      this.file_id_tmp = file_id;
     }
 
   },
@@ -220,5 +270,22 @@ export default {
   
 .clearfix:after {
     clear: both
+}
+.newfile {
+  height: 30px;
+  width: 120px;
+  background-color: rgb(36, 36, 36);
+  font-size: 11px;
+  margin-top: 20px;
+  margin-right: 100px;
+  color: rgb(180, 180, 180);
+  position: relative;
+  cursor: pointer;
+  .bt {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%)translateY(-50%);
+  }
 }
 </style>
