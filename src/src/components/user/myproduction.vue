@@ -27,7 +27,7 @@
                       <div class="docicon"><i class="el-icon-document"></i></div>
                       <span>{{item.file_title}}</span>
                     </div>
-                    <el-dropdown trigger="click" style="font-size: 1px; color: #999;" placement="bottom-start">
+                    <el-dropdown trigger="hover" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item icon="el-icon-star-on" @click.native="addFavorite(item.id)">收藏</el-dropdown-item>
