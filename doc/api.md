@@ -1163,3 +1163,242 @@ POST方式
 200——成功
 
 403——token问题
+
+****
+
+### 18. 获取用户创建或参与的所有团队接口
+
+##### 描述
+
+获取用户创建或参与的所有团队
+
+##### 请求URL
+
+- ` http://175.24.121.113:8000/myapp/team/all/get/`
+
+##### 请求方式
+
+- GET
+
+##### 参数
+
+无
+
+##### 返回示例 
+
+``` 
+{
+    "info": "success",
+    "code": 200,
+    "data": [
+        {
+            "id": 1,
+            "name": "we are a tem",
+            "create_time": "2020-08-11T11:40:08.495727",
+            "creator": 10,
+            "members": []
+        },
+        {
+            "id": 2,
+            "name": "wo are a team",
+            "create_time": "2020-08-11T11:40:41.492048",
+            "creator": 10,
+            "members": [
+                26
+            ]
+        },
+        {
+            "id": 3,
+            "name": "wo are a team",
+            "create_time": "2020-08-11T11:57:50.785125",
+            "creator": 10,
+            "members": []
+        },
+        {
+            "id": 4,
+            "name": "wo are team team ",
+            "create_time": "2020-08-11T16:46:43.842592",
+            "creator": 10,
+            "members": []
+        },
+        {
+            "id": 5,
+            "name": "112ff",
+            "create_time": "2020-08-12T16:09:53.860319",
+            "creator": 10,
+            "members": []
+        },
+        {
+            "id": 6,
+            "name": "1112",
+            "create_time": "2020-08-12T16:12:38.183152",
+            "creator": 10,
+            "members": []
+        },
+        {
+            "id": 7,
+            "name": "我们是冠军！",
+            "create_time": "2020-08-12T19:45:56.814308",
+            "creator": 26,
+            "members": [
+                10
+            ]
+        }
+    ]
+}
+```
+
+##### 返回参数说明 
+
+| 参数名 | 类型   | 说明                                                |
+| :----- | :----- | --------------------------------------------------- |
+| info   | string | 返回信息                                            |
+| code   | int    | 返回状态码                                          |
+| data   | dic    | 返回用户创建或参与的所有团队 member中放的是成员的id |
+
+##### 返回状态码
+
+200——成功
+
+403——token问题
+
+****
+
+### 19. 获取用户移到回收站的文档接口
+
+##### 描述
+
+获取用户移到回收站的文档
+
+**注：有一个删除时间，可以在前端显示**
+
+##### 请求URL
+
+- ` http://175.24.121.113:8000/myapp/file/delete/get/`
+
+##### 请求方式
+
+- GET
+
+##### 参数
+
+无
+
+##### 返回示例 
+
+``` 
+{
+    "info": "success",
+    "code": 200,
+    "data": [
+        {
+            "id": 12,
+            "file_title": "文档10",
+            "file_content": "56",
+            "create_time": "2020-08-11T16:19:13.510809",
+            "last_modified": "2020-08-13T09:15:50.741585",
+            "is_delete": true,
+            "delete_time": "2020-08-13T09:15:50.741474",
+            "modified_times": 0,
+            "type": "private",
+            "permission": 4,
+            "team_permission": 4,
+            "share": null,
+            "creator": 10,
+            "team_belong": null,
+            "modified_user": [],
+            "comments": [
+                26
+            ]
+        },
+        {
+            "id": 11,
+            "file_title": "文档9",
+            "file_content": " ",
+            "create_time": "2020-08-11T16:18:58.620517",
+            "last_modified": "2020-08-13T09:15:58.964329",
+            "is_delete": true,
+            "delete_time": "2020-08-13T09:15:58.964214",
+            "modified_times": 0,
+            "type": "private",
+            "permission": 4,
+            "team_permission": 4,
+            "share": null,
+            "creator": 10,
+            "team_belong": null,
+            "modified_user": [],
+            "comments": []
+        },
+        {
+            "id": 10,
+            "file_title": "文档8",
+            "file_content": "",
+            "create_time": "2020-08-11T16:17:20.131157",
+            "last_modified": "2020-08-13T09:47:18.364390",
+            "is_delete": true,
+            "delete_time": "2020-08-13T09:47:18.364293",
+            "modified_times": 0,
+            "type": "private",
+            "permission": 4,
+            "team_permission": 4,
+            "share": null,
+            "creator": 10,
+            "team_belong": null,
+            "modified_user": [],
+            "comments": []
+        },
+        {
+            "id": 2,
+            "file_title": "tt",
+            "file_content": "ttttttttttttttttttttttt",
+            "create_time": "2020-08-10T17:01:01.209864",
+            "last_modified": "2020-08-13T08:47:04.462798",
+            "is_delete": true,
+            "delete_time": "2020-08-13T08:47:04.462798",
+            "modified_times": 0,
+            "type": "private",
+            "permission": 4,
+            "team_permission": 4,
+            "share": "wu",
+            "creator": 10,
+            "team_belong": null,
+            "modified_user": [],
+            "comments": [
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10
+            ]
+        }
+    ]
+}
+```
+
+##### 返回参数说明 
+
+| 参数名 | 类型   | 说明                                                |
+| :----- | :----- | --------------------------------------------------- |
+| info   | string | 返回信息                                            |
+| code   | int    | 返回状态码                                          |
+| data   | dic    | 返回用户创建或参与的所有团队 member中放的是成员的id |
+
+
+
+##### 返回状态码
+
+200——成功
+
+403——token问题
