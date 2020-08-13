@@ -1,98 +1,49 @@
 <template>
+
     <el-container class="Info_Container">
         <el-header>
-            <span><i class="el-icon-s-custom"></i>&nbsp;个人信息查看</span>
+            <div style="font-size:24px;color:grey;margin:10px" ><b>个人信息查看</b></div>
+<!--            <span><i class="el-icon-s-custom" style="font-size:20px"></i>&nbsp;</span>-->
         </el-header>
-        <el-container class="Inner_container">
-            <el-aside width="30%">
-                <div class="Inner_aside">
-                    <img src="../../assets/logo_new.png" alt=""  width="70%" height="50%">
-                    <p>{{this.form.name}}</p>
-                </div>
-            </el-aside>
-            <el-divider direction="vertical"></el-divider>
-            <el-divider direction="vertical"></el-divider>
-            <el-main>
-                <el-form ref="form" :model="form" label-width="80px">
-                
-                    <el-form-item  label="手机号">
-                        <el-input v-model="form.phone"  :disabled="true"></el-input>
-                    </el-form-item>
-                    <el-form-item label="邮箱">
-                        <el-input v-model="form.email"  :disabled="true"></el-input>
-                    </el-form-item>
-                    <el-form-item label="权限">
-                        <el-input v-model="form.type"  :disabled="true"></el-input>
-                    </el-form-item>
-                    <el-form-item label="ID">
-                        <el-input v-model="form.ID"  :disabled="true"></el-input>
-                    </el-form-item>
-                </el-form>
-            </el-main>
-        </el-container>
-        <el-footer></el-footer>
+        <br><br><br>
+        <div style="margin-bottom:20px">
+            <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="128"></el-avatar>
+            <div style="font-size:24px;color:grey;margin:10px" ><b>{{username}}</b></div>
+            <div style="margin-top:5px">ID: {{id}}</div>
+            <div style="margin-top:5px">用户名：{{username}}</div>
+            <div style="margin-top:5px" >角色：<el-tag type="worning">注册用户</el-tag></div>
+            <div style="margin-top:5px">邮箱：{{email}}</div>
+            <div style="margin-top:5px">手机号：{{phone_num}}</div>
+        </div>
     </el-container>
 </template>
 
 <script>
 //import QS from "qs";
-import Vue from 'vue'
 export default {
     name: "Userinfo",
     data(){
-        return { 
-            form: {
-                name: 'Y',
-                password: '',
-                phone: '',
-                email:'',
-                type: '普通用户',
-                ID: 11,
-                token:'',
-                old_pwd:''
-            },
-            formLabelWidth: '80px'
+        return {
+            id: '',
+            username: '',
+            phone_num: '',
+            email: ''
         }
     },
     created: function(){
         this.token=window.sessionStorage.getItem('token');
         this.GetInfo();
     },
-    watch:{
-
-    },
     methods:{
-        ChangeInfo(){
-            Vue.axios.post(
-                "http://175.24.121.113:8000/myapp/user/info/",this.$qs.stringify({
-                    new_password:this.form.password,
-                    email:this.form.email,
-                    phone_num:this.form.phone
-                }),
-                {
-                    headers: {
-                        token: this.token
-                    }
-                }).then(function(res)  {
-                    console.log(res);
-                    console.log('success');
-                }).catch(res => {
-                    console.log(res);
-            });
-        },
         GetInfo(){
-            Vue.axios.get(
-                'http://175.24.121.113:8000/myapp/user/info',
-                {
-                headers:{
-                    token:this.token
-                    }
-                }
+            var that = this;
+            this.$http.get('http://175.24.121.113:8000/myapp/user/info/',
+                {headers:{token:this.token}}
             ).then(res=>{
-                this.form.name=res.data.data.username;
-                this.form.phone=res.data.data.phone_num;
-                this.form.ID=res.data.data.id;
-                this.form.email=res.data.data.email;
+                that.username=res.data.data.username;
+                that.phone_num=res.data.data.phone_num;
+                that.id=res.data.data.id;
+                that.email=res.data.data.email;
                 console.log(res.data.data);
             }).catch(function(error){
                 console.log(error);
@@ -104,7 +55,7 @@ export default {
 
 <style lang="less" scoped>
     .Info_Container{
-        background-color:#F2F6FC;
+        //background-color:#F2F6FC;
         text-align: center;
         height:100%;
         padding-left: 20%;

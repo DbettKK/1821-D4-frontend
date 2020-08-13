@@ -27,9 +27,10 @@
                     <i class="el-icon-s-tools el-icon--right icon-setting"></i>
                     <!--   <span style="font-size: 27px;margin-right: 20px;">欢迎您，{{userinfo.username}}</span>-->
                 </span>
-                <el-dropdown-menu slot="dropdown" v-if="isLogin && userinfo.username">
-                    <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
-                    <el-dropdown-item @click.native="writeOff">注销账号</el-dropdown-item>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item v-if="!(isLogin && userinfo.username)">登录后查看更多</el-dropdown-item>
+                    <el-dropdown-item @click.native="logout" v-if="isLogin && userinfo.username">退出登录</el-dropdown-item>
+                    <el-dropdown-item @click.native="writeOff" v-if="isLogin && userinfo.username">注销账号</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
             </div>
@@ -45,8 +46,8 @@
                             <i class="el-icon-user-solid"></i><span>个人空间</span></template>
                         <el-menu-item-group style="background-color: #EDEEEF">
                             <template slot="title">个人信息</template>
-                            <el-menu-item index="2-1" class="el-icon-info" @click.native="showUserInfo">个人详情</el-menu-item>
-                            <el-menu-item index="2-2" class="el-icon-bell">消息通知</el-menu-item>
+                            <el-menu-item index="2-1" @click.native="showUserInfo">个人详情</el-menu-item>
+                            <el-menu-item index="2-2">消息通知</el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
                     <el-submenu index="3" style="background-color: #EDEEEF" >
@@ -59,7 +60,9 @@
                                  <router-link :to="{ path:'/TeamSpace/'+item.id,query:{id:item.id} }" class="a" :key="item.name"> 
                               <!--   '/TeamSpace/'+item.id"  class="a" :key="item.name"> -->
                                 <!-- <router-link :to="idplus(item.id)"  class="a" :key="item.name"> -->
-                            <el-menu-item :index="tindex.toString()" :key="item.name" ><!-- class="el-icon-caret-right">图标好像有点丑-->{{item.name}}</el-menu-item>
+                            <el-menu-item :index="tindex.toString()" :key="item.name" ><!-- class="el-icon-caret-right">图标好像有点丑-->
+                            {{item.name}}
+                            </el-menu-item>
                            </router-link> 
                             </template>
                         </el-menu-item-group>
@@ -87,8 +90,6 @@
 </template>
 
 <script>
-//import qs from "qs";
-import Vue from 'vue'
 export default {
     data() {
         return {
@@ -102,10 +103,7 @@ export default {
             isCollapse: false,
             createTeamVisible:false,
             createTeam_name:"",
-            Teams:
-            [
-               
-            ]
+            Teams: []
         }
     },
     created() {
@@ -116,19 +114,14 @@ export default {
         }else{
             this.isLogin = false;
         }
-
     },
     methods: {
-        idplus(id)
-        {
-            return "TeamSpace/"+id;
-        },
         logout() {
             window.sessionStorage.clear()
             this.$router.push('/login')
         },
         getUserInfo() {
-            Vue.axios.get(
+            this.$http.get(
                 'http://175.24.121.113:8000/myapp/user/info/',
                 {headers: {token: window.sessionStorage.getItem("token")}}
             ).then(res=>{
@@ -150,16 +143,12 @@ export default {
         },
         createTeam(){
             this.createTeamVisible=false;
-            Vue.axios.post(
+            this.$http.post(
                 "http://175.24.121.113:8000/myapp/team/create/",
                 this.$qs.stringify({
                     team_name:this.createTeam_name
                 }),
-                {
-                    headers: {
-                        token: window.sessionStorage.getItem("token")
-                    }
-                }
+                {headers: {token: window.sessionStorage.getItem("token")}}
             ).then(res=>{
                 if(res.code===200){
                     alert("你的新团队:"+res.data.data.name+" id:"+res.data.data.id+"成功创建！");
@@ -191,27 +180,16 @@ export default {
         },
         getTeams()
         {
-                   Vue.axios.get(
+            var that = this;
+            this.$http.get(
                 'http://175.24.121.113:8000/myapp/team/all/get/',
                 {headers: {token: window.sessionStorage.getItem("token")}}
             ).then(res=>{
-         //       alert(qs.stringify(this.Teams[0]));
-
-                                this.Teams=res.data.data;
-        //        this.Teams=res.data
-        //        alert(qs.parse(res.data))
-
-                /*
-                this.userinfo.username=res.data.data.username;
-                this.userinfo.phone_num=res.data.data.phone_num;
-                this.userinfo.id=res.data.data.id;
-                this.userinfo.email=res.data.data.email;
-                console.log(res);
-                */
+                that.Teams=res.data.data;
+                console.log(that.Teams)
             }).catch(function(error){
                 console.log(error);
-            })
-                            console.log(this.Teams)
+            });
             },
         writeOff(){
             this.$http.get('http://175.24.121.113:8000/myapp/team/all/get/',
@@ -224,10 +202,10 @@ export default {
             this.$message({message:'注销成功', type:'success'});
             window.sessionStorage.clear();
             this.$router.push('/login')
-
-
+        },
+        toTeam(team_id){
+            this.$router.push("/TeamSpace/"+team_id);
         }
-   
     }
 }
 </script>
