@@ -66,6 +66,19 @@ export default {
         console.log(error,Response);
       })
     },
+    favor(){
+      Vue.axios.get(
+        "http://175.24.121.113:8000/myapp/file/favorite",
+        this.$qs.stringify({
+          file_id:1,
+        }),
+        {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(res=>{
+        console.log(res);
+      }).catch(error=>{
+        console.log(error,Response);
+      })
+    },
     recently() {
             this.$router.push('/recently')
         },

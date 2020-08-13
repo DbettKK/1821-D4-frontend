@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Login from './components/user/login.vue'
 import Register from './components/user/register.vue'
 import FindPassword from './components/user/FindPassword.vue'
-import User from './components/user/UserInfo.vue'
+import ChangeUserInfo from './components/user/changeUserInfo.vue'
 import Home from './components/user/home.vue'
 import Welcome from './components/user/welcome.vue'
 import Ue from './components/edit/ue.vue'
@@ -11,7 +11,7 @@ import Recently from './components/user/recently.vue'
 import Myproduction from './components/user/myproduction.vue'
 import Favorite from './components/user/favorite.vue'
 import Trashbin from './components/user/trashbin.vue'
-
+import ShowUserInfo from './components/user/showUserInfo.vue'
 
 Vue.use(Router)
 
@@ -47,7 +47,8 @@ const router = new Router({
         {path: '/myproduction', component: Myproduction,meta:{title:'金刚石文档编辑器'}},
         {path: '/favorite', component: Favorite,meta:{title:'金刚石文档编辑器'}},
         {path: '/trashbin', component: Trashbin,meta:{title:'金刚石文档编辑器'}},
-        {path: '/changeInfo', component: User, name:'ChangeInfo',meta:{title:'金刚石文档编辑器:个人信息'}},
+        {path: '/changeInfo', component: ChangeUserInfo, name:'ChangeInfo',meta:{title:'金刚石文档编辑器:个人信息'}},
+        {path: '/showUserInfo', component: ShowUserInfo, name:'ShowUserInfo',meta:{title:'金刚石文档编辑器:个人信息'}}
       ]
     },
     /*{

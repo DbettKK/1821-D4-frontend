@@ -43,8 +43,8 @@
                             <i class="el-icon-user-solid"></i><span>个人空间</span></template>
                         <el-menu-item-group style="background-color: #EDEEEF">
                             <template slot="title">个人信息</template>
-                            <el-menu-item index="2-1">个人详情</el-menu-item>
-                            <el-menu-item index="2-2">消息通知</el-menu-item>
+                            <el-menu-item index="2-1" class="el-icon-info" @click.native="showUserInfo">个人详情</el-menu-item>
+                            <el-menu-item index="2-2" class="el-icon-bell">消息通知</el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
                     <el-submenu index="3" style="background-color: #EDEEEF">
@@ -143,6 +143,9 @@ export default {
             }).catch(function(error){
                 console.log(error);
             })
+        },
+        showUserInfo(){
+            this.$router.push('/showUserInfo')
         },
         //折叠展开左菜单
         toggleCollapse() {
