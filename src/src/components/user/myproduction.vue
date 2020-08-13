@@ -81,7 +81,7 @@
                   </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                  <el-button @click="dialog=false">取 消</el-button>
+                  <el-button @click="dialog2=false">取 消</el-button>
                   <el-button type="primary" @click="renameFile" >确定</el-button>
                 </div>
               </el-dialog>
@@ -103,6 +103,7 @@ export default {
       doclist: [],
       privilege: '',
       dialog: false,
+      dialog1: false,
       dialog2: false,
       permission: ['仅查看','可编辑','可评论','可分享']
     };
@@ -189,7 +190,15 @@ export default {
     },
     submit1(){
       this.$http.get('http://175.24.121.113:8000/myapp/file/create/pri/',
-              {headers: {token: window.sessionStorage.getItem("token")}})
+              {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(function (res) {
+        console.log(res.data);
+      }).catch(function (error) {
+        console.log(error.response);
+      });
+      this.dialog1=false;
+      this.getDoclist();
+      this.reload();
     },
     renameFile(){
       this.$http.post('http://175.24.121.113:8000/myapp/file/rename/',this.$qs.stringify({
