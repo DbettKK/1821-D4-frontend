@@ -1,10 +1,10 @@
 <template>
   <div class="background">
-    <Header :url="url" :title="title" :file_id="file_id" :content="content"></Header>
+    <Header :url="url" :title="title" :file_id="file_id" :content="content" :collect="collect"></Header>
     <el-card style="height: 780px;">
       <el-container>
         <el-header style="height: 50px">
-          <div class="font_type" @click="drawer=true">{{title}}</div>
+          <div class="font_type">{{title}}</div>
         </el-header>
         <el-main>
           <mavon-editor
@@ -58,6 +58,7 @@
     },
     data() {
       return {
+        collect:false,
         showable:true,
         drawer: false,
         direction: 'rtl',
@@ -133,6 +134,7 @@
                 ).then(res => {
                     this.title=res.data.data.file_title;
                     this.content=res.data.data.file_content;
+                    this.collect=res.data.is_kept;
                     console.log(res);
             });
       },

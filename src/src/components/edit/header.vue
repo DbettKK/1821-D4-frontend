@@ -8,6 +8,7 @@
                     <el-breadcrumb-item>首页</el-breadcrumb-item>
                     <el-breadcrumb-item><a href="/recently">工作台</a></el-breadcrumb-item>
                     <el-breadcrumb-item>文档编辑</el-breadcrumb-item>
+                    <el-breadcrumb-item @click="dialogVisible=true">用户评论</el-breadcrumb-item>
                 </el-breadcrumb>
             </div>
         </el-col>
@@ -30,7 +31,7 @@
             :visible.sync="dialogVisible"
             width="30%"
             :before-close="handleClose">
-            <span>您的文档邀请码url为：{{url}}</span>
+            <span>您的文档邀请码为：{{file_id}}</span>
             <span slot="footer" class="dialog-footer">
               <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
             </span>
@@ -68,11 +69,14 @@
         },
         file_id:{
           type:Number,
+        },
+        collect:{
+          type:Boolean,
         }
     },
     data() {
       return {
-        show_collect: true,
+        show_collect:false,
         dialogVisible:false,
       };
     },
@@ -80,24 +84,30 @@
         this.Get_file();
     },
     watch:{
+      collect:function () {
+        if(this.collect == true)
+          this.show_collect=true;
+        else  
+          this.show_collect=false;
+      }
     },
     methods: {
       Collect() {
-        if(this.show_collect == true){
+        if(this.collect == true){
           this.$message({
             message: '您已取消收藏',
             type: 'warning'
           });
-          this.show_collect=false;
+          this.collect=false;
           this.Q_file();
         }
         else    {
-            this.show_collect=true;
+            this.collect=true;
             this.$message({
               message: '您已成功收藏',
               type: 'success'
             });
-            this.Q_file();
+            this.C_file();
         }
       },
       ToInfo(){
@@ -141,13 +151,13 @@
       C_file(){
             Vue.axios.get(
                 'http://175.24.121.113:8000/myapp/file/favorite',
-                this.$qs.stringify({
-                  file_id:this.url
-                }),
                 {
                 headers:{
-                    token:this.token
-                    }
+                    token: window.sessionStorage.getItem('token')
+                    },
+                  params:{
+                    file_id:this.file_id
+                  }
                 }
             ).then(res=>{
                 console.log(res.data);
@@ -158,13 +168,13 @@
       Q_file(){
         Vue.axios.get(
                 'http://175.24.121.113:8000/myapp/file/cancelfavor',
-                this.$qs.stringify({
-                  file_id:this.url
-                }),
                 {
                 headers:{
-                    token:this.token
-                    }
+                    token: window.sessionStorage.getItem('token')
+                    },
+                  params:{
+                    file_id:this.file_id
+                  }
                 }
             ).then(res=>{
                 console.log(res.data);
