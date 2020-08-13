@@ -39,8 +39,7 @@
               </el-card>
             </el-col>
           </el-row>
-        </el-main>
-        <div class="right_pannels"><!--右边按钮栏-->
+                  <div class="right_pannels"><!--右边按钮栏-->
             <div class="button_container">
             <div class="button_create_team_doc">   
                 <el-button class="shenhui" @click="creat_team_doc" style="width:160px" icon="el-icon-edit">
@@ -55,6 +54,8 @@
             </div>
 
         </div>
+        </el-main>
+
 
     </el-container>
 </template>
@@ -189,14 +190,16 @@ export default {
 display: flex;
     z-index: 100;
     -webkit-flex-direction: column;
+        margin-top:100px;
     -ms-flex-direction: column;
     flex-direction: column;
     box-sizing: border-box;
     position: absolute;
-    padding-top: 38px;
+    padding-top: 380px;
     right: 0px;
-    top: 0px;
+    top: 100px;
     bottom: 0;
+    height:400px;
     width: 244px;
     margin: 0;
     padding: 0;
@@ -206,9 +209,9 @@ display: flex;
 {
     
     margin-bottom: 40px;
-    margin-top:100px;
+
     width: 160px;
-    top:100px;
+    top:10px;
     left:50px;
     margin: 0;
     padding: 0;
