@@ -1,5 +1,6 @@
 <template>
   <div class="login_container">
+    <Ba />
     <div class="login_box">
       <div class="avatar_box">
         <img src="../../assets/logo_new.png" alt="">
@@ -75,8 +76,12 @@
 <script>
 import QS from "qs";
 import Vue from 'vue'
+import Ba from './background.vue'
 export default {
     name: "Register",
+    components:{
+    Ba,
+  },
   data () {
     return {
       loginForm: {
@@ -289,9 +294,11 @@ font-size:26px;//调整字体大小
   background-color: #fff;
   border-radius: 3px;
   position: absolute;
-  left: 50%;
+  left: 30%;
   top: 55%;
   transform: translate(-50%, -50%);
+
+
   //登录按钮的定制
 .el-button--shenhui {
   background-color: rgb(73, 74, 75);

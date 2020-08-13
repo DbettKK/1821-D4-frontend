@@ -138,12 +138,13 @@
       },
       $imgAdd(pos, $file){
         var formdata = new FormData();
+        console.log($file)
         formdata.append('image', $file);
         Vue.axios.post(
         'http://175.24.121.113:8000/myapp/picSave/',formdata,
         {headers: { 'Content-Type': 'multipart/form-data' }},
-        ).then((response)=>{
-        this.$refs.md.$img2Url(pos, response.data.data.url);
+        ).then(()=>{
+        this.$refs.md.$img2Url(pos, 'http://175.24.121.113:8000/myapp/media/' + $file.name);
         })
       },
 
