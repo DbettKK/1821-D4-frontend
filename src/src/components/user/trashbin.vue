@@ -1,119 +1,139 @@
 <template>
-    <div height=100%>
-        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-          <el-menu-item index="1" @click="recently">最近使用</el-menu-item>
-          <el-menu-item index="2" @click="myproduction">我创建的</el-menu-item>
-          <el-menu-item index="3" @click="favorite">我的收藏</el-menu-item>
-          <el-menu-item index="4" @click="trashbin">回收站</el-menu-item>
-        </el-menu>
-        <el-divider></el-divider>
-        <el-table :data="tableData" height=734px style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}">
-            <el-table-column type="expand">
-                <template slot-scope="props">
-                    <el-form label-position="left" class="demo-table-expand">
-                        <el-form-item label="最近一次修改">
-                            <span>{{ props.row.modification_date }}</span>
-                        </el-form-item>
-                        <el-form-item label="修改人">
-                            <span>{{ props.row.modifier }}</span>
-                        </el-form-item>
-                        <el-form-item label="修改次数">
-                            <span>{{ props.row.modification_times }}</span>
-                        </el-form-item>
-                    </el-form>
-                </template>
+    <el-container style="height: 100%; width: 100%; border: 0px">
+        <el-header style="text-align: left; font-size: 20px">
+          <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
+            <el-menu-item index="1" @click="recently">最近使用</el-menu-item>
+            <el-menu-item index="2" @click="myproduction">我创建的</el-menu-item>
+            <el-menu-item index="3" @click="favorite">我的收藏</el-menu-item>
+            <el-menu-item index="4" @click="trashbin">回收站</el-menu-item>
+          </el-menu>
+        </el-header>
+        <el-main>
+        <el-table :data="tableData" height=734px style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" :row-style="{height: '35px'}">
+            <el-table-column prop="file_title" label="文件名称" @contextmenu.prevent=""></el-table-column>
+            <el-table-column prop="delete_time" :formatter="dateFormat" label="删除日期" width="240px"></el-table-column>
+            <el-table-column fixed="right" width="50">
+              <template slot-scope="scope">
+                <el-tooltip class="item" effect="dark" content="放回原处" placement="bottom-end">
+                  <el-button @click.native="redo(scope.row.id)" type="text" style="color: #999" size="mini">
+                    <i class="el-icon-thumb"></i>
+                  </el-button>
+                </el-tooltip>
+              </template>
             </el-table-column>
-            <el-table-column prop="date" label="创建日期" width="180"></el-table-column>
-            <el-table-column prop="author" label="作者" width="180"></el-table-column>
-            <el-table-column prop="name" label="文件名称" @contextmenu.prevent=""></el-table-column>
-            <el-table-column label="操作">
-                <template slot-scope="scope">
-                    <el-tooltip class="item" effect="dark" content="彻底删除" placement="right">
-                        <el-button type="danger" icon="el-icon-delete" circle @click="handleDelete(scope.$index, scope.row)"></el-button>
-                    </el-tooltip>
-                </template>
+            <el-table-column fixed="right" width="50">
+              <template slot-scope="scope">
+                <el-tooltip class="item" effect="dark" content="彻底删除" placement="bottom-end">
+                  <el-button @click.native="del(scope.row.id)" type="text" style="color: #999" size="mini">
+                    <i class="el-icon-delete-solid"></i>
+                  </el-button>
+                </el-tooltip>
+              </template>
             </el-table-column>
         </el-table>
-    </div>
+        </el-main>
+        <el-dialog title="确认将文档从回收站放回原处" :visible.sync="dialog" width="30%">
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialog=false">取 消</el-button>
+            <el-button type="primary" @click="submitredo()" >确定</el-button>
+          </div>
+        </el-dialog>
+        <el-dialog title="确认将文档从回收站彻底删除" :visible.sync="dialog2" width="30%">
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialog2=false">取 消</el-button>
+            <el-button type="primary" @click="submitdel()" >确定</el-button>
+          </div>
+        </el-dialog>
+    </el-container>
 </template>
 
 <script>
+  import Vue from 'vue'
+  import fecha from 'fecha'
   export default {
+    inject: ['reload'],
     data() {
       return {
         activeIndex:'4',
-        tableData: [{
-          date: '2016-05-03',
-          author: '王小虎',
-          name: '金刚石文档内容描述',
-          modification_date: '2020-08-10',
-          modifier: '笪昊凡',
-          modification_times: '1'
-        }, {
-          date: '2016-05-04',
-          author: '王小虎',
-          name: '金刚石文档内容描述',
-          modification_date: '2020-08-10',
-          modifier: '笪昊凡',
-          modification_times: '1'
-        }, {
-          date: '2016-05-05',
-          author: '王小虎',
-          name: '金刚石文档内容描述',
-          modification_date: '2020-08-10',
-          modifier: '笪昊凡',
-          modification_times: '1'
-        }, {
-          date: '2016-05-06',
-          author: '王小虎',
-          name: '金刚石文档内容描述',
-          modification_date: '2020-08-10',
-          modifier: '笪昊凡',
-          modification_times: '1'
-        }, {
-          date: '2016-05-07',
-          author: '王小虎',
-          name: '金刚石文档内容描述',
-          modification_date: '2020-08-10',
-          modifier: '笪昊凡',
-          modification_times: '1'
-        }, {
-          date: '2016-05-08',
-          author: '王小虎',
-          name: '金刚石文档内容描述',
-          modification_date: '2020-08-10',
-          modifier: '笪昊凡',
-          modification_times: '1'
-        }, {
-          date: '2016-05-09',
-          author: '王小虎',
-          name: '金刚石文档内容描述',
-          modification_date: '2020-08-10',
-          modifier: '笪昊凡',
-          modification_times: '1'
-        }, {
-          date: '2016-05-10',
-          author: '王小虎',
-          name: '金刚石文档内容描述',
-          modification_date: '2020-08-10',
-          modifier: '笪昊凡',
-          modification_times: '1'
-        }]
+        tableData: [],
+        dialog: false,
+        dialog2: false,
+        id: '1'
       }
     },
+    created() {
+      this.getTabledata()
+    },
     methods:{
-      recently() {
-            this.$router.push('/recently')
-        },
-        myproduction() {
-            this.$router.push('/myproduction')
-        },
-        favorite() {
-            this.$router.push('/favorite')
-        },
-        trashbin() {
-            this.$router.push('/trashbin')
-        }
+      getTabledata() {
+      var that = this;
+      Vue.axios.get(
+        'http://175.24.121.113:8000/myapp/file/delete/get/',
+        {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(function(res){
+        console.log(res);
+        that.tableData=res.data.data;
+      }).catch(function(error){
+        console.log(error,Response);
+      })
+    },
+    dateFormat(row, column, cellValue) {
+        return cellValue ? fecha.format(new Date(cellValue), 'YYYY-MM-DD') : '';
+      },
+    time(a) {
+      this.doctime = a.toString().substr(0, 10)
+         return this.doctime
+    },
+    recently() {
+          this.$router.push('/recently')
+    },
+    myproduction() {
+      this.$router.push('/myproduction')
+    },
+    favorite() {
+      this.$router.push('/favorite')
+    },
+    trashbin() {
+      this.$router.push('/trashbin')
+    },
+    redo(a) {
+      this.id = a;
+      console.log(this.id);
+      this.dialog = true;
+    },
+    del(a) {
+      this.id = a;
+      console.log(this.id);
+      this.dialog2 = true;
+    },
+    submitredo(){
+      this.$http.get('http://175.24.121.113:8000/myapp/file/isdelete',{
+                headers: {token: window.sessionStorage.getItem("token")},
+                params:{file_id: this.id, is_delete: 'False'}
+      }
+      ).then(function (res) {
+        console.log(res.data);
+      }).catch(function (error) {
+        console.log(error.response);
+      });
+      this.dialog=false;
+      this.getTabledata();
+      this.reload();
+    },
+    submitdel(){
+      this.$http.get('http://175.24.121.113:8000/myapp/file/realdelete',{
+                headers: {token: window.sessionStorage.getItem("token")},
+                params:{file_id: this.id}
+      }
+      ).then(function (res) {
+        console.log(res.data);
+      }).catch(function (error) {
+        console.log(error.response);
+      });
+      this.dialog=false;
+      this.getTabledata();
+      this.reload();
+    }
     }
   }
 </script>
