@@ -1,6 +1,6 @@
 <template>
     <el-container style="height: 100%; width: 100%; border: 0px">
-        <el-header style="text-align: left; font-size: 20px; display: flex; justify-content: space-between;" >
+      <el-header style="text-align: left; font-size: 20px; display: flex; justify-content: space-between;" >
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
             <el-menu-item index="1" @click="recently">最近使用</el-menu-item>
             <el-menu-item index="2" @click="myproduction">我创建的</el-menu-item>
@@ -107,7 +107,8 @@ export default {
       this.reload();
     },
     submit(){
-      this.$http.get('http://175.24.121.113:8000/myapp/file/create/pri/', {headers: {token: window.sessionStorage.getItem("token")}}
+      this.$http.get('http://175.24.121.113:8000/myapp/file/create/pri/',
+              {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(function (res) {
         console.log(res.data);
       }).catch(function (error) {

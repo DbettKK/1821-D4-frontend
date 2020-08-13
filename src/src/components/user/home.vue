@@ -50,7 +50,7 @@
                     <el-submenu index="3" style="background-color: #EDEEEF">
                         <template slot="title">
                             <i class="el-icon-s-claim"></i><span style="margin-right: 50px">团队空间</span>
-                            <i class="el-icon-circle-plus" @click="createTeamVisible=true" ></i>  </template>
+                            <i class="el-icon-circle-plus-outline" @click="createTeamVisible=true" ></i>  </template>
                             <el-menu-item-group style="background-color: #EDEEEF">
                             <template slot="title">加入的团队</template>
                             <template v-for="(item) in Teams"> 
@@ -77,7 +77,6 @@
                 <router-view></router-view>
             </el-main>
         </el-container>
-
     </el-container>
 </template>
 
@@ -94,7 +93,6 @@ export default {
             },
             isLogin: false,
             isCollapse: false,
-    
             createTeamVisible:false,
             createTeam_name:"",
             Teams:
