@@ -1,13 +1,22 @@
 <template>
     <el-container style="height: 100%; width: 100%; border: 0px">
-        <el-header style="text-align: left; font-size: 20px">
+        <el-header style="text-align: left; font-size: 20px; display: flex; justify-content: space-between;" >
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
             <el-menu-item index="1" @click="recently">最近使用</el-menu-item>
             <el-menu-item index="2" @click="myproduction">我创建的</el-menu-item>
             <el-menu-item index="3" @click="favorite">我的收藏</el-menu-item>
             <el-menu-item index="4" @click="trashbin">回收站</el-menu-item>
           </el-menu>
+          <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="dialog1=true">
+            <i class="el-icon-circle-plus bt">新建文档</i>
+          </el-card>
         </el-header>
+        <el-dialog title="是否新建私人文档" :visible.sync="dialog1" width="30%">
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialog1=false">取 消</el-button>
+            <el-button type="primary" @click="submit1()" >确 定</el-button>
+          </div>
+        </el-dialog>
         <el-main>
           <el-row v-for="(page, index) of pages" :key="index" style="margin-bottom: 40px;">
             <el-col :span="8" align="left" v-for="(item, innerindex) of page" :key="item.id" :offset="innerindex > 0 ? 2 : 0" style="margin-right: -60px;">
@@ -76,6 +85,7 @@ export default {
       doclist: [],
       privilege: '',
       dialog: false,
+      dialog1: false,
       permission: ['仅查看','可编辑','可评论','可分享']
     };
   },
@@ -158,6 +168,17 @@ export default {
       });
       this.dialog=false;
       this.reload();
+    },
+    submit1(){
+      this.$http.get('http://175.24.121.113:8000/myapp/file/create/pri/', {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(function (res) {
+        console.log(res.data);
+      }).catch(function (error) {
+        console.log(error.response);
+      });
+      this.dialog1=false;
+      this.getDoclist();
+      this.reload();
     }
 
   },
@@ -220,5 +241,23 @@ export default {
   
 .clearfix:after {
     clear: both
+}
+
+.newfile {
+  height: 30px;
+  width: 120px;
+  background-color: rgb(36, 36, 36);
+  font-size: 11px;
+  margin-top: 20px;
+  margin-right: 100px;
+  color: rgb(180, 180, 180);
+  position: relative;
+  cursor: pointer;
+  .bt {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%)translateY(-50%);
+  }
 }
 </style>
