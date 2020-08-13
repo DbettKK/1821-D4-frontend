@@ -1,29 +1,49 @@
 <template>
-  <div class="login_container">
+<div>
+    <Ba></Ba>
+    <div class="login_container">
     <div class="login_box">
       <div class="avatar_box">
         <img src="../../assets/logo.png" alt="">
       </div>
-      <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" label-width="0px" class="login_form">
-        <el-form-item prop="username">
-          <el-input placeholder="请输入账号" v-model="loginForm.username" prefix-icon="el-icon-user"></el-input>
-        </el-form-item>
-        <el-form-item prop="password">
-          <el-input placeholder="请输入密码" v-model="loginForm.password" prefix-icon="el-icon-lock" type="password"></el-input>
-        </el-form-item>
-        <el-form-item class="btns">
-          <el-button type="primary" @click="login">登录</el-button>
-          <el-button type="info" @click="resetloginForm">重置</el-button>
-          <el-form-item><router-link to="/register" class=a>还未拥有账号？前往注册</router-link></el-form-item>
-        <el-form-item><router-link to="/FindPassword" class=a>已经忘记密码？前往找回</router-link></el-form-item>
-        </el-form-item>
-      </el-form>
+      <el-container>
+        <el-main class="main1">
+          <div class="In">金刚石文档：用户登录 </div>
+          <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" label-width="0px" class="login_form">
+            <el-form-item prop="username">
+              <el-input placeholder="请输入账号" v-model="loginForm.username" prefix-icon="el-icon-user"></el-input>
+            </el-form-item>
+            <el-form-item prop="password">
+              <el-input placeholder="请输入密码" v-model="loginForm.password" prefix-icon="el-icon-lock" type="password"></el-input>
+            </el-form-item>
+            <el-form-item class="btns">
+              <el-button type="primary" @click="login">登录</el-button>
+              <el-button type="info" @click="resetloginForm">重置</el-button>
+            </el-form-item>
+          </el-form>
+        </el-main>
+        <el-footer>
+          <el-container>
+          <el-aside width="50%">
+              <router-link to="/register" class="a">前往注册</router-link>
+          </el-aside>
+          <el-main class="main2">
+              <router-link to="/FindPassword" class="a">找回密码</router-link>
+          </el-main>
+          </el-container>
+        </el-footer>
+      </el-container>
     </div>
   </div>
+</div>
 </template>
 
 <script>
+import Ba from './background.vue'
 export default {
+  components:{
+    Ba,
+  },
   data () {
     return {
       loginForm: {
@@ -41,12 +61,11 @@ export default {
           { min: 2, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
           // 因为数据库现在存的都是简单密码。。所以这里min先改成2，之后再改回来
         ]
-      }
+      },
     }
   },
   //保存登录状态
-  
-  //created() {
+  created() {
     //console.log(sessionStorage.getItem("store"));
     //console.log(sessionStorage.length);
     // 如果sessionStorage中存储了store
@@ -58,14 +77,9 @@ export default {
     //window.addEventListener("beforeunload",()=>{
         //sessionStorage.setItem("store", JSON.stringify(this.$store.state))
     //})
-  //},
+  },
   
   methods: {
-    //exit(){
-      //console.log(this.$store.state.token)
-      //this.$store.commit('exit')
-      //console.log(this.$store.state.token)
-    //},
     resetloginForm () {
       // console.log(this)
       this.$refs.loginFormRef.resetFields();
@@ -102,18 +116,22 @@ export default {
 
 <style lang="less" scoped>
 .login_container {
-  background-color: rgb(0, 194, 129);
-  height: 100%;
+  padding-top: 400px;
+  padding-right: 400px;
+  margin-right: 900px;
+  //background-color:#e4ddd0;
+  
+  //opacity: 20%;
+  height:320px;
 }
 
 .login_box {
-  width: 450px;
-  height: 380px;
+  width: 350px;
+  height: 450px;
   background-color: #fff;
   border-radius: 3px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
+  margin-left: 300px;
+  opacity: 90%;
   transform: translate(-50%, -50%);
 
   .avatar_box {
@@ -125,6 +143,7 @@ export default {
     box-shadow: 0 0 10px #ddd;
     position: absolute;
     left: 50%;
+    opacity: 90%;
     transform: translate(-50%, -50%);
     background-color: #fff;
     img {
@@ -136,20 +155,51 @@ export default {
   }
 
   .login_form {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    padding: 0 20px;
+    opacity: 90%;
+    padding-top:5%;
+    width: 80%;
+    padding-left: 70px;
     box-sizing: border-box;
   }
 
   .btns {
-    display: flex;
-    justify-content: flex-end;
+    opacity: 90%;
+    padding-top: 10%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
   }
   .a{
         text-decoration: none;
+        padding-left: 20px;
         color:#333;
     }
+    
+  .main1 {
+    height: 390px;
+    text-align: center;
+    line-height: 190px;
+    opacity: 90%;
+  }
+  .main2{
+    text-decoration: none;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    vertical-align: top;
+    opacity: 90%;
+  }
+  .el-aside{
+    text-decoration: none;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    vertical-align: top;
+    opacity: 90%;
+  }
+  .In{
+    vertical-align: bottom;
+    height: 120px;
+  }
 }
 </style>

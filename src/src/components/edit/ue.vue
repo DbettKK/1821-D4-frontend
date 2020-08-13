@@ -7,54 +7,19 @@
           <div class="font_type">{{title}}</div>
         </el-header>
         <el-main style="height: 630px">
-          <quill-editor v-model="content" ref="myQuillEditor" style="height: 550px;" :options="editorOption">
-            <!-- 自定义toolar -->
-            <div id="toolbar" slot="toolbar">
-              <!-- Add a bold button -->
-              <button class="ql-bold" title="加粗">Bold</button>
-              <button class="ql-italic" title="斜体">Italic</button>
-              <button class="ql-underline" title="下划线">underline</button>
-              <button class="ql-strike" title="删除线">strike</button>
-              <button class="ql-blockquote" title="引用"></button>
-              <button class="ql-code-block" title="代码"></button>
-              <button class="ql-header" value="1" title="标题1"></button>
-              <button class="ql-header" value="2" title="标题2"></button>
-              <!--Add list -->
-              <button class="ql-list" value="ordered" title="有序列表"></button>
-              <button class="ql-list" value="bullet" title="无序列表"></button>
-              <!-- Add font size dropdown -->
-              <select class="ql-header" title="段落格式">
-                <option selected>段落</option>
-                <option value="1">标题1</option>
-                <option value="2">标题2</option>
-                <option value="3">标题3</option>
-                <option value="4">标题4</option>
-                <option value="5">标题5</option>
-                <option value="6">标题6</option>
-              </select>
-              <select class="ql-size" title="字体大小">
-                <option value="10px">10px</option>
-                <option value="12px">12px</option>
-                <option value="14px">14px</option>
-                <option value="16px" selected>16px</option>
-                <option value="18px">18px</option>
-                <option value="20px">20px</option>
-              </select>
-              <select class="ql-font" title="字体">
-                <option value="SimSun">宋体</option>
-                <option value="SimHei">黑体</option>
-                <option value="Microsoft-YaHei">微软雅黑</option>
-                <option value="KaiTi">楷体</option>
-                <option value="FangSong">仿宋</option>
-                <option value="Arial">Arial</option>
-              </select>
-              <!-- Add subscript and superscript buttons -->
-              <select class="ql-color" value="color" title="字体颜色"></select>
-              <select class="ql-background" value="background" title="背景颜色"></select>
-              <select class="ql-align" value="align" title="对齐"></select>
-              <button class="ql-clean" title="还原"></button>
-              <!-- You can also add your own -->
-            </div>
+          <el-upload
+              class="avatar-uploader"
+              :action="serverUrl"  
+              name="file"
+              :headers="header"
+              :show-file-list="false"
+              :on-success="uploadSuccess"
+              :on-error="uploadError">
+          </el-upload>
+          <quill-editor v-model="detailContent" style="height: 500px;" 
+              ref="myQuillEditor" 
+              :options="editorOption">
+              {{detailContent}}
           </quill-editor>
         </el-main>
         <!-- el-footer>
@@ -94,6 +59,23 @@
   Font.whitelist = fonts
   Quill.register(Font, true)
 
+  const toolbarOptions = [
+              ['bold', 'italic', 'underline'],        // toggled buttons
+              ['blockquote', 'code-block'],
+              [{'header': 1}],               // custom button values
+              [{'list': 'ordered'}],
+              [{'direction': 'rtl'}],                         // text direction
+
+              //[{'size': ['small', false, 'large', 'huge']}],  // custom dropdown
+              [{'header': [1, 2, 3, 4, 5, 6, false]}],
+
+              [{'color': []}, {'background': []}],          // dropdown with defaults from theme
+              [{'font': []}],
+              [{'align': []}],
+              ['link', 'image'],
+              ['clean']                                         // remove formatting button
+        ]
+
   export default {
     name: 'FuncFormsEdit',
     components: {
@@ -103,23 +85,58 @@
     },
     data() {
       return {
-        content: null,
+        url:'////',
         title:'Title',
-        url:'//',
+        serverUrl: '/api/file/uploadForApp',
+        header: {token: sessionStorage.token},
+        detailContent:'',  //富文本编辑器内容
         editorOption: {
-          placeholder: "请输入",
-          theme: "snow", // or 'bubble' 
-          modules: {
-            toolbar: {
-              container: '#toolbar'
+            placeholder: '请输入.....',
+            theme: 'snow',  // or 'bubble'
+            modules: {
+              toolbar: {
+                container: toolbarOptions,  // 工具栏
+                handlers: {
+                  'image': function (value) {
+                    if (value) {
+                      //****就是这里自定义了图片上传的事件****
+                      //你们可以alert(1111)试下有没有成功
+                      alert(111)
+                      console.log(this.header);
+                      document.querySelector('.avatar-uploader input').click()
+                    } else {
+                      
+                      alert(115)
+                      this.quill.format('image', false);
+                    }
+                  }
+                }
+              }
             }
-          }
-        }
+        },
       }
     },
     methods:{
+      uploadSuccess(res, file) {
+                    console.log('图片上传到服务器',file.response.data.fileUrl)
+                    //res为图片服务器返回的数据
+                    //获取富文本组件实例
+                    let quill = this.$refs.myQuillEditor.quill
+                    console.log('uploadSuccess的res',res)
+                    // 如果上传成功
+                    if (res.code == 0 && res.data !== null) {
+                        // 获取光标所在位置
+                        let length = quill.getSelection().index;
+                        // 插入图片  res.info为服务器返回的图片地址
+                        quill.insertEmbed(length, 'image', res.data.fileUrl)
+                        // 调整光标到最后
+                        quill.setSelection(length + 1)
+                    } else {
+                        this.$message.error('uploadSuccess图片插入失败')
+                    }
+                },
       GetContents(){
-        return this.content;
+        return this.detailContent;
       },
       Submit(){
         this.$notify({
@@ -128,6 +145,11 @@
           type: 'success'
         });
       },
+    },
+    watch:{
+      detailContent:function(){
+        console.log(this.detailContent);
+      }
     },
     created(){
       document.title=this.title;

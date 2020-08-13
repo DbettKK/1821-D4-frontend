@@ -78,7 +78,8 @@
             message: '您已取消收藏',
             type: 'warning'
           });
-            this.show_collect=false;
+          this.show_collect=false;
+          this.Q_file();
         }
         else    {
             this.show_collect=true;
@@ -86,6 +87,7 @@
               message: '您已成功收藏',
               type: 'success'
             });
+            this.Q_file();
         }
       },
       ToInfo(){
@@ -103,9 +105,9 @@
       C_file(){
             Vue.axios.get(
                 'http://175.24.121.113:8000/myapp/file/favorite',
-                {
+                this.$qs.stringify({
                   file_id:this.url
-                },
+                }),
                 {
                 headers:{
                     token:this.token
@@ -120,9 +122,9 @@
       Q_file(){
         Vue.axios.get(
                 'http://175.24.121.113:8000/myapp/file/cancelfavor',
-                {
+                this.$qs.stringify({
                   file_id:this.url
-                },
+                }),
                 {
                 headers:{
                     token:this.token
