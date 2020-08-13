@@ -2,17 +2,17 @@
     <el-row type="flex" class="row-bg">
         <!-- 居中 -->
         <el-col :span="3"><div class="grid-content bg-purple">金刚石文档</div></el-col>
-        <el-col :span="4">
+        <el-col :span="6">
             <div class="grid-content bg-purple">
                 <el-breadcrumb separator="/">
                     <el-breadcrumb-item>首页</el-breadcrumb-item>
                     <el-breadcrumb-item><a href="/recently">工作台</a></el-breadcrumb-item>
                     <el-breadcrumb-item>文档编辑</el-breadcrumb-item>
-                    <el-breadcrumb-item @click="dialogVisible=true">用户评论</el-breadcrumb-item>
+                    <el-breadcrumb-item><div @click="showcomment">用户评论</div></el-breadcrumb-item>
                 </el-breadcrumb>
             </div>
         </el-col>
-        <el-col :span="9"></el-col>
+        <el-col :span="7"></el-col>
         <el-col :span="1">
              <el-tooltip class="item" effect="light" content="用户收藏" placement="bottom">
               <el-button class="share-button" icon="el-icon-star-on" type="primary" v-if="show_collect" @click="Collect"></el-button>
@@ -78,6 +78,7 @@
       return {
         show_collect:false,
         dialogVisible:false,
+        show:true
       };
     },
     created:function(){
@@ -92,6 +93,9 @@
       }
     },
     methods: {
+      showcomment(){
+        this.$emit('event1',this.show)
+      },
       Collect() {
         if(this.collect == true){
           this.$message({

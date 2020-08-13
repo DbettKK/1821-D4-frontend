@@ -1,6 +1,6 @@
 <template>
   <div class="background">
-    <Header :url="url" :title="title" :file_id="file_id" :content="content" :collect="collect"></Header>
+    <Header :url="url" :title="title" :file_id="file_id" :content="content" :collect="collect" @event1="change($event)"></Header>
     <el-card style="height: 780px;">
       <el-container>
         <el-header style="height: 50px">
@@ -61,7 +61,7 @@
         collect:false,
         showable:true,
         drawer: false,
-        direction: 'rtl',
+        direction: 'ltr',
         url:'12',
         title:'Title',
         file_id:10,
@@ -119,6 +119,9 @@
       }
     },
     methods:{
+      change(data){
+        this.drawer=data;
+      },
       GetContents(){
         Vue.axios.get(
                 'http://175.24.121.113:8000/myapp/file/get/',
