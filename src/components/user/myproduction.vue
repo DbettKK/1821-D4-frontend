@@ -45,6 +45,7 @@
 <script>
 import Vue from 'vue'
 export default {
+  inject: ['reload'],
   data() {
     return {
       activeIndex:'2',
@@ -97,8 +98,21 @@ export default {
       })
     },
     toTrash(file_id){
-      // 这里的后端还有些bug 交互暂缓
-      return file_id;
+      this.$http.get('http://175.24.121.113:8000/myapp/file/isdelete/',
+              {
+                headers: {token: window.sessionStorage.getItem("token")},
+                params:{file_id: file_id}
+              }
+      ).then(function (res) {
+        console.log(res.data);
+
+      }).catch(function (error) {
+        console.log(error.response.data);
+        console.log(window.sessionStorage.getItem("token"))
+      });
+      this.getDoclist();
+      this.reload();
+      //location.reload();
     }
   },
   computed: {
@@ -111,6 +125,7 @@ export default {
         }
         pages[page].push(item)
       })
+
       return pages
     }
   }

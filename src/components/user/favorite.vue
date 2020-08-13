@@ -21,7 +21,7 @@
                     <el-dropdown trigger="click" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item icon="el-icon-star-on">取消收藏</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-star-on" @click.native="cancelFavor(item.file)">取消收藏</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-delete-solid">移动到回收站</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
@@ -42,6 +42,7 @@
 <script>
 import Vue from 'vue'
 export default {
+  inject: ['reload'],
   data() {
     return {
       activeIndex:'3',
@@ -79,6 +80,21 @@ export default {
     time(a) {
       this.doctime = a.toString().substr(0, 10)
          return this.doctime
+    },
+    cancelFavor(file_id){
+      this.$http.get('http://175.24.121.113:8000/myapp/file/cancelfavor/',
+              {
+                headers: {token: window.sessionStorage.getItem("token")},
+                params:{file_id: file_id}
+              }
+      ).then(function (res) {
+        console.log(res.data);
+      }).catch(function (error) {
+        console.log(error.response.data);
+        console.log(window.sessionStorage.getItem("token"))
+      })
+      this.getDoclist();
+      this.reload();
     }
   },
   computed: {

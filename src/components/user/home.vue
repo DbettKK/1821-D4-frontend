@@ -14,7 +14,8 @@
                         <!--  <span style="font-size: 27px;margin-right: 20px;">欢迎您，{{userinfo.username}}</span>-->
                     </span>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>你好，{{userinfo.username}}</el-dropdown-item>
+                    <el-dropdown-item v-if="isLogin">你好，{{userinfo.username}}</el-dropdown-item>
+                    <el-dropdown-item v-else @click.native="logout">请登录</el-dropdown-item>
                     <el-dropdown-item @click.native="changeInfo">修改密码及个人信息</el-dropdown-item>
 
                 </el-dropdown-menu>
@@ -78,32 +79,35 @@ export default {
     data() {
         return {
             userinfo: {
-                id:"111",
-                username:"cxc",
-                email:"xxa@buqq.edu.cn",
-                phone_num:"1222233",
+                id: "",
+                username: "",
+                email: "",
+                phone_num: "",
             },
+            isLogin: false,
             isCollapse: false,
             createTeamVisible:false,
             createTeam_name:""
         }
     },
     created() {
-        this.getUserInfo()
+        if(window.sessionStorage.getItem('token')){
+            this.isLogin = true;
+            this.getUserInfo();
+        }else{
+            this.isLogin = false;
+        }
+
     },
     methods: {
         logout() {
             window.sessionStorage.clear()
             this.$router.push('/login')
         },
-        async getUserInfo() {
+        getUserInfo() {
             Vue.axios.get(
                 'http://175.24.121.113:8000/myapp/user/info/',
-                {
-                headers:{
-                    token:window.sessionStorage.getItem("token")
-                    }
-                }
+                {headers: {token: window.sessionStorage.getItem("token")}}
             ).then(res=>{
                 this.userinfo.username=res.data.data.username;
                 this.userinfo.phone_num=res.data.data.phone_num;
