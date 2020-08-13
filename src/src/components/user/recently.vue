@@ -169,6 +169,11 @@ export default {
       this.file_id='';
       this.getDoclist();
       this.reload();
+    },
+    edit(file_id){
+      this.file_id = file_id;
+      this.addrecent();
+      this.$router.push('/edit/' + file_id)
     }
   },
   computed: {

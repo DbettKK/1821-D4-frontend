@@ -244,6 +244,8 @@ export default {
       this.file_id_tmp = file_id;
     },
     edit(file_id){
+      this.file_id = file_id;
+      this.addrecent();
       this.$router.push('/edit/' + file_id)
     }
 
