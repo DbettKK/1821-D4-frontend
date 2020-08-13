@@ -20,7 +20,7 @@
         <el-main>
           <el-row v-for="(page, index) of pages" :key="index" style="margin-bottom: 40px;">
             <el-col :span="8" align="left" v-for="(item, innerindex) of page" :key="item.id" :offset="innerindex > 0 ? 2 : 0" style="margin-right: -60px;">
-              <el-card :body-style="{ padding: '0px' }" shadow="hover">
+              <el-card :body-style="{ padding: '0px' }" shadow="hover" @click.native="edit(item.id)">
                 <div style="padding: 14px;">
                   <div class="top">
                     <div style="display: flex; align-items: start;">
@@ -217,6 +217,9 @@ export default {
     renameClick(file_id){
       this.dialog2 = true;
       this.file_id_tmp = file_id;
+    },
+    edit(file_id){
+      this.$router.push('/edit/' + file_id)
     }
 
   },
