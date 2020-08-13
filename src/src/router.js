@@ -14,7 +14,12 @@ import Trashbin from './components/user/trashbin.vue'
 import TeamSpace from './components/user/TeamSpace.vue'
 
 Vue.use(Router)
-
+/*
+const teamSpace =
+{
+  template:'<div>Teamspace {{$route.params.id }} </div>'
+}
+*/
 const router = new Router({
   routes: [
     {
@@ -58,7 +63,8 @@ const router = new Router({
         {path: '/favorite', component: Favorite,meta:{title:'金刚石文档编辑器'}},
         {path: '/trashbin', component: Trashbin,meta:{title:'金刚石文档编辑器'}},
         {path: '/changeInfo', component: User, name:'ChangeInfo',meta:{title:'金刚石文档编辑器:个人信息'}},
-        { path:'/TeamSpace', component:TeamSpace,  name:'Teamspace',meta:{title:'团队空间'} }
+        { path:'/TeamSpace/:id', component:TeamSpace, }
+         //name:'Teamspace',meta:{title:'团队空间'} }
       ]
     },
     /*{
