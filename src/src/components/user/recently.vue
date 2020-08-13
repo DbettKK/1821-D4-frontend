@@ -23,6 +23,8 @@
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item icon="el-icon-star-on">收藏</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-delete-solid">从列表中删除</el-dropdown-item>
+<!--                        <el-dropdown-item icon="el-icon-delete-solid" v-if="item.person">移到回收站</el-dropdown-item>-->
+
                       </el-dropdown-menu>
                     </el-dropdown>
                   </div>

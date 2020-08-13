@@ -22,7 +22,8 @@
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item icon="el-icon-star-on" @click.native="addFavorite(item.id)">收藏</el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-s-custom">设置文档权限</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-s-custom" @click.native="selectPrivi(item.id)">设置文档权限</el-dropdown-item>
+
                         <el-dropdown-item icon="el-icon-delete-solid" @click.native="toTrash(item.id)">移动到回收站</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-s-tools" v-if="item.type=='team'">设置文档为私人文档</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-s-tools" v-if="item.type=='private'">设置文档为团队文档</el-dropdown-item>
@@ -30,12 +31,34 @@
                     </el-dropdown>
                   </div>
                   <div class="bottom clearfix">
-                    <time class="time" style="margin-right: 40px;" >创建时间：{{time(item.create_time)}}</time>
-                    <span style="font-size: 13px; color: #999;">类型：</span>
-                    <span style="font-size: 13px; color: #999;">{{item.type}}</span>
+                    <time class="time" style="margin-right: 30px;" >创建时间：{{time(item.create_time)}}</time>
+                    <span style="font-size: 13px; color: #999;margin-right: 30px;">
+                      权限：{{permission[item.permission-1]}}
+                    </span>
+                    <span style="font-size: 13px; color: #999;">类型：{{item.type}}</span>
                   </div>
                 </div>
               </el-card>
+              <el-dialog
+                      title="请设置其他人对该文档的权限"
+                      :visible.sync="dialog"
+                      width="30%"
+              >
+                  <el-form>
+                    <el-form-item>
+                      <el-select v-model="privilege" placeholder="请选择">
+                        <el-option label="仅查看" value="1"></el-option>
+                        <el-option label="可编辑" value="2"></el-option>
+                        <el-option label="可评论" value="3"></el-option>
+                        <el-option label="可分享" value="4"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-form>
+                  <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialog=false">取 消</el-button>
+                    <el-button type="primary" @click="submit()" >确定</el-button>
+                  </div>
+              </el-dialog>
             </el-col>
           </el-row>
         </el-main>
@@ -48,8 +71,12 @@ export default {
   inject: ['reload'],
   data() {
     return {
+      file_id_tmp: null,
       activeIndex:'2',
-      doclist: []
+      doclist: [],
+      privilege: '',
+      dialog: false,
+      permission: ['仅查看','可编辑','可评论','可分享']
     };
   },
   created() {
@@ -113,7 +140,26 @@ export default {
       this.getDoclist();
       this.reload();
       //location.reload();
+    },
+    selectPrivi(file_id){
+      this.dialog = true;
+      this.file_id_tmp = file_id
+
+    },
+    submit(){
+      this.$http.post('http://175.24.121.113:8000/myapp/file/privi/pri/',this.$qs.stringify({
+        privilege: this.privilege,
+        file_id: this.file_id_tmp
+      }), {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(function (res) {
+        console.log(res.data);
+      }).catch(function (error) {
+        console.log(error.response);
+      });
+      this.dialog=false;
+      this.reload();
     }
+
   },
   computed: {
     pages () {
