@@ -18,13 +18,13 @@
                   <div class="top">
                     <div style="display: flex; align-items: start;">
                       <div class="docicon"><i class="el-icon-document"></i></div>
-                      <span>{{item.file_name}}</span>
+                      <span>{{item.file_title}}</span>
                     </div>
-                    <el-dropdown trigger="click" style="font-size: 1px; color: #999;" placement="bottom-start">
+                    <el-dropdown trigger="hover" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item icon="el-icon-star-on">收藏</el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-delete-solid">从列表中删除</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-star-on" @click.native="addFavorite(item.id)">收藏</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-delete-solid" @click.native="remove(item.id)" disabled>从列表中删除</el-dropdown-item>
 <!--                        <el-dropdown-item icon="el-icon-delete-solid" v-if="item.person">移到回收站</el-dropdown-item>-->
 
                       </el-dropdown-menu>
@@ -39,23 +39,22 @@
               </el-card>
             </el-col>
           </el-row>
-                  <div class="right_pannels"><!--右边按钮栏-->
-            <div class="button_container">
-            <div class="button_create_team_doc">   
-                <el-button class="shenhui" @click="creat_team_doc" style="width:160px" icon="el-icon-edit">
-                    新建
-                </el-button>
-            </div>
-            <div class= button_putin>
-                <el-button type='info' @click="putin" style="width:160px" icon="el-icon-plus"  >
-                    导入
-                </el-button>
-            </div>
-            </div>
-
-        </div>
         </el-main>
+<!--        <div class="right_pannels">&lt;!&ndash;右边按钮栏&ndash;&gt;-->
+<!--            <div class="button_container">-->
+<!--            <div class="button_create_team_doc">   -->
+<!--                <el-button class="shenhui"  style="width:160px" icon="el-icon-edit">-->
+<!--                    新建-->
+<!--                </el-button>-->
+<!--            </div>-->
+<!--            <div class= button_putin>-->
+<!--                <el-button type='info'  style="width:160px" icon="el-icon-plus"  >-->
+<!--                    导入-->
+<!--                </el-button>-->
+<!--            </div>-->
+<!--            </div>-->
 
+<!--        </div>-->
 
     </el-container>
 </template>
@@ -63,45 +62,36 @@
 <script>
 import Vue from 'vue'
 export default {
+    inject: ['reload'],
   data() {
     return {
+        file_id: null,
       activeIndex:'1',
       doclist: [],
-      five:0
+        five: 0
     };
   },
   created() {
     this.getDoclist()
   },
-  watch: {//监听下个访问的东西是不是还是teamspace，是则重新获取
-    '$route' (to, from) {
-        if(to.name === 'Teamspace'){
-           this.getDoclist();
+    watch: {//监听下个访问的东西是不是还是teamspace，是则重新获取
+        '$route' (to, from) {
+            if(to.name === 'Teamspace'){
+                this.getDoclist();
+            }
+            if(from.name==='post')//纯粹为了避免unused
+            {
+                this.five++;
+            }
         }
-        if(from.name==='post')//纯粹为了避免unused
-        {
-            this.five++;
-        }
-    }
-},
-  methods: {
-          edit(file_id){
-      this.$router.push('/edit/' + file_id)
     },
+  methods: {
     getDoclist() {
       var that = this;
       Vue.axios.get(
-        'http://175.24.121.113:8000/myapp/file/team/get/',
-        {
-        headers: {
-                        'token': window.sessionStorage.getItem('token')
-                    },
-                    params:{
-                      team_id: this.$route.query.id.toString()
-                    }
-        }
-
-       // {headers: {token: window.sessionStorage.getItem("token")}}
+          'http://175.24.121.113:8000/myapp/file/team/get/', {
+              headers: {'token': window.sessionStorage.getItem('token')},
+              params:{team_id: that.$route.params.id.toString()}}
       ).then(function(res){
         console.log(res);
         that.doclist=res.data.data;
@@ -124,7 +114,61 @@ export default {
     time(a) {
          this.doctime = a.toString().substr(0, 10)
          return this.doctime
-    }
+    },
+    addrecent(){
+        var that = this;
+        this.$http.get('http://175.24.121.113:8000/myapp/file/browse/', {
+                headers: {token: window.sessionStorage.getItem("token")},
+                params:{file_id: that.file_id}
+            }
+        ).then(function (res) {
+            console.log(res.data);
+        }).catch(function (error) {
+            console.log(error.response);
+        });
+        this.file_id='';
+        this.getDoclist();
+        this.reload();
+    },
+    edit(file_id){
+      this.file_id = file_id;
+      this.addrecent();
+      this.$router.push('/edit/' + file_id)
+    },
+      addFavorite(file_id){
+          var that = this;
+          this.$http.get('http://175.24.121.113:8000/myapp/file/favorite/',
+              {
+                  headers: {token: window.sessionStorage.getItem("token")},
+                  params:{file_id: file_id}
+              }
+          ).then(function (res) {
+              console.log(res.data);
+              that.file_id=res.data.data.file;
+              console.log(that.file_id);
+              that.addrecent();
+          }).catch(function (error) {
+              console.log(error.response.data);
+              console.log(window.sessionStorage.getItem("token"))
+          });
+          this.getDoclist();
+          this.reload();
+      },
+      remove(file_id) {
+          this.$http.get('http://175.24.121.113:8000/myapp/file/browse/delete/',
+              {
+                  headers: {token: window.sessionStorage.getItem("token")},
+                  params:{file_id: file_id}
+              }
+          ).then(function (res) {
+              console.log(res.data);
+          }).catch(function (error) {
+              console.log(error.response.data);
+              console.log(window.sessionStorage.getItem("token"))
+          });
+          this.getDoclist();
+          this.reload();
+      },
   },
   computed: {
     pages () {
@@ -190,16 +234,14 @@ export default {
 display: flex;
     z-index: 100;
     -webkit-flex-direction: column;
-        margin-top:100px;
     -ms-flex-direction: column;
     flex-direction: column;
     box-sizing: border-box;
     position: absolute;
-    padding-top: 380px;
+    padding-top: 38px;
     right: 0px;
-    top: 100px;
+    top: 0px;
     bottom: 0;
-    height:400px;
     width: 244px;
     margin: 0;
     padding: 0;
@@ -209,9 +251,9 @@ display: flex;
 {
     
     margin-bottom: 40px;
-
+    margin-top: 100px;
     width: 160px;
-    top:10px;
+    top:100px;
     left:50px;
     margin: 0;
     padding: 0;
@@ -222,7 +264,7 @@ display: flex;
 {
     top:40px;
      margin-top: 20px;
-  //   length:60px;
+     //length:60px;
     position: absolute;
 
 }
@@ -237,4 +279,10 @@ display: flex;
   border-color:  rgb(73, 74, 75);;
   color: #fff;
 }
+.bt {
+     position: absolute;
+     left: 50%;
+     top: 50%;
+     transform: translateX(-50%)translateY(-50%);
+ }
 </style>

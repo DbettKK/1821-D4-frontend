@@ -14,6 +14,7 @@ import Trashbin from './components/user/trashbin.vue'
 import ShowUserInfo from './components/user/showUserInfo.vue'
 import TeamSpace from './components/user/TeamSpace.vue'
 
+
 Vue.use(Router)
 /*
 const teamSpace =
@@ -63,10 +64,12 @@ const router = new Router({
         {path: '/myproduction', component: Myproduction,meta:{title:'金刚石文档编辑器'}},
         {path: '/favorite', component: Favorite,meta:{title:'金刚石文档编辑器'}},
         {path: '/trashbin', component: Trashbin,meta:{title:'金刚石文档编辑器'}},
-      //  {path: '/changeInfo', component: User, name:'ChangeInfo',meta:{title:'金刚石文档编辑器:个人信息'}},
+        // {path: '/changeInfo', component: User, name:'ChangeInfo',meta:{title:'金刚石文档编辑器:个人信息'}},
+         //name:'Teamspace',meta:{title:'团队空间'} }
         { path:'/TeamSpace/:id', component:TeamSpace, name:'Teamspace',meta:{title:'团队空间'} },
         {path: '/changeInfo', component: ChangeUserInfo, name:'ChangeInfo',meta:{title:'金刚石文档编辑器:个人信息'}},
         {path: '/showUserInfo', component: ShowUserInfo, name:'ShowUserInfo',meta:{title:'金刚石文档编辑器:个人信息'}},
+        //{ path:'/TeamSpace', component:TeamSpace,  name:'Teamspace',meta:{title:'团队空间'} }
       ]
     },
     /*{

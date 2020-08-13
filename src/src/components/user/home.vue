@@ -56,15 +56,15 @@
                             <i class="el-icon-circle-plus" @click="createTeamVisible=true" ></i>  </template>
                             <el-menu-item-group style="background-color: #EDEEEF">
                             <template slot="title">加入的团队</template>
-                            <template v-for="(item,tindex) in Teams"> 
-                                 <router-link :to="{ path:'/TeamSpace/'+item.id,query:{id:item.id} }" class="a" :key="item.name"> 
-                              <!--   '/TeamSpace/'+item.id"  class="a" :key="item.name"> -->
-                                <!-- <router-link :to="idplus(item.id)"  class="a" :key="item.name"> -->
-                            <el-menu-item :index="tindex.toString()" :key="item.name" ><!-- class="el-icon-caret-right">图标好像有点丑-->
-                            {{item.name}}
-                            </el-menu-item>
-                           </router-link> 
-                            </template>
+
+                                <template v-for="(item) in Teams">
+                                    <el-menu-item :key="item.name" @click.native="toTeam(item.id)">
+                                        <!-- class="el-icon-caret-right">图标好像有点丑-->
+                                        <!--   <router-link :to="idplus(item.id)"  class="a" :key="item.name">-->
+                                        {{item.name}}
+                                        <!--    </router-link>-->
+                                    </el-menu-item>
+                                </template>
                         </el-menu-item-group>
    
 
@@ -192,7 +192,7 @@ export default {
             });
             },
         writeOff(){
-            this.$http.get('http://175.24.121.113:8000/myapp/team/all/get/',
+            this.$http.get('http://175.24.121.113:8000/myapp/user/writeoff/',
                 {headers: {token: window.sessionStorage.getItem("token")}}
             ).then(function (res) {
                 console.log(res.data)
