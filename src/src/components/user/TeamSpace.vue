@@ -1,22 +1,15 @@
 <template>
     <el-container style="height: 100%; width: 100%; border: 0px">
-      <el-header style="text-align: left; font-size: 20px; display: flex; justify-content: space-between;" >
+        <el-header style="text-align: left; font-size: 20px">
+            <!--
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
             <el-menu-item index="1" @click="recently">最近使用</el-menu-item>
             <el-menu-item index="2" @click="myproduction">我创建的</el-menu-item>
             <el-menu-item index="3" @click="favorite">我的收藏</el-menu-item>
             <el-menu-item index="4" @click="trashbin">回收站</el-menu-item>
           </el-menu>
-          <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="dialog=true">
-            <i class="el-icon-circle-plus bt">新建文档</i>
-          </el-card>
+          -->
         </el-header>
-        <el-dialog title="是否新建私人文档" :visible.sync="dialog" width="30%">
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dialog=false">取 消</el-button>
-            <el-button type="primary" @click="submit()" >确 定</el-button>
-          </div>
-        </el-dialog>
         <el-main>
           <el-row v-for="(page, index) of pages" :key="index" style="margin-bottom: 40px;">
             <el-col :span="8" align="left" v-for="(item, innerindex) of page" :key="item.id" :offset="innerindex > 0 ? 2 : 0" style="margin-right: -60px;">
@@ -30,13 +23,15 @@
                     <el-dropdown trigger="click" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item icon="el-icon-star-on" @click.native="cancelFavor(item.file)">取消收藏</el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-delete-solid">移动到回收站</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-star-on">收藏</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-delete-solid">从列表中删除</el-dropdown-item>
+<!--                        <el-dropdown-item icon="el-icon-delete-solid" v-if="item.person">移到回收站</el-dropdown-item>-->
+
                       </el-dropdown-menu>
                     </el-dropdown>
                   </div>
                   <div class="bottom clearfix">
-                    <time class="time" style="margin-right: 40px;" >收藏时间：{{time(item.kept_time)}}</time>
+                    <time class="time" style="margin-right: 40px;">{{time(item.last_modified)}} 我 打开</time>
                     <span style="font-size: 13px; color: #999;">该文档创建者：</span>
                     <span style="font-size: 13px; color: #999;">{{item.file_creator_name}}</span>
                   </div>
@@ -45,18 +40,32 @@
             </el-col>
           </el-row>
         </el-main>
+        <div class="right_pannels"><!--右边按钮栏-->
+            <div class="button_container">
+            <div class="button_create_team_doc">   
+                <el-button class="shenhui" @click="creat_team_doc" style="width:160px" icon="el-icon-edit">
+                    新建
+                </el-button>
+            </div>
+            <div class= button_putin>
+                <el-button type='info' @click="putin" style="width:160px" icon="el-icon-plus"  >
+                    导入
+                </el-button>
+            </div>
+            </div>
+
+        </div>
+
     </el-container>
 </template>
 
 <script>
 import Vue from 'vue'
 export default {
-  inject: ['reload'],
   data() {
     return {
-      activeIndex:'3',
-      doclist: [],
-      dialog: false
+      activeIndex:'1',
+      doclist: []
     };
   },
   created() {
@@ -66,7 +75,7 @@ export default {
     getDoclist() {
       var that = this;
       Vue.axios.get(
-        'http://175.24.121.113:8000/myapp/file/favorite/get/',
+        'http://175.24.121.113:8000/myapp/file/browse/get/',
         {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(function(res){
         console.log(res);
@@ -88,35 +97,8 @@ export default {
             this.$router.push('/trashbin')
     },
     time(a) {
-      this.doctime = a.toString().substr(0, 10)
+         this.doctime = a.toString().substr(0, 10)
          return this.doctime
-    },
-    cancelFavor(file_id){
-      this.$http.get('http://175.24.121.113:8000/myapp/file/cancelfavor/',
-              {
-                headers: {token: window.sessionStorage.getItem("token")},
-                params:{file_id: file_id}
-              }
-      ).then(function (res) {
-        console.log(res.data);
-      }).catch(function (error) {
-        console.log(error.response.data);
-        console.log(window.sessionStorage.getItem("token"))
-      })
-      this.getDoclist();
-      this.reload();
-    },
-    submit(){
-      this.$http.get('http://175.24.121.113:8000/myapp/file/create/pri/',
-              {headers: {token: window.sessionStorage.getItem("token")}}
-      ).then(function (res) {
-        console.log(res.data);
-      }).catch(function (error) {
-        console.log(error.response);
-      });
-      this.dialog=false;
-      this.getDoclist();
-      this.reload();
     }
   },
   computed: {
@@ -176,24 +158,55 @@ export default {
 }
   
 .clearfix:after {
-    clear: both
+    clear: both;
 }
 
-.newfile {
-  height: 30px;
-  width: 120px;
-  background-color: rgb(36, 36, 36);
-  font-size: 11px;
-  margin-top: 20px;
-  margin-right: 100px;
-  color: rgb(180, 180, 180);
-  position: relative;
-  cursor: pointer;
-  .bt {
+.right_pannels{
+display: flex;
+    z-index: 100;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    box-sizing: border-box;
     position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translateX(-50%)translateY(-50%);
-  }
+    padding-top: 38px;
+    right: 0px;
+    top: 0px;
+    bottom: 0;
+    width: 244px;
+    margin: 0;
+    padding: 0;
+    outline: none;
+}
+.button_container
+{
+    
+    margin-bottom: 40px;
+    width: 160px;
+    top:100px;
+    left:50px;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    position:absolute;
+}
+.button_putin
+{
+    top:40px;
+     margin-top: 20px;
+     length:60px;
+    position: absolute;
+
+}
+.shenhui {
+  background-color: rgb(73, 74, 75);
+  border-color:  rgb(73, 74, 75);;
+  color: #fff;
+}
+//特意设置了鼠标聚焦时的颜色，不然莫名其妙就会变
+.shenhui:hover{
+    background-color: rgb(73, 74, 75);
+  border-color:  rgb(73, 74, 75);;
+  color: #fff;
 }
 </style>

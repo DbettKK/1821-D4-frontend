@@ -1,16 +1,26 @@
 <template>
     <el-container style="height: 100%; width: 100%; border: 0px">
-        <el-header style="text-align: left; font-size: 20px">
+        <el-header style="text-align: left; font-size: 20px; display: flex; justify-content: space-between;">
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
             <el-menu-item index="1" @click="recently">最近使用</el-menu-item>
             <el-menu-item index="2" @click="myproduction">我创建的</el-menu-item>
             <el-menu-item index="3" @click="favorite">我的收藏</el-menu-item>
             <el-menu-item index="4" @click="trashbin">回收站</el-menu-item>
           </el-menu>
+          <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="dialog1=true">
+            <i class="el-icon-circle-plus bt">新建文档</i>
+          </el-card>
         </el-header>
+        <el-dialog title="是否新建私人文档" :visible.sync="dialog1" width="30%">
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialog1=false">取 消</el-button>
+            <el-button type="primary" @click="submit()" >确 定</el-button>
+          </div>
+        </el-dialog>
         <el-main>
         <el-table :data="tableData" height=734px style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" :row-style="{height: '35px'}">
             <el-table-column prop="file_title" label="文件名称" @contextmenu.prevent=""></el-table-column>
+            <el-table-column prop="creator_name" label="文档创建人" width="240px"></el-table-column>
             <el-table-column prop="delete_time" :formatter="dateFormat" label="删除日期" width="240px"></el-table-column>
             <el-table-column fixed="right" width="50">
               <template slot-scope="scope">
@@ -57,6 +67,7 @@
         activeIndex:'4',
         tableData: [],
         dialog: false,
+        dialog1: false,
         dialog2: false,
         id: '1'
       }
@@ -107,7 +118,7 @@
       this.dialog2 = true;
     },
     submitredo(){
-      this.$http.get('http://175.24.121.113:8000/myapp/file/isdelete',{
+      this.$http.get('http://175.24.121.113:8000/myapp/file/isdelete/',{
                 headers: {token: window.sessionStorage.getItem("token")},
                 params:{file_id: this.id, is_delete: 'False'}
       }
@@ -121,7 +132,7 @@
       this.reload();
     },
     submitdel(){
-      this.$http.get('http://175.24.121.113:8000/myapp/file/realdelete',{
+      this.$http.get('http://175.24.121.113:8000/myapp/file/realdelete/',{
                 headers: {token: window.sessionStorage.getItem("token")},
                 params:{file_id: this.id}
       }
@@ -130,7 +141,18 @@
       }).catch(function (error) {
         console.log(error.response);
       });
-      this.dialog=false;
+      this.dialog2=false;
+      this.getTabledata();
+      this.reload();
+    },
+    submit(){
+      this.$http.get('http://175.24.121.113:8000/myapp/file/create/pri/', {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(function (res) {
+        console.log(res.data);
+      }).catch(function (error) {
+        console.log(error.response);
+      });
+      this.dialog1=false;
       this.getTabledata();
       this.reload();
     }
@@ -160,5 +182,22 @@
     margin-right: 0;
     margin-bottom: 0;
     width: 20%;
+}
+.newfile {
+  height: 30px;
+  width: 120px;
+  background-color: rgb(36, 36, 36);
+  font-size: 11px;
+  margin-top: 20px;
+  margin-right: 100px;
+  color: rgb(180, 180, 180);
+  position: relative;
+  cursor: pointer;
+  .bt {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%)translateY(-50%);
+  }
 }
 </style>

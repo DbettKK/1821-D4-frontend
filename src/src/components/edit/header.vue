@@ -11,7 +11,7 @@
                 </el-breadcrumb>
             </div>
         </el-col>
-        <el-col :span="11"></el-col>
+        <el-col :span="9"></el-col>
         <el-col :span="1">
              <el-tooltip class="item" effect="light" content="用户收藏" placement="bottom">
               <el-button class="share-button" icon="el-icon-star-on" type="primary" v-if="show_collect" @click="Collect"></el-button>
@@ -36,6 +36,7 @@
             </span>
           </el-dialog>
         </el-col>
+        <el-col :span="2"><el-button type="primary" @click="Submit">保存</el-button></el-col>
         <el-col :span="2" v-color:><div class="grid-content2 bg-purple">正在编辑</div></el-col>
         <el-col :span="2">
           <div class="grid-content bg-purple">
@@ -62,6 +63,9 @@
     },
     data() {
       return {
+        file_id:10,
+        content:'1a516',
+        title:'a45a',
         show_collect: true,
         dialogVisible:false,
       };
@@ -101,6 +105,32 @@
       exit(){
         window.sessionStorage.clear()
         this.$router.push('/login')
+      },
+      Submit(){
+        Vue.axios.post(
+                'http://175.24.121.113:8000/myapp/mdSave/',
+                this.$qs.stringify({
+                    title:this.title,
+                    content:this.content
+                }),
+                {
+                    headers: {
+                        'token': this.token
+                      
+                    },
+                    params:{
+                    file_id: this.file_id,
+                    }
+                }).then(res => {
+                    console.log(res);
+                    this.$notify({
+                    title: '成功',
+                    message: '您已成功提交修改！',
+                    type: 'success'
+                  });
+                }).catch(res => {
+                    console.log(res);
+            });
       },
       C_file(){
             Vue.axios.get(

@@ -814,7 +814,7 @@ POST方式
 
 ##### 请求URL
 
-- ` http://175.24.121.113:8000/myapp/file/browse`
+- ` http://175.24.121.113:8000/myapp/file/browse/`
 
 ##### 请求方式
 
@@ -998,7 +998,7 @@ POST方式
 
 ##### 请求URL
 
-- ` http://175.24.121.113:8000/file/isdelete`
+- ` http://175.24.121.113:8000/myapp/file/isdelete`
 
 ##### 请求方式
 
@@ -1040,7 +1040,7 @@ POST方式
 
 ##### 请求URL
 
-- ` http://175.24.121.113:8000/file/realdelete`
+- ` http://175.24.121.113:8000/myapp/file/realdelete`
 
 ##### 请求方式
 
@@ -1487,3 +1487,184 @@ POST方式
 200——成功
 
 403——token问题、权限有误
+
+****
+
+### 21. 获取当前团队内的所有文档接口
+
+##### 描述
+
+获取当前团队内的所有文档
+
+##### 请求URL
+
+- ` http://175.24.121.113:8000/myapp/file/team/get/`
+
+##### 请求方式
+
+- GET
+
+##### 参数
+
+| 参数名  | 必选 | 类型 | 说明   |
+| :------ | :--- | :--- | ------ |
+| team_id | 是   | int  | 团队id |
+
+##### 返回示例 
+
+``` 
+{
+    "info": "success",
+    "code": 200,
+    "data": [
+        {
+            "id": 6,
+            "file_title": "文档4",
+            "file_content": "",
+            "create_time": "2020-08-11T11:57:34.335391",
+            "last_modified": "2020-08-13T15:58:18.350344",
+            "is_delete": false,
+            "delete_time": "2020-08-13T15:32:15.311917",
+            "modified_times": 0,
+            "type": "team",
+            "permission": 4,
+            "team_permission": 4,
+            "share": null,
+            "creator": 10,
+            "team_belong": 2,
+            "modified_user": [],
+            "comments": []
+        }
+    ]
+}    
+```
+
+##### 返回参数说明 
+
+| 参数名 | 类型   | 说明                           |
+| :----- | :----- | ------------------------------ |
+| info   | string | 返回信息                       |
+| code   | int    | 返回状态码                     |
+| data   | dic    | 返回当前团队相关的所有文档信息 |
+
+##### 返回状态码
+
+200——成功
+
+403——token问题
+
+### 22. 修改文档内容
+
+##### 描述
+
+修改文档
+
+##### 请求URL
+
+- ` http://175.24.121.113:8000/myapp/mdSave`
+
+##### 请求方式
+
+- post
+
+##### 参数
+
+| 参数名  | 必选 | 类型 | 说明   |
+| :------ | :--- | :--- | ------ |
+| file_id | 是   | int  | 文件id |
+| title | 是   | Stirng  | 标题 |
+| content | 是   | Stirng  | 内容 |
+
+
+##### 返回示例 
+
+``` 
+{
+    "info": "success",
+    "code": 200,
+    "data": [
+        {
+            
+        }
+    ]
+}    
+```
+
+##### 返回参数说明 
+
+| 参数名 | 类型   | 说明                           |
+| :----- | :----- | ------------------------------ |
+| info   | string | 返回信息                       |
+| code   | int    | 返回状态码                     |
+| data   | dic    | 返回相关的文档信息 |
+
+##### 返回状态码
+
+200——成功
+
+403——token问题
+
+****
+
+### 23. 返回文档接口
+
+##### 描述
+
+返回文档
+
+##### 请求URL
+
+- ` http://175.24.121.113:8000/myapp/file/get/`
+
+##### 请求方式
+
+- GET
+
+##### 参数
+
+| 参数名  | 必选 | 类型 | 说明   |
+| :------ | :--- | :--- | ------ |
+| file_id | 是   | int  | 文件id |
+
+
+##### 返回示例 
+
+``` 
+{
+    "info": "success",
+    "code": 200,
+    "data": {
+        "id": 5,
+        "creator_name": "lisi",
+        "file_title": "文档3",
+        "file_content": "",
+        "create_time": "2020-08-11T11:57:21.217534",
+        "last_modified": "2020-08-13T16:02:06.170953",
+        "is_delete": true,
+        "delete_time": "2020-08-13T16:02:06.170858",
+        "modified_times": 0,
+        "type": "private",
+        "permission": 4,
+        "team_permission": 4,
+        "share": null,
+        "creator": 10,
+        "team_belong": null,
+        "modified_user": [],
+        "comments": []
+    }
+} 
+```
+
+##### 返回参数说明 
+
+| 参数名 | 类型   | 说明               |
+| :----- | :----- | ------------------ |
+| info   | string | 返回信息           |
+| code   | int    | 返回状态码         |
+| data   | dic    | 返回相关的文档信息 |
+
+##### 返回状态码
+
+200——成功
+
+403——token问题
