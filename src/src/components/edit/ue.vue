@@ -4,21 +4,13 @@
     <el-card style="height: 780px;">
       <el-container>
         <el-header style="height: 50px">
-          <div class="font_type">{{title}}</div>
+          <div class="font_type" @click="drawer=true">{{title}}</div>
         </el-header>
         <el-main>
-          <el-upload
-              class="avatar-uploader"
-              :action="serverUrl"  
-              name="file"
-              :headers="header"
-              :show-file-list="false"
-              :on-success="uploadSuccess"
-              :on-error="uploadError">
-          </el-upload>
           <mavon-editor
             ref="md"
             :editable="showable"
+            @imgAdd="$imgAdd"
             placeholder="请输入文档内容..."
             :boxShadow="true"
             style="z-index:1;border: 1px solid #d9d9d9;height:85vh"
@@ -33,9 +25,22 @@
     <el-drawer
       title="用户评论"
       :visible.sync="drawer"
-      :direction="direction"
-      :before-close="handleClose">
-      <span>我来啦!</span>
+      :direction="direction">
+      <el-table
+        :data="comments"
+        stripe
+        style="width: 100%">
+        <el-table-column
+          prop="uesername"
+          label="姓名"
+          width="150">
+        </el-table-column>
+        <el-table-column
+          prop="comment"
+          label="评论"
+          width="300">
+        </el-table-column>
+      </el-table>
     </el-drawer>
     <Footer></Footer>
   </div>
@@ -44,7 +49,7 @@
 <script>
   import Header from './header.vue' 
   import Footer from './footer.vue'
-
+  import Vue from 'vue'
   export default {
     name: 'FuncFormsEdit',
     components: {
@@ -56,9 +61,24 @@
         showable:true,
         drawer: false,
         direction: 'rtl',
-        url:'////',
+        url:'12',
         title:'Title',
         content: "",
+        comments:[
+          {
+            uesername:'yty',
+            comment:'lalallalalalalallal'
+          },{
+            uesername:'yty',
+            comment:'lalallalalalalallal'
+          },{
+            uesername:'yty',
+            comment:'lalallalalalalallal'
+          },{
+            uesername:'yty',
+            comment:'lalallalalalalallal'
+          },
+          ],
         toolbars: {
           bold: true, // 粗体
           italic: true, // 斜体
@@ -100,15 +120,15 @@
       GetContents(){
         return this.detailContent;
       },
-      $imgAdd(pos, $file) {
-        console.log(pos, $file);
-      },
-      Submit(){
-        this.$notify({
-          title: '成功',
-          message: '您已成功提交修改！',
-          type: 'success'
-        });
+      $imgAdd(pos, $file){
+        var formdata = new FormData();
+        formdata.append('image', $file);
+        Vue.axios.post(
+        'http://175.24.121.113:8000/myapp/picSave/',formdata,
+        {headers: { 'Content-Type': 'multipart/form-data' }},
+        ).then((response)=>{
+        this.$refs.md.$img2Url(pos, response.data.data.url);
+        })
       },
     },
     watch:{
@@ -142,7 +162,6 @@
   }
   .el-main{
     height: 700px;
-    //background-color: brown;
   }
   .font_type{
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
