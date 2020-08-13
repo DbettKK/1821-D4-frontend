@@ -77,6 +77,7 @@
                 <router-view></router-view>
             </el-main>
         </el-container>
+
     </el-container>
 </template>
 
@@ -93,23 +94,24 @@ export default {
             },
             isLogin: false,
             isCollapse: false,
+    
             createTeamVisible:false,
             createTeam_name:"",
             Teams:
             [
                 {
-                    Teamname:'ateam',
+                    Teamname:'团队一',
                     Tid:'001',
                     Turl:'123'
                 },
                 {
-                    Teamname:'bteam',
+                    Teamname:'团队二',
                     Tid:'002',
                     Turl:''
                 }
                 ,
                 {
-                    Teamname:'cteam',
+                    Teamname:'团队三',
                     Tid:'003',
                     Turl:''
                 }

@@ -11,7 +11,7 @@ import Recently from './components/user/recently.vue'
 import Myproduction from './components/user/myproduction.vue'
 import Favorite from './components/user/favorite.vue'
 import Trashbin from './components/user/trashbin.vue'
-
+import TeamSpace from './components/user/TeamSpace.vue'
 
 Vue.use(Router)
 
@@ -35,6 +35,16 @@ const router = new Router({
       name:'FindPassword',
       meta:{title:'找回密码'}
     },
+    /*
+    {
+      path:'/TeamSpace',
+      component:TeamSpace,
+      name:'Teamspace',
+      meta:{title:'团队空间'}
+
+    },
+
+    */
     {
       path: '/', 
       component: Home,
@@ -48,6 +58,7 @@ const router = new Router({
         {path: '/favorite', component: Favorite,meta:{title:'金刚石文档编辑器'}},
         {path: '/trashbin', component: Trashbin,meta:{title:'金刚石文档编辑器'}},
         {path: '/changeInfo', component: User, name:'ChangeInfo',meta:{title:'金刚石文档编辑器:个人信息'}},
+        { path:'/TeamSpace', component:TeamSpace,  name:'Teamspace',meta:{title:'团队空间'} }
       ]
     },
     /*{
