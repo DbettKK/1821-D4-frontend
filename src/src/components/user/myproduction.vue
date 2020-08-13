@@ -20,14 +20,14 @@
         <el-main>
           <el-row v-for="(page, index) of pages" :key="index" style="margin-bottom: 40px;">
             <el-col :span="8" align="left" v-for="(item, innerindex) of page" :key="item.id" :offset="innerindex > 0 ? 2 : 0" style="margin-right: -60px;">
-              <el-card :body-style="{ padding: '0px' }" shadow="hover">
+              <el-card :body-style="{ padding: '0px' }" shadow="hover" @click.native="edit(item.id)">
                 <div style="padding: 14px;">
                   <div class="top">
                     <div style="display: flex; align-items: start;">
                       <div class="docicon"><i class="el-icon-document"></i></div>
                       <span>{{item.file_title}}</span>
                     </div>
-                    <el-dropdown trigger="click" style="font-size: 1px; color: #999;" placement="bottom-start">
+                    <el-dropdown trigger="hover" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item icon="el-icon-star-on" @click.native="addFavorite(item.id)">收藏</el-dropdown-item>
@@ -81,7 +81,7 @@
                   </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                  <el-button @click="dialog=false">取 消</el-button>
+                  <el-button @click="dialog2=false">取 消</el-button>
                   <el-button type="primary" @click="renameFile" >确定</el-button>
                 </div>
               </el-dialog>
@@ -103,6 +103,7 @@ export default {
       doclist: [],
       privilege: '',
       dialog: false,
+      dialog1: false,
       dialog2: false,
       permission: ['仅查看','可编辑','可评论','可分享']
     };
@@ -140,6 +141,7 @@ export default {
          return this.doctime
     },
     addFavorite(file_id){
+      var that = this;
       this.$http.get('http://175.24.121.113:8000/myapp/file/favorite/',
               {
                 headers: {token: window.sessionStorage.getItem("token")},
@@ -147,10 +149,15 @@ export default {
                 }
       ).then(function (res) {
         console.log(res.data);
+        that.file_id=res.data.data.file;
+        console.log(that.file_id);
+        that.addrecent();
       }).catch(function (error) {
         console.log(error.response.data);
         console.log(window.sessionStorage.getItem("token"))
-      })
+      });
+      this.getDoclist();
+      this.reload();
     },
     toTrash(file_id){
       this.$http.get('http://175.24.121.113:8000/myapp/file/isdelete/',
@@ -188,8 +195,35 @@ export default {
       this.reload();
     },
     submit1(){
+      var that=this;
       this.$http.get('http://175.24.121.113:8000/myapp/file/create/pri/',
-              {headers: {token: window.sessionStorage.getItem("token")}})
+              {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(function (res) {
+        console.log(res.data);
+        that.file_id=res.data.data.id;
+        console.log(that.file_id);
+        that.addrecent();
+      }).catch(function (error) {
+        console.log(error.response);
+      });
+      this.dialog1=false;
+      this.getDoclist();
+      this.reload();
+    },
+    addrecent() {
+      var that = this;
+      this.$http.get('http://175.24.121.113:8000/myapp/file/browse/', {
+        headers: {token: window.sessionStorage.getItem("token")},
+        params:{file_id: that.file_id}
+      }
+      ).then(function (res) {
+        console.log(res.data);
+      }).catch(function (error) {
+        console.log(error.response);
+      });
+      this.file_id='';
+      this.getDoclist();
+      this.reload();
     },
     renameFile(){
       this.$http.post('http://175.24.121.113:8000/myapp/file/rename/',this.$qs.stringify({
@@ -208,6 +242,9 @@ export default {
     renameClick(file_id){
       this.dialog2 = true;
       this.file_id_tmp = file_id;
+    },
+    edit(file_id){
+      this.$router.push('/edit/' + file_id)
     }
 
   },

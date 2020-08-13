@@ -20,18 +20,17 @@
         <el-main>
           <el-row v-for="(page, index) of pages" :key="index" style="margin-bottom: 40px;">
             <el-col :span="8" align="left" v-for="(item, innerindex) of page" :key="item.id" :offset="innerindex > 0 ? 2 : 0" style="margin-right: -60px;">
-              <el-card :body-style="{ padding: '0px' }" shadow="hover">
+              <el-card :body-style="{ padding: '0px' }" shadow="hover" @click.native="edit(item.file)">
                 <div style="padding: 14px;">
                   <div class="top">
                     <div style="display: flex; align-items: start;">
                       <div class="docicon"><i class="el-icon-document"></i></div>
                       <span>{{item.file_name}}</span>
                     </div>
-                    <el-dropdown trigger="click" style="font-size: 1px; color: #999;" placement="bottom-start">
+                    <el-dropdown trigger="hover" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item icon="el-icon-star-on" @click.native="cancelFavor(item.file)">取消收藏</el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-delete-solid">移动到回收站</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
                   </div>
@@ -92,6 +91,7 @@ export default {
          return this.doctime
     },
     cancelFavor(file_id){
+      var that = this;
       this.$http.get('http://175.24.121.113:8000/myapp/file/cancelfavor/',
               {
                 headers: {token: window.sessionStorage.getItem("token")},
@@ -99,6 +99,9 @@ export default {
               }
       ).then(function (res) {
         console.log(res.data);
+        that.file_id=res.data.data.file;
+        console.log(that.file_id);
+        that.addrecent();
       }).catch(function (error) {
         console.log(error.response.data);
         console.log(window.sessionStorage.getItem("token"))
@@ -107,16 +110,38 @@ export default {
       this.reload();
     },
     submit(){
+      var that = this;
       this.$http.get('http://175.24.121.113:8000/myapp/file/create/pri/',
               {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(function (res) {
         console.log(res.data);
+        that.file_id=res.data.data.id;
+        console.log(that.file_id);
+        that.addrecent();
       }).catch(function (error) {
         console.log(error.response);
       });
       this.dialog=false;
       this.getDoclist();
       this.reload();
+    },
+    addrecent() {
+      var that = this;
+      this.$http.get('http://175.24.121.113:8000/myapp/file/browse/', {
+        headers: {token: window.sessionStorage.getItem("token")},
+        params:{file_id: that.file_id}
+      }
+      ).then(function (res) {
+        console.log(res.data);
+      }).catch(function (error) {
+        console.log(error.response);
+      });
+      this.file_id='';
+      this.getDoclist();
+      this.reload();
+    },
+    edit(file_id){
+      this.$router.push('/edit/' + file_id)
     }
   },
   computed: {

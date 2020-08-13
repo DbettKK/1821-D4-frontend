@@ -814,7 +814,7 @@ POST方式
 
 ##### 请求URL
 
-- ` http://175.24.121.113:8000/myapp/file/browse`
+- ` http://175.24.121.113:8000/myapp/file/browse/`
 
 ##### 请求方式
 
