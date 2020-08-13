@@ -4,7 +4,7 @@
     <div class="login_container">
     <div class="login_box">
       <div class="avatar_box">
-        <img src="../../assets/logo.png" alt="">
+        <img src="../../assets/logo_new.png" alt="">
       </div>
       <el-container>
         <el-main class="main1">
@@ -126,12 +126,12 @@ export default {
 }
 
 .login_box {
-  width: 350px;
-  height: 450px;
+  width: 380px;
+  height: 500px;
   background-color: #fff;
   border-radius: 3px;
-  margin-left: 300px;
-  opacity: 90%;
+  margin-left: 330px;
+  opacity: 85%;
   transform: translate(-50%, -50%);
 
   .avatar_box {
@@ -156,9 +156,9 @@ export default {
 
   .login_form {
     opacity: 90%;
-    padding-top:5%;
-    width: 80%;
-    padding-left: 70px;
+    padding-top:10%;
+    width: 90%;
+    padding-left: 30px;
     box-sizing: border-box;
   }
 
@@ -176,7 +176,7 @@ export default {
     }
     
   .main1 {
-    height: 390px;
+    height: 420px;
     text-align: center;
     line-height: 190px;
     opacity: 90%;
