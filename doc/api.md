@@ -1395,10 +1395,90 @@ POST方式
 | code   | int    | 返回状态码                                          |
 | data   | dic    | 返回用户创建或参与的所有团队 member中放的是成员的id |
 
-
-
 ##### 返回状态码
 
 200——成功
 
 403——token问题
+
+****
+
+### 20. 设置私人文档权限接口
+
+##### 描述
+
+设置私人文档的权限
+
+##### 请求URL
+
+- ` http://175.24.121.113:8000/myapp/file/privi/pri/`
+
+##### 请求方式
+
+- POST
+
+##### 参数
+
+| 参数名    | 必选 | 类型 | 说明                   |
+| :-------- | :--- | :--- | ---------------------- |
+| file_id   | 是   | int  | 想要修改权限的file的id |
+| privilege | 是   | int  | 权限类型(1-4)          |
+
+##### 返回示例 
+
+``` 
+{
+    "info": "success",
+    "code": 200,
+    "data": {
+        "id": 2,
+        "file_title": "tt",
+        "file_content": "ttttttttttttttttttttttt",
+        "create_time": "2020-08-10T17:01:01.209864",
+        "last_modified": "2020-08-13T11:27:21.648218",
+        "is_delete": true,
+        "delete_time": "2020-08-13T08:47:04.462798",
+        "modified_times": 0,
+        "type": "private",
+        "permission": 1,
+        "team_permission": 4,
+        "share": "wu",
+        "creator": 10,
+        "team_belong": null,
+        "modified_user": [],
+        "comments": [
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10
+        ]
+    }
+}
+```
+
+##### 返回参数说明 
+
+| 参数名 | 类型   | 说明               |
+| :----- | :----- | ------------------ |
+| info   | string | 返回信息           |
+| code   | int    | 返回状态码         |
+| data   | dic    | 返回修改的文件信息 |
+
+##### 返回状态码
+
+200——成功
+
+403——token问题、权限有误
