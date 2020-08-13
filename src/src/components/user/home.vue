@@ -47,14 +47,14 @@
                             <el-menu-item index="2-2">消息通知</el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
-                    <el-submenu index="3" style="background-color: #EDEEEF">
-                        <template slot="title">
-                            <i class="el-icon-s-claim"></i><span style="margin-right: 50px">团队空间</span>
-                            <i class="el-icon-circle-plus-outline" @click="createTeamVisible=true" ></i>  </template>
+                    <el-submenu index="3" style="background-color: #EDEEEF" >
+                        <template slot="title" >
+                            <i class="el-icon-s-claim" @click="getTeams" ></i><span style="margin-right: 50px" @click="getTeams"> 团队空间</span>
+                            <i class="el-icon-circle-plus" @click="createTeamVisible=true" ></i>  </template>
                             <el-menu-item-group style="background-color: #EDEEEF">
                             <template slot="title">加入的团队</template>
-                            <template v-for="(item) in Teams"> 
-                            <el-menu-item  :key="item.Teamname" ><!-- class="el-icon-caret-right">图标好像有点丑-->{{item.Teamname}}</el-menu-item>
+                            <template v-for="(item,tindex) in Teams"> 
+                            <el-menu-item :index="tindex.toString()" :key="item.name" ><!-- class="el-icon-caret-right">图标好像有点丑-->{{item.name}}</el-menu-item>
                             </template>
                         </el-menu-item-group>
    
@@ -81,6 +81,7 @@
 </template>
 
 <script>
+//import qs from "qs";
 import Vue from 'vue'
 export default {
     data() {
@@ -98,20 +99,26 @@ export default {
             Teams:
             [
                 {
-                    Teamname:'团队一',
-                    Tid:'001',
-                    Turl:'123'
+                   id: 1,
+                   name: "we are a tem",
+                   create_time: "2020-08-11T11:40:08.495727",
+                   creator: 10,
+                   members: []
                 },
                 {
-                    Teamname:'团队二',
-                    Tid:'002',
-                    Turl:''
+                   id: 2,
+                   name: "we are a tem2",
+                   create_time: "2020-08-11T11:40:08.495727",
+                   creator: 10,
+                   members: []
                 }
                 ,
                 {
-                    Teamname:'团队三',
-                    Tid:'003',
-                    Turl:''
+                   id: 3,
+                   name: "we are a tem3",
+                   create_time: "2020-08-11T11:40:08.495727",
+                   creator: 10,
+                   members: []
                 }
             ]
         }
@@ -120,6 +127,7 @@ export default {
         if(window.sessionStorage.getItem('token')){
             this.isLogin = true;
             this.getUserInfo();
+            this.getTeams();
         }else{
             this.isLogin = false;
         }
@@ -188,14 +196,39 @@ export default {
         },
         changeInfo(){
             this.$router.push('/changeInfo')
-        }
+        },
+        getTeams()
+        {
+                   Vue.axios.get(
+                'http://175.24.121.113:8000/myapp/team/all/get/',
+                {headers: {token: window.sessionStorage.getItem("token")}}
+            ).then(res=>{
+         //       alert(qs.stringify(this.Teams[0]));
+
+                                this.Teams=res.data.data;
+        //        this.Teams=res.data
+        //        alert(qs.parse(res.data))
+
+                /*
+                this.userinfo.username=res.data.data.username;
+                this.userinfo.phone_num=res.data.data.phone_num;
+                this.userinfo.id=res.data.data.id;
+                this.userinfo.email=res.data.data.email;
+                console.log(res);
+                */
+            }).catch(function(error){
+                console.log(error);
+            })
+                            console.log(this.Teams)
+            }
+   
     }
 }
 </script>
 
 <style lang="less" scoped>
 .el-header {
-    background-color: #F2F6FC;
+    background-color: #FFFFFF;
     color: #333;
     line-height: 60px;
     display: flex;
