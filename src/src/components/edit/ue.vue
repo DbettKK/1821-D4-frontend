@@ -119,7 +119,22 @@
     },
     methods:{
       GetContents(){
-        return this.detailContent;
+        Vue.axios.get(
+                'http://175.24.121.113:8000/myapp/file/get/',
+                
+                {
+                    headers: {
+                        'token': window.sessionStorage.getItem('token')
+                    },
+                    params:{
+                      file_id:this.file_id
+                    }
+                }
+                ).then(res => {
+                    this.title=res.data.data.file_title;
+                    this.content=res.data.data.file_content;
+                    console.log(res);
+            });
       },
       $imgAdd(pos, $file){
         var formdata = new FormData();
@@ -131,13 +146,16 @@
         this.$refs.md.$img2Url(pos, response.data.data.url);
         })
       },
+
     },
     watch:{
     },
     created(){
       document.title=this.title;
       this.url=this.$route.path;
+      this.file_id=this.$route.params.id;
       console.log(this.$route.path)
+      this.GetContents();
     }
   }
 </script>
