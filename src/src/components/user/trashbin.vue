@@ -11,7 +11,9 @@
         <el-main>
         <el-table :data="tableData" height=734px style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" :row-style="{height: '35px'}">
             <el-table-column prop="file_title" label="文件名称" @contextmenu.prevent=""></el-table-column>
+            <el-table-column prop="creator_name" label="文档创建人" width="240px"></el-table-column>
             <el-table-column prop="delete_time" :formatter="dateFormat" label="删除日期" width="240px"></el-table-column>
+
             <el-table-column fixed="right" width="50">
               <template slot-scope="scope">
                 <el-tooltip class="item" effect="dark" content="放回原处" placement="bottom-end">
@@ -107,7 +109,7 @@
       this.dialog2 = true;
     },
     submitredo(){
-      this.$http.get('http://175.24.121.113:8000/myapp/file/isdelete',{
+      this.$http.get('http://175.24.121.113:8000/myapp/file/isdelete/',{
                 headers: {token: window.sessionStorage.getItem("token")},
                 params:{file_id: this.id, is_delete: 'False'}
       }
@@ -121,7 +123,7 @@
       this.reload();
     },
     submitdel(){
-      this.$http.get('http://175.24.121.113:8000/myapp/file/realdelete',{
+      this.$http.get('http://175.24.121.113:8000/myapp/file/realdelete/',{
                 headers: {token: window.sessionStorage.getItem("token")},
                 params:{file_id: this.id}
       }

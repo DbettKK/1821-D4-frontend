@@ -19,9 +19,23 @@
                    class="el-input__icon iconfont el-icon-open"></i>
                    -->
           </el-input>
+          <el-input v-model="loginForm.password2" prefix-icon="el-icon-lock"  type="password" placeholder="请重复密码">
+            <i slot="suffix" title="显示密码" @click="changePass" style="cursor:pointer;"
+               class="el-icon-view"></i>
+               <!--
+                   class="el-input__icon iconfont el-icon-open"></i>
+                   -->
+          </el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password" v-else>
           <el-input v-model="loginForm.password" prefix-icon="el-icon-lock" type="text" placeholder="密码应介于6-20个字符之间" >
+            <i slot="suffix" title="隐藏密码" @click="changePass" style="cursor:pointer;"
+               class="el-icon-more"></i>
+               <!--
+                 class="el-input__icon iconfont el-icon-off"></i>
+                 -->
+          </el-input>
+          <el-input v-model="loginForm.password2" prefix-icon="el-icon-lock" type="text" placeholder="请重复密码" >
             <i slot="suffix" title="隐藏密码" @click="changePass" style="cursor:pointer;"
                class="el-icon-more"></i>
                <!--
@@ -99,7 +113,6 @@ export default {
             trigger: "blur"
           }
         ],
-        /*
         password2: [
           {
             required: true,
@@ -119,7 +132,6 @@ export default {
             trigger: "blur"
           }
         ],
-        */
         email: [
           {
             required: true,
@@ -209,6 +221,15 @@ export default {
       this.$refs.loginFormRef.validate(valid => {
         if (valid) {
           // 指定请求为正式提交表单
+          if(this.loginForm.password!==this.loginForm.password2){
+            this.$message.error({
+            message:"两次输入密码必须相同！",
+            type:"error",
+            customClass:"c-msg",
+            showClose:true,
+            })
+            return;
+          }
           Vue.axios
             .post('http://175.24.121.113:8000/myapp/register/', QS.stringify(this.loginForm))
             .then(response => {
@@ -216,7 +237,7 @@ export default {
                 // 注册成功
                 this.$router.replace("/");
                 this.$message({
-                    message: response.data.data.username,
+                    message: "注册成功，你的账号是："+response.data.data.username+"请登录",
                     type: "success",
                     customClass: "c-msg",
                     showClose: true

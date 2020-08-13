@@ -5,6 +5,8 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import ElementUI from 'element-ui';
+import mavonEditor from 'mavon-editor'
+import "mavon-editor/dist/css/index.css"
 //import { quillEditor } from 'vue-quill-editor'
 //import * as Quill from 'quill';
 
@@ -28,6 +30,7 @@ Vue.prototype.$qs = qs;
 Vue.use(ElementUI);
 Vue.use(VueAxios, axios)
 Vue.use(Vuex)
+Vue.use(mavonEditor);
 //Vue.use(VueQuillEditor, /* { default global options } */)
 
 Vue.config.productionTip = false

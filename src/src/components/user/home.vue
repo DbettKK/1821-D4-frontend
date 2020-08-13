@@ -54,7 +54,7 @@
                             <el-menu-item-group style="background-color: #EDEEEF">
                             <template slot="title">加入的团队</template>
                             <template v-for="(item) in Teams"> 
-                            <el-menu-item :index="tindex" :key="item.Teamname" ><!-- class="el-icon-caret-right">图标好像有点丑-->{{item.Teamname}}</el-menu-item>
+                            <el-menu-item  :key="item.Teamname" ><!-- class="el-icon-caret-right">图标好像有点丑-->{{item.Teamname}}</el-menu-item>
                             </template>
                         </el-menu-item-group>
    
@@ -197,7 +197,7 @@ export default {
 
 <style lang="less" scoped>
 .el-header {
-    background-color: #FFFFFF;
+    background-color: #F2F6FC;
     color: #333;
     line-height: 60px;
     display: flex;

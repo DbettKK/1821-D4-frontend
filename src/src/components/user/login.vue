@@ -92,12 +92,26 @@ export default {
               const { data: res } = await this.$http.post('http://175.24.121.113:8000/myapp/login/',
                   this.$qs.stringify(this.loginForm));
               console.log(res);
-              if (res.code !== 200) return console.log('登录失败');
+              if (res.code !== 200) {
+                this.$message({
+                    message: res.info,
+                    type: "error",
+                    customClass: "c-msg",
+                    showClose: true
+                  }); 
+              }
               // 这里后端返回了一个code就先用code看看效果
               else{
                 console.log('登录成功');
                 window.sessionStorage.setItem("token", res.token);
-                this.$router.push('/')
+                this.$message({
+                    message: "欢迎回来,"+res.data.username,
+                    type: "success",
+                    customClass: "c-msg",
+                    duration:1000,
+                    showClose: true
+                  }); 
+                this.$router.push('/');
               }
 
               // this.$http.post('http://175.24.121.113:8000/myapp/login/',
