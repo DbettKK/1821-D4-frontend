@@ -1,6 +1,6 @@
 <template>
   <div class="background">
-    <Header :url="url"></Header>
+    <Header :url="url" :title="title" :file_id="file_id" :content="content"></Header>
     <el-card style="height: 780px;">
       <el-container>
         <el-header style="height: 50px">
@@ -63,6 +63,7 @@
         direction: 'rtl',
         url:'12',
         title:'Title',
+        file_id:10,
         content: "",
         comments:[
           {

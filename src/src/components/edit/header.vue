@@ -59,13 +59,19 @@
     props:{
         url:{
           type:String,
+        },
+        title:{
+          type:String,
+        },
+        content:{
+          type:String,
+        },
+        file_id:{
+          type:Number,
         }
     },
     data() {
       return {
-        file_id:10,
-        content:'1a516',
-        title:'a45a',
         show_collect: true,
         dialogVisible:false,
       };
@@ -115,7 +121,7 @@
                 }),
                 {
                     headers: {
-                        'token': this.token
+                        'token': window.sessionStorage.getItem('token')
                       
                     },
                     params:{
