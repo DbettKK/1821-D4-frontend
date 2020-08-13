@@ -88,31 +88,28 @@ export default {
           this.$refs.loginFormRef.validate(async (valid) => {
               if (!valid) return false;
               // 缺少请求路径login
-
-              const { data: res } = await this.$http.post('http://175.24.121.113:8000/myapp/login/',
-                  this.$qs.stringify(this.loginForm));
-              console.log(res);
-              if (res.code !== 200) {
-                this.$message({
-                    message: res.info,
-                    type: "error",
-                    customClass: "c-msg",
-                    showClose: true
-                  }); 
-              }
+              var that = this;
+              this.$http.post('http://175.24.121.113:8000/myapp/login/',
+                  this.$qs.stringify(this.loginForm)
+              ).then(function (res) {
+                console.log(res.data);
+                window.sessionStorage.setItem("token", res.data.token);
+                that.$message({
+                  message: "欢迎回来,"+res.data.data.username,
+                  type: "success",
+                  customClass: "c-msg",
+                  duration:1000,
+                  showClose: true
+                });
+                that.$router.push('/');
+              }).catch(function (error) {
+                console.log(error.message)
+                that.$message({message: error.response.data.info, type:'error'})
+              });
               // 这里后端返回了一个code就先用code看看效果
-              else{
-                console.log('登录成功');
-                window.sessionStorage.setItem("token", res.token);
-                this.$message({
-                    message: "欢迎回来,"+res.data.username,
-                    type: "success",
-                    customClass: "c-msg",
-                    duration:1000,
-                    showClose: true
-                  }); 
-                this.$router.push('/');
-              }
+
+
+
 
               // this.$http.post('http://175.24.121.113:8000/myapp/login/',
               //     this.$qs.stringify(this.loginForm)
