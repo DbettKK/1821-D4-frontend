@@ -39,7 +39,8 @@
                 <el-menu :unique-opened="true" :collapse="isCollapse" :collapse-transition="false" style="background-color: #EDEEEF;">
                     <el-menu-item index="1" @click="recently"><i class="el-icon-menu"></i><span>工作站</span></el-menu-item>
                     <el-submenu index="2" style="background-color: #EDEEEF">
-                        <template slot="title"><i class="el-icon-user-solid"></i><span>个人空间</span></template>
+                        <template slot="title">
+                            <i class="el-icon-user-solid"></i><span>个人空间</span></template>
                         <el-menu-item-group style="background-color: #EDEEEF">
                             <template slot="title">个人信息</template>
                             <el-menu-item index="2-1">个人详情</el-menu-item>
@@ -49,8 +50,14 @@
                     <el-submenu index="3" style="background-color: #EDEEEF">
                         <template slot="title">
                             <i class="el-icon-s-claim"></i><span style="margin-right: 50px">团队空间</span>
-                            <i class="el-icon-circle-plus" @click="createTeamVisible=true" ></i>
-                        </template>
+                            <i class="el-icon-circle-plus" @click="createTeamVisible=true" ></i>  </template>
+                            <el-menu-item-group style="background-color: #EDEEEF">
+                            <template slot="title">加入的团队</template>
+                            <template v-for="(item) in Teams"> 
+                            <el-menu-item :index="tindex" :key="item.Teamname" ><!-- class="el-icon-caret-right">图标好像有点丑-->{{item.Teamname}}</el-menu-item>
+                            </template>
+                        </el-menu-item-group>
+   
 
                     </el-submenu>
                 </el-menu>
@@ -87,7 +94,26 @@ export default {
             isLogin: false,
             isCollapse: false,
             createTeamVisible:false,
-            createTeam_name:""
+            createTeam_name:"",
+            Teams:
+            [
+                {
+                    Teamname:'ateam',
+                    Tid:'001',
+                    Turl:'123'
+                },
+                {
+                    Teamname:'bteam',
+                    Tid:'002',
+                    Turl:''
+                }
+                ,
+                {
+                    Teamname:'cteam',
+                    Tid:'003',
+                    Turl:''
+                }
+            ]
         }
     },
     created() {
