@@ -141,6 +141,7 @@ export default {
          return this.doctime
     },
     addFavorite(file_id){
+      var that = this;
       this.$http.get('http://175.24.121.113:8000/myapp/file/favorite/',
               {
                 headers: {token: window.sessionStorage.getItem("token")},
@@ -148,10 +149,15 @@ export default {
                 }
       ).then(function (res) {
         console.log(res.data);
+        that.file_id=res.data.data.file;
+        console.log(that.file_id);
+        that.addrecent();
       }).catch(function (error) {
         console.log(error.response.data);
         console.log(window.sessionStorage.getItem("token"))
-      })
+      });
+      this.getDoclist();
+      this.reload();
     },
     toTrash(file_id){
       this.$http.get('http://175.24.121.113:8000/myapp/file/isdelete/',
@@ -189,14 +195,33 @@ export default {
       this.reload();
     },
     submit1(){
+      var that=this;
       this.$http.get('http://175.24.121.113:8000/myapp/file/create/pri/',
               {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(function (res) {
+        console.log(res.data);
+        that.file_id=res.data.data.id;
+        console.log(that.file_id);
+        that.addrecent();
+      }).catch(function (error) {
+        console.log(error.response);
+      });
+      this.dialog1=false;
+      this.getDoclist();
+      this.reload();
+    },
+    addrecent() {
+      var that = this;
+      this.$http.get('http://175.24.121.113:8000/myapp/file/browse/', {
+        headers: {token: window.sessionStorage.getItem("token")},
+        params:{file_id: that.file_id}
+      }
       ).then(function (res) {
         console.log(res.data);
       }).catch(function (error) {
         console.log(error.response);
       });
-      this.dialog1=false;
+      this.file_id='';
       this.getDoclist();
       this.reload();
     },

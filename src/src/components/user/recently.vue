@@ -30,8 +30,8 @@
                     <el-dropdown trigger="hover" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item icon="el-icon-star-on">收藏</el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-delete-solid">从列表中删除</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-star-on" @click.native="addFavorite(item.file)">收藏</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-delete-solid" @click.native="remove(item.file)">从列表中删除</el-dropdown-item>
 <!--                        <el-dropdown-item icon="el-icon-delete-solid" v-if="item.person">移到回收站</el-dropdown-item>-->
 
                       </el-dropdown-menu>
@@ -106,10 +106,48 @@ export default {
          this.doctime = a.toString().substr(0, 10)
          return this.doctime
     },
+    addFavorite(file_id){
+      var that = this;
+      this.$http.get('http://175.24.121.113:8000/myapp/file/favorite/',
+              {
+                headers: {token: window.sessionStorage.getItem("token")},
+                params:{file_id: file_id}
+                }
+      ).then(function (res) {
+        console.log(res.data);
+        that.file_id=res.data.data.file;
+        console.log(that.file_id);
+        that.addrecent();
+      }).catch(function (error) {
+        console.log(error.response.data);
+        console.log(window.sessionStorage.getItem("token"))
+      });
+      this.getDoclist();
+      this.reload();
+    },
+    remove(file_id) {
+      this.$http.get('http://175.24.121.113:8000/myapp/file/browse/delete/',
+              {
+                headers: {token: window.sessionStorage.getItem("token")},
+                params:{file_id: file_id}
+                }
+      ).then(function (res) {
+        console.log(res.data);
+      }).catch(function (error) {
+        console.log(error.response.data);
+        console.log(window.sessionStorage.getItem("token"))
+      });
+      this.getDoclist();
+      this.reload();
+    },
     submit(){
+      var that = this;
       this.$http.get('http://175.24.121.113:8000/myapp/file/create/pri/', {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(function (res) {
         console.log(res.data);
+        that.file_id=res.data.data.id;
+        console.log(that.file_id);
+        that.addrecent();
       }).catch(function (error) {
         console.log(error.response);
       });
@@ -117,8 +155,20 @@ export default {
       this.getDoclist();
       this.reload();
     },
-    edit(file_id){
-      this.$router.push('/edit/' + file_id)
+    addrecent() {
+      var that = this;
+      this.$http.get('http://175.24.121.113:8000/myapp/file/browse/', {
+        headers: {token: window.sessionStorage.getItem("token")},
+        params:{file_id: that.file_id}
+      }
+      ).then(function (res) {
+        console.log(res.data);
+      }).catch(function (error) {
+        console.log(error.response);
+      });
+      this.file_id='';
+      this.getDoclist();
+      this.reload();
     }
   },
   computed: {

@@ -31,7 +31,6 @@
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item icon="el-icon-star-on" @click.native="cancelFavor(item.file)">取消收藏</el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-delete-solid">移动到回收站</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
                   </div>
@@ -92,6 +91,7 @@ export default {
          return this.doctime
     },
     cancelFavor(file_id){
+      var that = this;
       this.$http.get('http://175.24.121.113:8000/myapp/file/cancelfavor/',
               {
                 headers: {token: window.sessionStorage.getItem("token")},
@@ -99,6 +99,9 @@ export default {
               }
       ).then(function (res) {
         console.log(res.data);
+        that.file_id=res.data.data.file;
+        console.log(that.file_id);
+        that.addrecent();
       }).catch(function (error) {
         console.log(error.response.data);
         console.log(window.sessionStorage.getItem("token"))
@@ -107,14 +110,33 @@ export default {
       this.reload();
     },
     submit(){
+      var that = this;
       this.$http.get('http://175.24.121.113:8000/myapp/file/create/pri/',
               {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(function (res) {
+        console.log(res.data);
+        that.file_id=res.data.data.id;
+        console.log(that.file_id);
+        that.addrecent();
+      }).catch(function (error) {
+        console.log(error.response);
+      });
+      this.dialog=false;
+      this.getDoclist();
+      this.reload();
+    },
+    addrecent() {
+      var that = this;
+      this.$http.get('http://175.24.121.113:8000/myapp/file/browse/', {
+        headers: {token: window.sessionStorage.getItem("token")},
+        params:{file_id: that.file_id}
+      }
       ).then(function (res) {
         console.log(res.data);
       }).catch(function (error) {
         console.log(error.response);
       });
-      this.dialog=false;
+      this.file_id='';
       this.getDoclist();
       this.reload();
     },

@@ -146,13 +146,33 @@
       this.reload();
     },
     submit(){
-      this.$http.get('http://175.24.121.113:8000/myapp/file/create/pri/', {headers: {token: window.sessionStorage.getItem("token")}}
+      var that = this;
+      this.$http.get('http://175.24.121.113:8000/myapp/file/create/pri/',
+              {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(function (res) {
+        console.log(res.data);
+        that.file_id=res.data.data.id;
+        console.log(that.file_id);
+        that.addrecent();
+      }).catch(function (error) {
+        console.log(error.response);
+      });
+      this.dialog=false;
+      this.getTabledata();
+      this.reload();
+    },
+    addrecent() {
+      var that = this;
+      this.$http.get('http://175.24.121.113:8000/myapp/file/browse/', {
+        headers: {token: window.sessionStorage.getItem("token")},
+        params:{file_id: that.file_id}
+      }
       ).then(function (res) {
         console.log(res.data);
       }).catch(function (error) {
         console.log(error.response);
       });
-      this.dialog1=false;
+      this.file_id='';
       this.getTabledata();
       this.reload();
     }
