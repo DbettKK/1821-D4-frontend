@@ -70,7 +70,7 @@ const router = new Router({
       meta:{title:'金刚石文档编辑器'}
     },*/
     {
-      path:'/Edit',
+      path:'/Edit/:id',
       component:Ue,
       name:'Edit',
       meta:{title:'无'}
