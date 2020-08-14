@@ -148,8 +148,8 @@
         Vue.axios.post(
         'http://175.24.121.113:8000/myapp/picSave/',formdata,
         {headers: { 'Content-Type': 'multipart/form-data' }},
-        ).then(()=>{
-        this.$refs.md.$img2Url(pos, 'http://175.24.121.113:8000/myapp/media/' + Response.data.url);
+        ).then((response)=>{
+        this.$refs.md.$img2Url(pos, 'http://175.24.121.113:8000/myapp/media/' + response.data.url);
         })
       },
 
