@@ -30,7 +30,7 @@
                     <el-dropdown trigger="hover" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item icon="el-icon-share" v-if="item.file_privi===4" @click.native="share(item.id)">分享</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-share" v-if="item.file_privi>=4" @click.native="share(item.id)">分享</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-star-on" @click.native="addFavorite(item.file)">收藏</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-delete-solid" @click.native="remove(item.file)">从列表中删除</el-dropdown-item>
 <!--                        <el-dropdown-item icon="el-icon-delete-solid" v-if="item.person">移到回收站</el-dropdown-item>-->
@@ -41,7 +41,7 @@
                   <div class="bottom clearfix">
                     <time class="time" style="margin-right: 20px;">{{time(item.last_modified)}} 我 打开</time>
                     <span style="font-size: 13px; color: #999;margin-right: 20px;">该文档创建者：{{item.file_creator_name}}</span>
-                    <p style="font-size: 13px; color: #999;margin-right: 20px;">权限：{{permission[item.file_privi-1]}}</p>
+                    <p style="font-size: 13px; color: #999;margin-right: 20px;">权限：{{permission[item.file_privi-1>3?3:item.file_privi-1]}}</p>
                     <p style="font-size: 13px; color: #999;" v-if="item.is_delete">已被创建者删除</p>
                   </div>
                 </div>
@@ -61,7 +61,7 @@ export default {
       activeIndex:'1',
       doclist: [],
       dialog: false,
-      permission: ['仅查看','可编辑','可评论','可分享']
+      permission: ['仅查看','可编辑','可评论','可分享',]
     };
   },
   created() {
@@ -172,8 +172,8 @@ export default {
       ).then(function (res) {
         console.log(res.data);
         that.file_id=res.data.data.id;
-        console.log(that.file_id);
         that.addrecent();
+        that.edit(that.file_id)
       }).catch(function (error) {
         console.log(error.response);
       });
