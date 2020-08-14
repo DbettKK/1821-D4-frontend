@@ -1,14 +1,10 @@
 <template>
     <el-container style="height: 100%; width: 100%; border: 0px">
         <el-header style="text-align: left; font-size: 20px">
-            <!--
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
-            <el-menu-item index="1" @click="recently">最近使用</el-menu-item>
-            <el-menu-item index="2" @click="myproduction">我创建的</el-menu-item>
-            <el-menu-item index="3" @click="favorite">我的收藏</el-menu-item>
-            <el-menu-item index="4" @click="trashbin">回收站</el-menu-item>
+            <el-menu-item index="1" @click="toTeam(team_id)">团队文档</el-menu-item>
+            <el-menu-item index="2" @click="Teammessage(team_id)">团队信息</el-menu-item>
           </el-menu>
-          -->
         </el-header>
         <el-main>
           <el-row v-for="(page, index) of pages" :key="index" style="margin-bottom: 40px;">
@@ -66,13 +62,15 @@ export default {
   data() {
     return {
         file_id: null,
+        team_id: null,
       activeIndex:'1',
       doclist: [],
         five: 0
     };
   },
   created() {
-    this.getDoclist()
+    this.getDoclist();
+    this.team_id=this.$route.params.id.toString();
   },
     watch: {//监听下个访问的东西是不是还是teamspace，是则重新获取
         '$route' (to, from) {
@@ -99,17 +97,11 @@ export default {
         console.log(error,Response);
       })
     },
-    recently() {
-            this.$router.push('/recently')
-        },
-        myproduction() {
-            this.$router.push('/myproduction')
-        },
-        favorite() {
-            this.$router.push('/favorite')
-        },
-        trashbin() {
-            this.$router.push('/trashbin')
+    toTeam(team_id){
+      this.$router.push("/TeamSpace/"+team_id);
+    },
+    Teammessage(team_id){
+      this.$router.push("/Teammessage/"+team_id);
     },
     time(a) {
          this.doctime = a.toString().substr(0, 10)
