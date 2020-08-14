@@ -154,7 +154,7 @@ export default {
             ).then(res=>{
                 if(res.data.code===200){
                     that.$message({message:  '你的新团队:'+res.data.data.name+ '  id:'+res.data.data.id+'已成功创建',
-                    type: 'success'})
+                    type: 'success',duration:7000,showClose:true})
                     that.reload();
                 }
             }).catch(res=>{

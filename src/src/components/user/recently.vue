@@ -20,7 +20,7 @@
         <el-main>
           <el-row v-for="(page, index) of pages" :key="index" style="margin-bottom: 40px;">
             <el-col :span="8" align="left" v-for="(item, innerindex) of page" :key="item.id" :offset="innerindex > 0 ? 2 : 0" style="margin-right: -60px;">
-              <el-card :body-style="{ padding: '0px' }" shadow="hover" @click.native="edit(item.file)">
+              <el-card :body-style="{ padding: '0px' }" shadow="hover" @dblclick.native="edit(item.file)">
                 <div style="padding: 14px;">
                   <div class="top">
                     <div style="display: flex; align-items: start;">
@@ -30,6 +30,7 @@
                     <el-dropdown trigger="hover" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item icon="el-icon-share" v-if="item.file_privi===4" @click.native="share(item.id)">分享</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-star-on" @click.native="addFavorite(item.file)">收藏</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-delete-solid" @click.native="remove(item.file)">从列表中删除</el-dropdown-item>
 <!--                        <el-dropdown-item icon="el-icon-delete-solid" v-if="item.person">移到回收站</el-dropdown-item>-->
@@ -40,7 +41,8 @@
                   <div class="bottom clearfix">
                     <time class="time" style="margin-right: 20px;">{{time(item.last_modified)}} 我 打开</time>
                     <span style="font-size: 13px; color: #999;margin-right: 20px;">该文档创建者：{{item.file_creator_name}}</span>
-                    <span style="font-size: 13px; color: #999;" v-if="item.is_delete">已被创建者删除</span>
+                    <p style="font-size: 13px; color: #999;margin-right: 20px;">权限：{{permission[item.file_privi-1]}}</p>
+                    <p style="font-size: 13px; color: #999;" v-if="item.is_delete">已被创建者删除</p>
                   </div>
                 </div>
               </el-card>
@@ -58,7 +60,8 @@ export default {
     return {
       activeIndex:'1',
       doclist: [],
-      dialog: false
+      dialog: false,
+      permission: ['仅查看','可编辑','可评论','可分享']
     };
   },
   created() {
@@ -77,17 +80,11 @@ export default {
         console.log(error,Response);
       })
     },
-    favor(){
-      Vue.axios.get(
-        "http://175.24.121.113:8000/myapp/file/favorite",
-        this.$qs.stringify({
-          file_id:1,
-        }),
-        {headers: {token: window.sessionStorage.getItem("token")}}
-      ).then(res=>{
-        console.log(res);
-      }).catch(error=>{
-        console.log(error,Response);
+    share(file_id){
+      this.$message({
+        message:"该文档的分享邀请码为："+file_id,
+        duration:5000,
+        showClose:true,
       })
     },
     recently() {

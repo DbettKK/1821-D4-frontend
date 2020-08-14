@@ -20,7 +20,7 @@
         <el-main>
           <el-row v-for="(page, index) of pages" :key="index" style="margin-bottom: 40px;">
             <el-col :span="8" align="left" v-for="(item, innerindex) of page" :key="item.id" :offset="innerindex > 0 ? 2 : 0" style="margin-right: -60px;">
-              <el-card :body-style="{ padding: '0px' }" shadow="hover" @click.native="edit(item.file)">
+              <el-card :body-style="{ padding: '0px' }" shadow="hover" @dblclick.native="edit(item.file)">
                 <div style="padding: 14px;">
                   <div class="top">
                     <div style="display: flex; align-items: start;">
@@ -30,14 +30,15 @@
                     <el-dropdown trigger="hover" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item icon="el-icon-share" v-if="item.file_privi===4" @click.native="share(item.id)">分享</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-star-on" @click.native="cancelFavor(item.file)">取消收藏</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
                   </div>
                   <div class="bottom clearfix">
                     <time class="time" style="margin-right: 40px;" >收藏时间：{{time(item.kept_time)}}</time>
-                    <span style="font-size: 13px; color: #999;">该文档创建者：</span>
-                    <span style="font-size: 13px; color: #999;">{{item.file_creator_name}}</span>
+                    <span style="font-size: 13px; color: #999;">该文档创建者：{{item.file_creator_name}}</span>
+                    <p style="font-size: 13px; color: #999;margin-right: 20px;">权限：{{permission[item.file_privi-1]}}</p>
                   </div>
                 </div>
               </el-card>
@@ -55,7 +56,8 @@ export default {
     return {
       activeIndex:'3',
       doclist: [],
-      dialog: false
+      dialog: false,
+      permission: ['仅查看','可编辑','可评论','可分享']
     };
   },
   created() {
@@ -89,6 +91,13 @@ export default {
     time(a) {
       this.doctime = a.toString().substr(0, 10)
          return this.doctime
+    },
+    share(file_id){
+      this.$message({
+        message:"该文档的分享邀请码为："+file_id,
+        duration:5000,
+        showClose:true,
+      })
     },
     cancelFavor(file_id){
       var that = this;
