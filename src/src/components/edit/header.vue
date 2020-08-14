@@ -4,9 +4,9 @@
         <el-col :span="3"><div class="grid-content bg-purple">金刚石文档</div></el-col>
         <el-col :span="6">
             <div class="grid-content bg-purple">
-                <el-breadcrumb separator="/">
-                    <el-breadcrumb-item>首页</el-breadcrumb-item>
-                    <el-breadcrumb-item><a href="/recently">工作台</a></el-breadcrumb-item>
+                <el-breadcrumb separator="/" >
+                    <el-breadcrumb-item @click.native="home">首页</el-breadcrumb-item>
+                    <el-breadcrumb-item @click.native="recently">工作台</el-breadcrumb-item>
                     <el-breadcrumb-item>文档编辑</el-breadcrumb-item>
                     <el-breadcrumb-item ><div @click="showcomment" >用户评论</div></el-breadcrumb-item>
                 </el-breadcrumb>
@@ -104,6 +104,12 @@
       }
     },
     methods: {
+      recently() {
+            this.$router.push('/recently')
+      },
+      home(){
+        this.$router.push('/')
+      },
       showcomment(){
           if(this.can_comment){
               this.$emit('event1',this.show)
