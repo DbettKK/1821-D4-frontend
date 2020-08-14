@@ -1,6 +1,6 @@
 <template>
   <div class="background">
-    <Header :url="url" :title="title" v-bind:file_id="parseInt(file_id)" :content="content" :collect="collect" @event1="change($event)"></Header>
+    <Header :url="url" :title="title" v-bind:file_id="parseInt(file_id)" :content="content" :collect="collect" v-bind:is_edit="showable" @event1="change($event)"></Header>
     <el-card style="height: 780px;">
       <el-container>
         <el-header style="height: 50px">

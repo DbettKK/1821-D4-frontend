@@ -38,7 +38,7 @@
           </el-dialog>
         </el-col>
         <el-col :span="2"><el-button type="primary" @click="Submit">保存</el-button></el-col>
-        <el-col :span="2"><div class="grid-content2 bg-purple">正在编辑</div></el-col>
+        <el-col :span="2"><div class="grid-content2 bg-purple">{{state}}</div></el-col>
         <el-col :span="2">
           <div class="grid-content bg-purple">
           <el-dropdown>
@@ -73,16 +73,25 @@
         },
         collect:{
           type:Boolean,
+        },
+        is_edit:{
+          type:Boolean,
         }
     },
     data() {
       return {
         show_collect:false,
         dialogVisible:false,
+        state:'正在编辑',
         show:true
       };
     },
     created:function(){
+        if(this.is_edit==true){
+          this.state='正在编辑'
+        }
+        else
+          this.state='浏览模式'
     },
     watch:{
       collect:function () {
@@ -90,7 +99,7 @@
           this.show_collect=true;
         else  
           this.show_collect=false;
-      }
+      },
     },
     methods: {
       showcomment(){
