@@ -91,6 +91,7 @@
 
 <script>
 export default {
+    inject: ['reload'],
     data() {
         return {
             userinfo: {
@@ -142,6 +143,7 @@ export default {
             this.isCollapse = !this.isCollapse
         },
         createTeam(){
+            var that = this;
             this.createTeamVisible=false;
             this.$http.post(
                 "http://175.24.121.113:8000/myapp/team/create/",
@@ -150,8 +152,10 @@ export default {
                 }),
                 {headers: {token: window.sessionStorage.getItem("token")}}
             ).then(res=>{
-                if(res.code===200){
-                    alert("你的新团队:"+res.data.data.name+" id:"+res.data.data.id+"成功创建！");
+                if(res.data.code===200){
+                    that.$message({message:  '你的新团队:'+res.data.data.name+ '  id:'+res.data.data.id+'已成功创建',
+                    type: 'success'})
+                    that.reload();
                 }
             }).catch(res=>{
                 console.log(res);
