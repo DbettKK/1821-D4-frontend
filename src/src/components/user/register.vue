@@ -41,7 +41,7 @@
           <el-input v-model="loginForm.phone_num" prefix-icon="el-icon-phone" placeholder="手机号应为11位数字"></el-input>
         </el-form-item>
         <el-form-item label="验证码" prop="code">
-          <el-input v-model="loginForm.code" prefix-icon="el-icon-document" style="width:55%"></el-input>
+          <el-input v-model="loginForm.code" prefix-icon="el-icon-document" style="width:55%" @keyup.enter.native="submitForm"></el-input>
           <el-button style="float:right" type="success" @click="sendEmail">获取验证码</el-button>
         </el-form-item>
         <el-form-item class="btns">

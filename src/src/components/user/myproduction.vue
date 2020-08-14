@@ -37,6 +37,7 @@
 
                         <el-dropdown-item icon="el-icon-delete-solid" @click.native="toTrash(item.id)">移动到回收站</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-s-tools" v-if="item.type=='team'">设置文档为私人文档</el-dropdown-item>
+
                         <el-dropdown-item icon="el-icon-s-tools" v-if="item.type=='private'">设置文档为团队文档</el-dropdown-item>
 
                       </el-dropdown-menu>
@@ -78,7 +79,7 @@
               >
                 <el-form>
                   <el-form-item>
-                    <el-input v-model="file_name" placeholder="请输入文档名字"></el-input>
+                    <el-input v-model="file_name" placeholder="请输入文档名字" @keyup.enter.native="renameFile"></el-input>
                   </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -157,11 +158,25 @@ export default {
                 params:{file_id: file_id}
                 }
       ).then(function (res) {
+        that.$message({
+                  message: "收藏成功",//+res.data.file_id,
+                  type: "success",
+                  customClass: "c-msg",
+                  duration:3000,
+                  showClose: true
+                });
         console.log(res.data);
         that.file_id=res.data.data.file;
         console.log(that.file_id);
         that.addrecent();
       }).catch(function (error) {
+               that.$message({
+                  message: error.response.data.info,//+res.data.file_id,
+                  type: "error",
+                  customClass: "c-msg",
+                  duration:3000,
+                  showClose: true
+                });
         console.log(error.response.data);
         console.log(window.sessionStorage.getItem("token"))
       });
@@ -169,12 +184,20 @@ export default {
       this.reload();
     },
     toTrash(file_id){
+      var that=this
       this.$http.get('http://175.24.121.113:8000/myapp/file/isdelete/',
               {
                 headers: {token: window.sessionStorage.getItem("token")},
                 params:{file_id: file_id}
               }
       ).then(function (res) {
+        that.$message({
+                  message: "成功移到回收站",//+res.data.file_id,
+                  type: "success",
+                  customClass: "c-msg",
+                  duration:3000,
+                  showClose: true
+                });
         console.log(res.data);
 
       }).catch(function (error) {
@@ -191,13 +214,28 @@ export default {
 
     },
     submit(){
+      var that=this
       this.$http.post('http://175.24.121.113:8000/myapp/file/privi/pri/',this.$qs.stringify({
         privilege: this.privilege,
         file_id: this.file_id_tmp
       }), {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(function (res) {
+          that.$message({
+                  message: "权限设置成功",//+res.data.file_id,
+                  type: "success",
+                  customClass: "c-msg",
+                  duration:3000,
+                  showClose: true
+                });
         console.log(res.data);
       }).catch(function (error) {
+                         that.$message({
+                  message: error.resopnse.data.info,//+res.data.file_id,
+                  type: "error",
+                  customClass: "c-msg",
+                  duration:3000,
+                  showClose: true
+                });
         console.log(error.response);
       });
       this.dialog=false;
@@ -235,13 +273,29 @@ export default {
       this.reload();
     },
     renameFile(){
+            var that = this;
       this.$http.post('http://175.24.121.113:8000/myapp/file/rename/',this.$qs.stringify({
                 file_id: this.file_id_tmp,
                 file_name: this.file_name
               }), {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(function (res) {
+         that.$message({
+                  message: "成功重命名",//+res.data.file_id,
+                  type: "success",
+                  customClass: "c-msg",
+                  duration:3000,
+                  showClose: true
+                });
+
         console.log(res.data);
       }).catch(function (error) {
+                 that.$message({
+                  message: error.resopnse.data.info,//+res.data.file_id,
+                  type: "error",
+                  customClass: "c-msg",
+                  duration:3000,
+                  showClose: true
+                });
         console.log(error.response);
       });
       this.dialog2=false;

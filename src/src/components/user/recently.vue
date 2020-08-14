@@ -115,7 +115,21 @@ export default {
         that.file_id=res.data.data.file;
         console.log(that.file_id);
         that.addrecent();
+        that.$message({
+                  message: "收藏成功",//+res.data.file_id,
+                  type: "success",
+                  customClass: "c-msg",
+                  duration:3000,
+                  showClose: true
+                });
       }).catch(function (error) {
+        that.$message({
+                  message: error.response.data.info,//+res.data.file_id,
+                  type: "error",
+                  customClass: "c-msg",
+                  duration:3000,
+                  showClose: true
+                });
         console.log(error.response.data);
         console.log(window.sessionStorage.getItem("token"))
       });
@@ -123,14 +137,29 @@ export default {
       this.reload();
     },
     remove(file_id) {
+      var that =this
       this.$http.get('http://175.24.121.113:8000/myapp/file/browse/delete/',
               {
                 headers: {token: window.sessionStorage.getItem("token")},
                 params:{file_id: file_id}
                 }
       ).then(function (res) {
+           that.$message({
+                  message: "删除成功",//+res.data.file_id,
+                  type: "success",
+                  customClass: "c-msg",
+                  duration:3000,
+                  showClose: true
+                });
         console.log(res.data);
       }).catch(function (error) {
+        that.$message({
+                  message: error.response.data.info,//+res.data.file_id,
+                  type: "error",
+                  customClass: "c-msg",
+                  duration:3000,
+                  showClose: true
+                });
         console.log(error.response.data);
         console.log(window.sessionStorage.getItem("token"))
       });
