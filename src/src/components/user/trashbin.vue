@@ -18,7 +18,7 @@
           </div>
         </el-dialog>
         <el-main>
-        <el-table :data="tableData" height=734px style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" :row-style="{height: '35px'}">
+        <el-table :data="tableData" height=666px style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" :row-style="{height: '35px'}">
             <el-table-column prop="file_title" label="文件名称" @contextmenu.prevent=""></el-table-column>
             <el-table-column prop="creator_name" label="文档创建人" width="240px"></el-table-column>
             <el-table-column prop="delete_time" :formatter="dateFormat" label="删除日期" width="240px"></el-table-column>
@@ -41,7 +41,16 @@
               </template>
             </el-table-column>
         </el-table>
+        <el-card :body-style="{ padding: '0px' }" shadow="hover" class="Empty" @click.native="dialog3=true" style="position: absolute; left: 85%;">
+          <i class="el-icon-delete bt">清空回收站</i>
+        </el-card>
         </el-main>
+        <el-dialog title="确认清空回收站" :visible.sync="dialog3" width="30%">
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialog3=false">取 消</el-button>
+            <el-button type="primary" @click="Empty()" >确定</el-button>
+          </div>
+        </el-dialog>
         <el-dialog title="确认将文档从回收站放回原处" :visible.sync="dialog" width="30%">
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialog=false">取 消</el-button>
@@ -69,6 +78,7 @@
         dialog: false,
         dialog1: false,
         dialog2: false,
+        dialog3: false,
         id: '1'
       }
     },
@@ -161,6 +171,19 @@
       this.getTabledata();
       this.reload();
     },
+    Empty() {
+      this.$http.get('http://175.24.121.113:8000/myapp/file/delete/all/',{
+                headers: {token: window.sessionStorage.getItem("token")}
+      }
+      ).then(function (res) {
+        console.log(res.data);
+      }).catch(function (error) {
+        console.log(error.response);
+      });
+      this.dialog3=false;
+      this.getTabledata();
+      this.reload();
+    },
     addrecent() {
       var that = this;
       this.$http.get('http://175.24.121.113:8000/myapp/file/browse/', {
@@ -211,6 +234,23 @@
   margin-top: 20px;
   margin-right: 100px;
   color: rgb(180, 180, 180);
+  position: relative;
+  cursor: pointer;
+  .bt {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%)translateY(-50%);
+  }
+}
+.Empty {
+  height: 30px;
+  width: 150px;
+  background-color: rgb(180, 180, 180);
+  font-size: 11px;
+  margin-top: 20px;
+  margin-right: 100px;
+  color: rgb(36, 36, 36);
   position: relative;
   cursor: pointer;
   .bt {
