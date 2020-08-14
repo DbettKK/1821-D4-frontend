@@ -36,9 +36,9 @@
                         <el-dropdown-item icon="el-icon-s-custom" @click.native="selectPrivi(item.id)">设置文档权限</el-dropdown-item>
 
                         <el-dropdown-item icon="el-icon-delete-solid" @click.native="toTrash(item.id)">移动到回收站</el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-s-tools" v-if="item.type=='team'">设置文档为私人文档</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-s-tools" v-if="item.type=='team'" @click.native="change_tp_type(item.id)">设置文档为私人文档</el-dropdown-item>
 
-                        <el-dropdown-item icon="el-icon-s-tools" v-if="item.type=='private'">设置文档为团队文档</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-s-tools" v-if="item.type=='private'" @click.native="change_tp_type(item.id)">设置文档为团队文档</el-dropdown-item>
 
                       </el-dropdown-menu>
                     </el-dropdown>
@@ -80,6 +80,7 @@
                 <el-form>
                   <el-form-item>
                     <el-input v-model="file_name" placeholder="请输入文档名字" @keyup.enter.native="renameFile"></el-input>
+                    <!--这里有一个奇怪的bug 用回车重命名经常失败(但有时可以成功（成功也没有message提示）)  如果有闲可以看下咋回事。。。-->
                   </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -310,8 +311,38 @@ export default {
       this.file_id = file_id;
       this.addrecent();
       this.$router.push('/edit/' + file_id)
-    }
+    },
 
+
+
+
+
+
+    change_tp_type(file_id)//更改团队、私人类型
+    {
+      var that=this
+      this.$http.get('http://175.24.121.113:8000/myapp/file/privi/change/',
+        {
+                headers: {token: window.sessionStorage.getItem("token")},
+                params:{file_id: file_id}
+        }
+      ).then(function (res) {
+        that.$message({
+                  message: "成功修改",//+res.data.file_id,
+                  type: "success",
+                  customClass: "c-msg",
+                  duration:3000,
+                  showClose: true
+                });
+        console.log(res.data);
+
+      }).catch(function (error) {
+        console.log(error.response.data);
+        console.log(window.sessionStorage.getItem("token"))
+      });
+      this.getDoclist();
+      this.reload();
+    }
   },
   computed: {
     pages () {
