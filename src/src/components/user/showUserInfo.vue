@@ -90,8 +90,4 @@ export default {
         justify-content:center;
         align-items:center;
     }
-    .a{
-        text-decoration: none;
-        background-color:rgb(255,255,255);
-    }
 </style>

@@ -1,20 +1,20 @@
 <template>
     <el-container class="Info_Container">
         <el-header>
-            <span><i class="el-icon-s-custom"></i>&nbsp;个人信息查看与修改</span>
+            <span><i class="el-icon-s-custom" style="font-size: 20px"></i >&nbsp;
+                <b style="font-size: 20px">个人信息修改</b></span>
         </el-header>
         <el-container class="Inner_container">
             <el-aside width="30%">
                 <div class="Inner_aside">
-                    <img src="../../assets/logo.png" alt=""  width="70%" height="50%">
-                    <p>用户信息与修改</p>
+                    <img src="../../assets/logo_new.png" alt=""  width="70%" height="50%">
                 </div>
             </el-aside>
             <el-divider direction="vertical"></el-divider>
             <el-main>
                 <el-form ref="form" :model="form" label-width="80px">
                     <el-form-item label="用户">
-                        <el-input v-model="form.name" prefix-icon="el-icon-user-solid" clearable></el-input>
+                        <el-input v-model="form.name" prefix-icon="el-icon-user-solid" disabled></el-input>
                     </el-form-item>
                     <el-form-item label="密码">
                         <el-input v-model="form.password" placeholder="请输入新密码" prefix-icon="el-icon-key" type=password></el-input>
@@ -32,8 +32,8 @@
                         <el-input v-model="form.ID" prefix-icon="el-icon-user" :disabled="true"></el-input>
                     </el-form-item>
                     <div>
-                        <el-button type="info" round @click="dialogFormVisible=true">确认修改</el-button>
-                        <el-button type="return" round><router-link to="/" class="a">返回</router-link></el-button>
+                        <el-button type="primary" round @click="dialogFormVisible=true">确认修改</el-button>
+                        <el-button type="return" round @click="toHome">返回</el-button>
                     </div>
                     <el-dialog title="修改信息" :visible.sync="dialogFormVisible" width="400px">
                         <el-form :model="form">
@@ -61,11 +61,11 @@ export default {
     data(){
         return { 
             form: {
-                name: 'Y',
+                name: '',
                 password: '',
                 phone: '',
                 email:'',
-                type: '普通用户',
+                type: '注册用户',
                 ID: 11,
                 token:'',
                 old_pwd:''
@@ -98,33 +98,42 @@ export default {
                     console.log(res);
                     if(this.form.password==''){
                         this.form.password=this.form.old_pwd;
-                        this.ChangeInfo();
+
                     }
+                    this.ChangeInfo();
                 }).catch(res => {
                     console.log(res);
             });
         },
         ChangeInfo(){
+            var that=this;
             Vue.axios.post(
                 "http://175.24.121.113:8000/myapp/user/info/",this.$qs.stringify({
                     new_password:this.form.password,
                     email:this.form.email,
                     phone_num:this.form.phone
-                }),
-                {
-                    headers: {
-                        token: this.token
-                    }
-                }).then(function(res)  {
+                }), {headers: {token: this.token}}
+                ).then(function(res)  {
+
                     console.log(res);
                     console.log('success');
+                that.$message({
+                        message: '修改成功，请重新登录！',
+                        type: 'success'
+                    });
+                    window.sessionStorage.clear();
+                that.$router.push('/login');
                 }).catch(res => {
                     console.log(res);
+                    this.$message({
+                        message: res.response.data.info,
+                        type: 'warning'
+                    });
             });
         },
         GetInfo(){
             Vue.axios.get(
-                'http://175.24.121.113:8000/myapp/user/info',
+                'http://175.24.121.113:8000/myapp/user/info/',
                 {
                 headers:{
                     token:this.token
@@ -139,6 +148,9 @@ export default {
             }).catch(function(error){
                 console.log(error);
             })
+        },
+        toHome(){
+            this.$router.push('/');
         }
     }
 }
@@ -158,6 +170,7 @@ export default {
         background-color:#FFFFFF;
         box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
         vertical-align: middle;
+        margin-top: 25px;
     }
     .Inner_aside{
         padding-top: 60%;

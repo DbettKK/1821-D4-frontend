@@ -24,9 +24,6 @@
           <el-input v-model="loginForm.password_new" prefix-icon="el-icon-lock"  type="password" placeholder="新密码必须介于6-20个字符之间">
             <i slot="suffix" title="显示密码" @click="changePass" style="cursor:pointer;"
                class="el-icon-view"></i>
-               <!--
-                   class="el-input__icon iconfont el-icon-open"></i>
-                   -->
           </el-input>
         </el-form-item>
         <el-form-item label="新密码" prop="password_new" v-else>
