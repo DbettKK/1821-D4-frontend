@@ -159,6 +159,9 @@ export default {
                 }
             }).catch(res=>{
                 console.log(res);
+                that.$message({message:  '创建失败 ' + '原因:' + res.response.data.info,
+                    type: 'error'})
+                that.reload();
             });
         },
         ue(){

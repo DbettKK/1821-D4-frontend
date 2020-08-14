@@ -2,8 +2,8 @@
     <el-container style="height: 100%; width: 100%; border: 0px">
         <el-header style="text-align: left; font-size: 20px">
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
-            <el-menu-item index="1" @click="toTeam(this.$route.params.id.toString())">团队文档</el-menu-item>
-            <el-menu-item index="2" @click="Teammessage(this.$route.params.id.toString())">团队信息</el-menu-item>
+            <el-menu-item index="1" @click="toTeam()">团队文档</el-menu-item>
+            <el-menu-item index="2" @click="Teammessage()">团队信息</el-menu-item>
           </el-menu>
         </el-header>
         <el-main>
@@ -17,7 +17,7 @@ export default {
     inject: ['reload'],
   data() {
     return {
-        
+        activeIndex: '2'
     };
   },
   created() {
@@ -39,10 +39,12 @@ export default {
         }
     },
   methods: {
-    toTeam(team_id){
-      this.$router.push("/TeamSpace/"+team_id);
+    toTeam(){
+        var team_id = this.$route.params.id;
+        this.$router.push("/TeamSpace/"+team_id);
     },
-    Teammessage(team_id){
+    Teammessage(){
+        var team_id = this.$route.params.id;
       this.$router.push("/Teammessage/"+team_id);
     },
   },

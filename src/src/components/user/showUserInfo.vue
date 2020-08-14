@@ -12,8 +12,9 @@
             <div style="margin-top:5px">ID: {{id}}</div>
             <div style="margin-top:5px">用户名：{{username}}</div>
             <div style="margin-top:5px" >角色：<el-tag type="worning">注册用户</el-tag></div>
-            <div style="margin-top:5px">邮箱：{{email}}</div>
             <div style="margin-top:5px">手机号：{{phone_num}}</div>
+            <div style="margin-top:5px">邮箱：{{email}}</div>
+
         </div>
     </el-container>
 </template>
