@@ -1,11 +1,12 @@
 <template>
   <div class="login_container">
+    <Ba></Ba>
     <div class="login_box">
       <div class="avatar_box">
         <img src="../../assets/logo_new.png" alt="">
       </div>
              <div class="biaoti"> 
-               <p>找回密码</p>
+               <p style="color: grey">重置密码</p>
              </div>
       <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" label-width="100px" class="login_form">
             <div>
@@ -45,10 +46,10 @@
         </el-form-item>
         <el-form-item label="验证码" prop="code">
           <el-input v-model="loginForm.code" prefix-icon="el-icon-document" style="width:55%"></el-input>
-          <el-button style="float:right" type="info" @click="sendEmail">获取验证码</el-button>
+          <el-button style="float:right" type="success" @click="sendEmail">获取验证码</el-button>
         </el-form-item>
         <el-form-item class="btns">
-          <el-button type="shenhui" @click="submitForm" style="width:300px">修改密码</el-button>
+          <el-button type="primary" @click="submitForm" style="width:300px">重置密码</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -58,8 +59,12 @@
 <script>
 import QS from "qs";
 import Vue from 'vue'
+import Ba from './background.vue';
 export default {
     name: "FindPassword",
+  components:{
+    Ba,
+  },
   data () {
       //很大程度参照了login的写法
     return {
@@ -220,12 +225,13 @@ export default {
 
 
 .login_box {
+  opacity: 90%;
   width: 450px;
   height: 450px;
   background-color: #fff;
   border-radius: 3px;
   position: absolute;
-  left: 50%;
+  left: 20%;
   top: 50%;
   transform: translate(-50%, -50%);
     //登录按钮的定制

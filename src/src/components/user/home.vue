@@ -30,7 +30,7 @@
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item v-if="!(isLogin && userinfo.username)">登录后查看更多</el-dropdown-item>
                     <el-dropdown-item @click.native="logout" v-if="isLogin && userinfo.username">退出登录</el-dropdown-item>
-                    <el-dropdown-item @click.native="writeOff" v-if="isLogin && userinfo.username">注销账号</el-dropdown-item>
+                    <el-dropdown-item @click.native="wirteOffWarn" v-if="isLogin && userinfo.username">注销账号</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
             </div>
@@ -191,6 +191,23 @@ export default {
                 console.log(error);
             });
             },
+        wirteOffWarn(){
+            this.$confirm('此操作将永久注销账号, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.$message({
+                    type: 'success',
+                    message: '注销成功!'
+                });
+                this.writeOff();
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消注销'});
+            });
+        },
         writeOff(){
             this.$http.get('http://175.24.121.113:8000/myapp/user/writeoff/',
                 {headers: {token: window.sessionStorage.getItem("token")}}
@@ -199,7 +216,6 @@ export default {
             }).catch(function (error) {
                 console.log(error.response)
             });
-            this.$message({message:'注销成功', type:'success'});
             window.sessionStorage.clear();
             this.$router.push('/login')
         },

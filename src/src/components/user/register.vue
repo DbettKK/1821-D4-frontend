@@ -6,8 +6,10 @@
         <img src="../../assets/logo_new.png" alt="">
       </div>
               <div class="biaoti"> 
-               <p>注 册</p>
+               <p style="color: grey">用户注册</p>
              </div>
+      <el-container>
+      <el-main class="main1">
       <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" label-width="100px" class="login_form">
         <el-form-item  label="用户名" prop="username" >
           <el-input v-model="loginForm.username" prefix-icon="el-icon-user" placeholder="长度应在3~15个字符"></el-input>
@@ -16,42 +18,22 @@
           <el-input v-model="loginForm.password" prefix-icon="el-icon-lock"  type="password" placeholder="密码必须介于6-20个字符之间">
             <i slot="suffix" title="显示密码" @click="changePass" style="cursor:pointer;"
                class="el-icon-view"></i>
-               <!--
-                   class="el-input__icon iconfont el-icon-open"></i>
-                   -->
           </el-input>
           <el-input v-model="loginForm.password2" prefix-icon="el-icon-lock"  type="password" placeholder="请重复密码">
             <i slot="suffix" title="显示密码" @click="changePass" style="cursor:pointer;"
                class="el-icon-view"></i>
-               <!--
-                   class="el-input__icon iconfont el-icon-open"></i>
-                   -->
           </el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password" v-else>
           <el-input v-model="loginForm.password" prefix-icon="el-icon-lock" type="text" placeholder="密码应介于6-20个字符之间" >
             <i slot="suffix" title="隐藏密码" @click="changePass" style="cursor:pointer;"
                class="el-icon-more"></i>
-               <!--
-                 class="el-input__icon iconfont el-icon-off"></i>
-                 -->
           </el-input>
           <el-input v-model="loginForm.password2" prefix-icon="el-icon-lock" type="text" placeholder="请重复密码" >
             <i slot="suffix" title="隐藏密码" @click="changePass" style="cursor:pointer;"
                class="el-icon-more"></i>
-               <!--
-                 class="el-input__icon iconfont el-icon-off"></i>
-                 -->
           </el-input>
         </el-form-item>
-
-
-
-        <!--
-        <el-form-item label="确认密码" prop="password2">
-          <el-input v-model="loginForm.password2" prefix-icon="el-icon-lock" ></el-input>
-        </el-form-item>
-        -->
         <el-form-item label="邮箱" prop="email" >
           <el-input v-model="loginForm.email" prefix-icon="el-icon-message" placeholder="邮箱将接收验证码"></el-input>
         </el-form-item>
@@ -60,15 +42,14 @@
         </el-form-item>
         <el-form-item label="验证码" prop="code">
           <el-input v-model="loginForm.code" prefix-icon="el-icon-document" style="width:55%"></el-input>
-          <el-button style="float:right" type="info" @click="sendEmail">获取验证码</el-button>
+          <el-button style="float:right" type="success" @click="sendEmail">获取验证码</el-button>
         </el-form-item>
         <el-form-item class="btns">
-          <!--
-          <el-button style="margin-right:110px" type="info" @click="sendEmail">获取验证码</el-button>
-          -->
-          <el-button type="shenhui" @click="submitForm" style="width:300px">注册</el-button>
+          <el-button type="primary" @click="submitForm" style="width:300px">注册</el-button>
         </el-form-item>
       </el-form>
+      </el-main>
+      </el-container>
     </div>
   </div>
 </template>
@@ -213,7 +194,7 @@ export default {
           })
         .catch(error => {
               this.$message({
-                message: "该页面出了点状况",
+                message: error.response.data.info,
                 type: "error",
                 customClass: "c-msg",
                 duration: 0,
@@ -240,7 +221,7 @@ export default {
             .then(response => {
               if (response.data.registered) {
                 // 注册成功
-                this.$router.replace("/");
+                this.$router.replace("/login");
                 this.$message({
                     message: "注册成功，你的账号是："+response.data.data.username+"请登录",
                     type: "success",
@@ -289,13 +270,14 @@ top:55px;
 font-size:26px;//调整字体大小
 }
 .login_box {
+  opacity: 90%;
   width: 450px;
-  height: 500px;
+  height: 550px;
   background-color: #fff;
   border-radius: 3px;
   position: absolute;
-  left: 30%;
-  top: 55%;
+  left: 20%;
+  top: 50%;
   transform: translate(-50%, -50%);
 
 
@@ -327,8 +309,7 @@ font-size:26px;//调整字体大小
   .login_form {
     position: absolute;
     bottom: 0;
-    width: 100%;
-    padding: 0 20px;
+    width: 90%;
     box-sizing: border-box;
   }
 

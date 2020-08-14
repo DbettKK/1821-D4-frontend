@@ -1,6 +1,6 @@
 <template>
 <div>
-    <Ba></Ba>
+    <Ba/>
     <div class="login_container">
     <div class="login_box">
       <div class="avatar_box">
@@ -28,7 +28,7 @@
               <router-link to="/register" class="a">前往注册</router-link>
           </el-aside>
           <el-main class="main2">
-              <router-link to="/FindPassword" class="a">找回密码</router-link>
+              <router-link to="/FindPassword" class="a">忘记密码</router-link>
           </el-main>
           </el-container>
         </el-footer>
