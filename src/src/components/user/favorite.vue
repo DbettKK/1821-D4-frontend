@@ -102,6 +102,13 @@ export default {
         that.file_id=res.data.data.file;
         console.log(that.file_id);
         that.addrecent();
+        that.$message({
+                  message: "成功取消收藏",
+                  type: "success",
+                  customClass: "c-msg",
+                  duration:3000,
+                  showClose: true
+                });
       }).catch(function (error) {
         console.log(error.response.data);
         console.log(window.sessionStorage.getItem("token"))
