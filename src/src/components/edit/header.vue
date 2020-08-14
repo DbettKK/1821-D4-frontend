@@ -38,7 +38,7 @@
           </el-dialog>
         </el-col>
         <el-col :span="2"><el-button type="primary" @click="Submit">保存</el-button></el-col>
-        <el-col :span="2" v-color:><div class="grid-content2 bg-purple">正在编辑</div></el-col>
+        <el-col :span="2"><div class="grid-content2 bg-purple">正在编辑</div></el-col>
         <el-col :span="2">
           <div class="grid-content bg-purple">
           <el-dropdown>
@@ -69,6 +69,7 @@
         },
         file_id:{
           type:Number,
+          default:-1
         },
         collect:{
           type:Boolean,
@@ -82,7 +83,6 @@
       };
     },
     created:function(){
-        this.Get_file();
     },
     watch:{
       collect:function () {
@@ -95,6 +95,9 @@
     methods: {
       showcomment(){
         this.$emit('event1',this.show)
+      },
+      handleClose(){
+
       },
       Collect() {
         if(this.collect == true){

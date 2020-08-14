@@ -1,6 +1,6 @@
 <template>
   <div class="background">
-    <Header :url="url" :title="title" :file_id="file_id" :content="content" :collect="collect" @event1="change($event)"></Header>
+    <Header :url="url" :title="title" v-bind:file_id="parseInt(file_id)" :content="content" :collect="collect" @event1="change($event)"></Header>
     <el-card style="height: 780px;">
       <el-container>
         <el-header style="height: 50px">
@@ -26,22 +26,38 @@
       title="用户评论"
       :visible.sync="drawer"
       :direction="direction">
-      <el-table
-        :data="comments"
-        stripe
-        style="width: 100%">
-        <el-table-column
-          prop="uesername"
-          label="姓名"
-          width="150">
-        </el-table-column>
-        <el-table-column
-          prop="comment"
-          label="评论"
-          width="300">
-        </el-table-column>
-      </el-table>
+      <el-main>
+        <el-table
+          :data="comments"
+          stripe
+          style="width: 100%">
+          <el-table-column
+            prop="username"
+            label="姓名"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="content"
+            label="评论"
+            width="290">
+          </el-table-column>
+        </el-table>
+      </el-main>
+      <el-footer>
+        <el-button type="primary" round @click="L_comment">编写评论</el-button>
+      </el-footer>
     </el-drawer>
+    <el-dialog title="添加用户评论" :visible.sync="CommentdialogFormVisible" width="30%">
+      <el-form >
+        <el-form-item label=" 说说你对这篇文档的看法：" >
+          <el-input autocomplete="off" v-model="comment" placeholder="请输入短评..."></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="CommentdialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="add_comment">确 定</el-button>
+      </div>
+    </el-dialog>
     <Footer></Footer>
   </div>
 </template>
@@ -61,26 +77,14 @@
         collect:false,
         showable:true,
         drawer: false,
+        CommentdialogFormVisible:false,
+        comment:'',
         direction: 'ltr',
         url:'12',
         title:'Title',
         file_id:10,
         content: "",
-        comments:[
-          {
-            uesername:'yty',
-            comment:'lalallalalalalallal'
-          },{
-            uesername:'yty',
-            comment:'lalallalalalalallal'
-          },{
-            uesername:'yty',
-            comment:'lalallalalalalallal'
-          },{
-            uesername:'yty',
-            comment:'lalallalalalalallal'
-          },
-          ],
+        comments:[],
         toolbars: {
           bold: true, // 粗体
           italic: true, // 斜体
@@ -119,13 +123,57 @@
       }
     },
     methods:{
+      L_comment(){
+        this.CommentdialogFormVisible=true;
+      },
+      add_comment(){
+        this.CommentdialogFormVisible = false;
+        Vue.axios.post(
+          "http://175.24.121.113:8000/myapp/file/comment/",this.$qs.stringify({
+              file_id:this.file_id,
+              comment:this.comment
+          }),
+          {
+              headers: {
+                  token: window.sessionStorage.getItem('token')
+              }
+          }).then((res)=>  {
+              console.log(res);
+              this.comments.push({id:res.data.data.id,username:res.data.data.username,content:this.comment})
+              this.$notify({
+                title: '成功',
+                message: '您已成功提交！',
+                type: 'success'
+              });
+          }).catch(res => {
+              console.log(res);
+        });
+        this.get_comment();
+      },
+      get_comment(){
+        Vue.axios.get(
+            'http://175.24.121.113:8000/myapp/file/comment/get/',
+            {
+              headers:{
+                  token:window.sessionStorage.getItem('token')
+                  },
+              params:{
+                  file_id:this.file_id
+              }
+            }
+        ).then(res=>{
+            this.comments=res.data.data;
+            console.log(res);
+        }).catch(function(error){
+            console.log(error);
+        })
+      },
       change(data){
         this.drawer=data;
       },
       GetContents(){
         Vue.axios.get(
                 'http://175.24.121.113:8000/myapp/file/get/',
-                
                 {
                     headers: {
                         'token': window.sessionStorage.getItem('token')
@@ -162,6 +210,7 @@
       this.file_id=this.$route.params.id;
       console.log(this.$route.path)
       this.GetContents();
+      this.get_comment();
     }
   }
 </script>
@@ -194,5 +243,14 @@
   }
   .background{
     background-color: #F2F6FC;
+  }
+  .el-main{
+    height: 90%;
+    width: 100%;
+  }
+  .el-footer{
+    text-align: center;
+    line-height: 30px;
+    vertical-align: middle;
   }
 </style>
