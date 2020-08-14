@@ -1,6 +1,6 @@
 <template>
   <div class="background">
-    <Header :url="url" :title="title" v-bind:file_id="parseInt(file_id)" :content="content" :collect="collect" v-bind:is_edit="showable" @event1="change($event)"></Header>
+    <Header :can_comment="can_comment" :can_edit="can_edit" :can_share="can_share" :url="url" :title="title" :file_id="parseInt(file_id)" :content="content" :collect="collect" @event1="change($event)"></Header>
     <el-card style="height: 780px;">
       <el-container>
         <el-header style="height: 50px">
@@ -9,7 +9,7 @@
         <el-main>
           <mavon-editor
             ref="md"
-            :editable="showable"
+            :editable="can_edit"
             @imgAdd="$imgAdd"
             placeholder="请输入文档内容..."
             :boxShadow="true"
@@ -75,7 +75,6 @@
     data() {
       return {
         collect:false,
-        showable:true,
         drawer: false,
         CommentdialogFormVisible:false,
         comment:'',
@@ -83,6 +82,11 @@
         url:'12',
         title:'Title',
         file_id:10,
+        file_type: '',
+        privilege: '',
+        can_edit: false,
+        can_comment: false,
+        can_share: false,
         content: "",
         comments:[],
         toolbars: {
@@ -132,11 +136,7 @@
           "http://175.24.121.113:8000/myapp/file/comment/",this.$qs.stringify({
               file_id:this.file_id,
               comment:this.comment
-          }),
-          {
-              headers: {
-                  token: window.sessionStorage.getItem('token')
-              }
+          }),{headers: {token: window.sessionStorage.getItem('token')}
           }).then((res)=>  {
               console.log(res);
               this.comments.push({id:res.data.data.id,username:res.data.data.username,content:this.comment})
@@ -153,14 +153,8 @@
       get_comment(){
         Vue.axios.get(
             'http://175.24.121.113:8000/myapp/file/comment/get/',
-            {
-              headers:{
-                  token:window.sessionStorage.getItem('token')
-                  },
-              params:{
-                  file_id:this.file_id
-              }
-            }
+            {headers: {token: window.sessionStorage.getItem('token')},
+              params: {file_id: this.file_id}}
         ).then(res=>{
             this.comments=res.data.data;
             console.log(res);
@@ -172,22 +166,17 @@
         this.drawer=data;
       },
       GetContents(){
-        Vue.axios.get(
-                'http://175.24.121.113:8000/myapp/file/get/',
-                {
-                    headers: {
-                        'token': window.sessionStorage.getItem('token')
-                    },
-                    params:{
-                      file_id:this.file_id
-                    }
-                }
-                ).then(res => {
-                    this.title=res.data.data.file_title;
-                    this.content=res.data.data.file_content;
-                    this.collect=res.data.is_kept;
-                    console.log(res);
-            });
+        Vue.axios.get('http://175.24.121.113:8000/myapp/file/get/',
+          {headers: {'token': window.sessionStorage.getItem('token')},
+            params:{file_id:this.file_id}}
+        ).then(res => {
+          this.title=res.data.data.file_title;
+          this.content=res.data.data.file_content;
+          this.collect=res.data.is_kept;
+          this.file_type=res.data.data.type;
+          console.log(res);
+          this.getPri(res.data.data.type);
+        });
       },
       $imgAdd(pos, $file){
         var formdata = new FormData();
@@ -200,6 +189,45 @@
         this.$refs.md.$img2Url(pos, 'http://175.24.121.113:8000/myapp/media/' + response.data.url);
         })
       },
+      getPri(type){
+        var that = this;
+        this.$http.get('http://175.24.121.113:8000/myapp/'+type+'/privi/judge/',
+                {headers: {token: window.sessionStorage.getItem('token')},
+                  params: {file_id: this.file_id}}
+        ).then(function (res) {
+          console.log(res.data.data.pri);
+          that.privilege=res.data.data.pri;
+          console.log(typeof that.privilege);
+          that.judgePri();
+        })
+      },
+      judgePri(){
+        if(this.privilege === 1){
+          this.$message({
+            message: '由于您的权限问题，当前页面只能查看哦',
+            type: 'warning'
+          });
+          return;
+        }else if(this.privilege >= 2){
+          this.can_edit=true;
+          this.$http.get('http://175.24.121.113:8000/myapp/file/edit/',
+                  {headers: {token: window.sessionStorage.getItem('token')},
+                    params: {file_id: this.file_id}});
+          if (this.privilege >= 3){
+            this.can_comment=true;
+            if (this.privilege >= 4){
+              this.can_share=true;
+            }
+          }
+        }
+        console.log(this.privilege);
+        console.log(this.can_edit);
+        console.log(this.can_comment);
+        console.log(this.can_share);
+      },
+      send_msg(){
+        this.$emit('func',this.can_comment, this.can_share);
+      }
 
     },
     watch:{
@@ -209,8 +237,11 @@
       this.url=this.$route.path;
       this.file_id=this.$route.params.id;
       console.log(this.$route.path)
+      //this.enterEdit();
+      this.send_msg();
       this.GetContents();
       this.get_comment();
+
     }
   }
 </script>

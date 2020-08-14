@@ -8,7 +8,7 @@
                     <el-breadcrumb-item>首页</el-breadcrumb-item>
                     <el-breadcrumb-item><a href="/recently">工作台</a></el-breadcrumb-item>
                     <el-breadcrumb-item>文档编辑</el-breadcrumb-item>
-                    <el-breadcrumb-item><div @click="showcomment">用户评论</div></el-breadcrumb-item>
+                    <el-breadcrumb-item ><div @click="showcomment" >用户评论</div></el-breadcrumb-item>
                 </el-breadcrumb>
             </div>
         </el-col>
@@ -21,11 +21,13 @@
         </el-col>
         <el-col :span="1">
           <el-tooltip class="item" effect="light" content="添加到团队中" placement="bottom-end">
-            <el-button class="share-button" icon="el-icon-folder-add" type="primary" @click="Add_G"></el-button>
+            <el-button class="share-button" icon="el-icon-folder-add" type="primary" @click="Add_G" ></el-button>
           </el-tooltip>
         </el-col>
         <el-col :span="1">
-          <el-button class="share-button" icon="el-icon-share" type="primary" @click="dialogVisible = true"></el-button>
+            <el-tooltip class="item" effect="light" content="分享" placement="bottom-end">
+                <el-button class="share-button" icon="el-icon-share" type="primary" @click="judgeShare"></el-button>
+            </el-tooltip>
           <el-dialog
             title=文档分享
             :visible.sync="dialogVisible"
@@ -38,7 +40,7 @@
           </el-dialog>
         </el-col>
         <el-col :span="2"><el-button type="primary" @click="Submit">保存</el-button></el-col>
-        <el-col :span="2"><div class="grid-content2 bg-purple">{{state}}</div></el-col>
+        <el-col :span="2"><div class="grid-content2 bg-purple">{{can_edit?'正在编辑':'浏览模式'}}</div></el-col>
         <el-col :span="2">
           <div class="grid-content bg-purple">
           <el-dropdown>
@@ -74,24 +76,24 @@
         collect:{
           type:Boolean,
         },
-        is_edit:{
+        can_comment:{
+            type:Boolean,
+        },
+        can_share:{
+            type:Boolean,
+        },
+        can_edit:{
           type:Boolean,
-        }
+        },
     },
     data() {
       return {
         show_collect:false,
         dialogVisible:false,
-        state:'正在编辑',
-        show:true
+        show:true,
       };
     },
     created:function(){
-        if(this.is_edit==true){
-          this.state='正在编辑'
-        }
-        else
-          this.state='浏览模式'
     },
     watch:{
       collect:function () {
@@ -99,12 +101,24 @@
           this.show_collect=true;
         else  
           this.show_collect=false;
-      },
+      }
     },
     methods: {
       showcomment(){
-        this.$emit('event1',this.show)
+          if(this.can_comment){
+              this.$emit('event1',this.show)
+          }else{
+              this.$message({message: '您没有这个权限哦', type: 'warning'})
+          }
       },
+        judgeShare(){
+          if(this.can_share){
+              this.dialogVisible = true
+          }else{
+              this.$message({message: '您没有这个权限哦', type: 'warning'})
+          }
+
+        },
       handleClose(){
 
       },
