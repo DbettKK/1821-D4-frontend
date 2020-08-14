@@ -94,6 +94,7 @@ export default {
               ).then(function (res) {
                 console.log(res.data);
                 window.sessionStorage.setItem("token", res.data.token);
+                window.sessionStorage.setItem("id", res.data.data.id);
                 that.$message({
                   message: "欢迎回来,"+res.data.data.username,
                   type: "success",

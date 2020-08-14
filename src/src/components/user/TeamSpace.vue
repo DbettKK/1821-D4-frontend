@@ -1,11 +1,20 @@
 <template>
     <el-container style="height: 100%; width: 100%; border: 0px">
-        <el-header style="text-align: left; font-size: 20px">
+        <el-header style="text-align: left; font-size: 20px; display: flex; justify-content: space-between;">
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
-            <el-menu-item index="1" @click="toTeam(team_id)">团队文档</el-menu-item>
-            <el-menu-item index="2" @click="Teammessage(team_id)">团队信息</el-menu-item>
+            <el-menu-item index="1" @click="toTeam()">团队文档</el-menu-item>
+            <el-menu-item index="2" @click="Teammessage()">团队信息</el-menu-item>
           </el-menu>
+          <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="dialog=true">
+            <i class="el-icon-circle-plus bt">新建文档</i>
+          </el-card>
         </el-header>
+        <el-dialog title="是否新建团队文档" :visible.sync="dialog" width="30%">
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialog=false">取 消</el-button>
+            <el-button type="primary" @click="submit()" >确 定</el-button>
+          </div>
+        </el-dialog>
         <el-main>
           <el-row v-for="(page, index) of pages" :key="index" style="margin-bottom: 40px;">
             <el-col :span="8" align="left" v-for="(item, innerindex) of page" :key="item.id" :offset="innerindex > 0 ? 2 : 0" style="margin-right: -60px;">
@@ -20,22 +29,26 @@
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item icon="el-icon-star-on" @click.native="addFavorite(item.id)">收藏</el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-delete-solid" @click.native="remove(item.id)" disabled>从列表中删除</el-dropdown-item>
-<!--                        <el-dropdown-item icon="el-icon-delete-solid" v-if="item.person">移到回收站</el-dropdown-item>-->
-
+                        <el-dropdown-item icon="el-icon-delete-solid" v-if="item.creator == id" @click.native="delfile(item.id)">删除团队文档</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
                   </div>
                   <div class="bottom clearfix">
-                    <time class="time" style="margin-right: 40px;">{{time(item.last_modified)}} 我 打开</time>
+                    <time class="time" style="margin-right: 40px;">{{time(item.last_modified)}} 最后一次修改</time>
                     <span style="font-size: 13px; color: #999;">该文档创建者：</span>
-                    <span style="font-size: 13px; color: #999;">{{item.file_creator_name}}</span>
+                    <span style="font-size: 13px; color: #999;">{{item.creator_name}}</span>
                   </div>
                 </div>
               </el-card>
             </el-col>
           </el-row>
         </el-main>
+        <el-dialog title="团队文档删除不可恢复，确认删除？" :visible.sync="dialog1" width="30%">
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialog1=false">取 消</el-button>
+            <el-button type="primary" @click="deletefile(del)" >确 定</el-button>
+          </div>
+        </el-dialog>
 <!--        <div class="right_pannels">&lt;!&ndash;右边按钮栏&ndash;&gt;-->
 <!--            <div class="button_container">-->
 <!--            <div class="button_create_team_doc">   -->
@@ -61,11 +74,15 @@ export default {
     inject: ['reload'],
   data() {
     return {
-        file_id: null,
-        team_id: null,
+      file_id: null,
+      del: null,
+      team_id: null,
       activeIndex:'1',
       doclist: [],
-        five: 0
+      five: 0,
+      id: null,
+      dialog: false,
+      dialog1: false
     };
   },
   created() {
@@ -93,15 +110,18 @@ export default {
       ).then(function(res){
         console.log(res);
         that.doclist=res.data.data;
+        that.id=window.sessionStorage.getItem('id');
       }).catch(function(error){
         console.log(error,Response);
       })
     },
-    toTeam(team_id){
-      this.$router.push("/TeamSpace/"+team_id);
+    toTeam(){
+      this.team_id = this.$route.params.id;
+      this.$router.push("/TeamSpace/"+this.team_id);
     },
-    Teammessage(team_id){
-      this.$router.push("/Teammessage/"+team_id);
+    Teammessage(){
+      this.team_id = this.$route.params.id;
+      this.$router.push("/Teammessage/"+this.team_id);
     },
     time(a) {
          this.doctime = a.toString().substr(0, 10)
@@ -127,7 +147,7 @@ export default {
       this.addrecent();
       this.$router.push('/edit/' + file_id)
     },
-      addFavorite(file_id){
+    addFavorite(file_id){
           var that = this;
           this.$http.get('http://175.24.121.113:8000/myapp/file/favorite/',
               {
@@ -145,9 +165,13 @@ export default {
           });
           this.getDoclist();
           this.reload();
-      },
-      remove(file_id) {
-          this.$http.get('http://175.24.121.113:8000/myapp/file/browse/delete/',
+    },
+    delfile(file_id) {
+      this.del = file_id;
+      this.dialog1 = true;
+    },
+    deletefile(file_id){
+          this.$http.get('http://175.24.121.113:8000/myapp/file/realdelete/',
               {
                   headers: {token: window.sessionStorage.getItem("token")},
                   params:{file_id: file_id}
@@ -160,7 +184,23 @@ export default {
           });
           this.getDoclist();
           this.reload();
-      },
+          this.dialog1 = false;
+    },
+    submit(){
+      var that = this;
+      this.$http.get('http://175.24.121.113:8000/myapp/file/create/team/', {headers: {token: window.sessionStorage.getItem("token")}, params: {team_id: that.team_id}}
+      ).then(function (res) {
+        console.log(res.data);
+        that.file_id=res.data.data.id;
+        console.log(that.file_id);
+        that.addrecent();
+      }).catch(function (error) {
+        console.log(error.response);
+      });
+      this.dialog=false;
+      this.getDoclist();
+      this.reload();
+    }
   },
   computed: {
     pages () {
@@ -222,59 +262,21 @@ export default {
     clear: both;
 }
 
-.right_pannels{
-display: flex;
-    z-index: 100;
-    -webkit-flex-direction: column;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    box-sizing: border-box;
-    position: absolute;
-    padding-top: 38px;
-    right: 0px;
-    top: 0px;
-    bottom: 0;
-    width: 244px;
-    margin: 0;
-    padding: 0;
-    outline: none;
-}
-.button_container
-{
-    
-    margin-bottom: 40px;
-    margin-top: 100px;
-    width: 160px;
-    top:100px;
-    left:50px;
-    margin: 0;
-    padding: 0;
-    outline: none;
-    position:absolute;
-}
-.button_putin
-{
-    top:40px;
-     margin-top: 20px;
-     //length:60px;
-    position: absolute;
-
-}
-.shenhui {
-  background-color: rgb(73, 74, 75);
-  border-color:  rgb(73, 74, 75);;
-  color: #fff;
-}
-//特意设置了鼠标聚焦时的颜色，不然莫名其妙就会变
-.shenhui:hover{
-    background-color: rgb(73, 74, 75);
-  border-color:  rgb(73, 74, 75);;
-  color: #fff;
-}
-.bt {
-     position: absolute;
-     left: 50%;
-     top: 50%;
-     transform: translateX(-50%)translateY(-50%);
- }
+ .newfile {
+    height: 30px;
+    width: 120px;
+    background-color: rgb(36, 36, 36);
+    font-size: 11px;
+    margin-top: 20px;
+    margin-right: 100px;
+    color: rgb(180, 180, 180);
+    position: relative;
+    cursor: pointer;
+    .bt {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translateX(-50%)translateY(-50%);
+    }
+  }
 </style>
