@@ -13,14 +13,14 @@
         </el-header>
       <el-dialog title="是否新建私人文档" :visible.sync="dialog1" width="30%">
         <div slot="footer" class="dialog-footer">
-          <el-button @click="dialog1=false">取 消</el-button>
           <el-button type="primary" @click="submit1()" >确 定</el-button>
+          <el-button @click="dialog1=false">取 消</el-button>
         </div>
       </el-dialog>
         <el-main>
           <el-row v-for="(page, index) of pages" :key="index" style="margin-bottom: 40px;">
             <el-col :span="8" align="left" v-for="(item, innerindex) of page" :key="item.id" :offset="innerindex > 0 ? 2 : 0" style="margin-right: -60px;">
-              <el-card :body-style="{ padding: '0px' }" shadow="hover" @click.native="edit(item.id)">
+              <el-card :body-style="{ padding: '0px' }" shadow="hover" @dblclick.native="edit(item.id)">
                 <div style="padding: 14px;">
                   <div class="top">
                     <div style="display: flex; align-items: start;">
@@ -30,6 +30,7 @@
                     <el-dropdown trigger="hover" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item icon="el-icon-share" @click.native="shareMine(item.id)">分享</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-star-on" @click.native="addFavorite(item.id)">收藏</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-edit" @click.native="renameClick(item.id)">重命名</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-s-custom" @click.native="selectPrivi(item.id)">设置文档权限</el-dropdown-item>
@@ -141,6 +142,14 @@ export default {
     time(a) {
       this.doctime = a.toString().substr(0, 10)
          return this.doctime
+    },
+    shareMine(file_id){
+
+      this.$message({
+        message:"该文档的分享邀请码为："+file_id,
+        duration:5000,
+        showClose:true,
+      })
     },
     addFavorite(file_id){
       var that = this;

@@ -33,7 +33,7 @@
                     </el-form-item>
                     <div>
                         <el-button type="primary" round @click="dialogFormVisible=true">确认修改</el-button>
-                        <el-button type="return" round @click="toHome">返回</el-button>
+                        <el-button type="return" round @click="goBack">返回</el-button>
                     </div>
                     <el-dialog title="修改信息" :visible.sync="dialogFormVisible" width="400px">
                         <el-form :model="form">
@@ -149,8 +149,8 @@ export default {
                 console.log(error);
             })
         },
-        toHome(){
-            this.$router.push('/');
+        goBack() {
+            window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
         }
     }
 }
