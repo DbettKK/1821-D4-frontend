@@ -128,13 +128,28 @@
       this.dialog2 = true;
     },
     submitredo(){
+      var that=this
       this.$http.get('http://175.24.121.113:8000/myapp/file/isdelete/',{
                 headers: {token: window.sessionStorage.getItem("token")},
                 params:{file_id: this.id, is_delete: 'False'}
       }
       ).then(function (res) {
+          that.$message({
+                  message: "恢复成功",//+res.data.file_id,
+                  type: "success",
+                  customClass: "c-msg",
+                  duration:3000,
+                  showClose: true
+                });
         console.log(res.data);
       }).catch(function (error) {
+        that.$message({
+                  message: error.response.data.info,//+res.data.file_id,
+                  type: "error",
+                  customClass: "c-msg",
+                  duration:3000,
+                  showClose: true
+                });
         console.log(error.response);
       });
       this.dialog=false;
@@ -142,13 +157,28 @@
       this.reload();
     },
     submitdel(){
+      var that=this
       this.$http.get('http://175.24.121.113:8000/myapp/file/realdelete/',{
                 headers: {token: window.sessionStorage.getItem("token")},
                 params:{file_id: this.id}
       }
       ).then(function (res) {
+                  that.$message({
+                  message: "成功彻底删除",//+res.data.file_id,
+                  type: "success",
+                  customClass: "c-msg",
+                  duration:3000,
+                  showClose: true
+                });
         console.log(res.data);
       }).catch(function (error) {
+        that.$message({
+                  message: error.response.data.info,//+res.data.file_id,
+                  type: "error",
+                  customClass: "c-msg",
+                  duration:3000,
+                  showClose: true
+                });
         console.log(error.response);
       });
       this.dialog2=false;
