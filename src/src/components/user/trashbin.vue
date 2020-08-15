@@ -1,7 +1,10 @@
 <template>
     <el-container style="height: 100%; width: 100%; border: 0px">
         <el-header style="text-align: left; font-size: 20px; display: flex; justify-content: space-between;">
-            <span style="color: grey">回收站</span>
+            <span style="color: grey;font-size: 40px">回收站</span>
+            <el-button class="emptytrash" type="danger" @click.native="emptyTrash">
+                <i class="el-icon-delete-solid"></i><span>清空回收站</span>
+            </el-button>
 <!--          <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">-->
 <!--            <el-menu-item index="1" @click="recently">最近使用</el-menu-item>-->
 <!--            <el-menu-item index="2" @click="myproduction">我创建的</el-menu-item>-->
@@ -42,9 +45,7 @@
               </template>
             </el-table-column>
         </el-table>
-        <el-card :body-style="{ padding: '0px' }" shadow="hover" class="Empty" @click.native="emptyTrash" style="position: absolute; left: 85%;">
-          <i class="el-icon-delete bt">清空回收站</i>
-        </el-card>
+
         </el-main>
 <!--        <el-dialog title="确认清空回收站" :visible.sync="dialog3" width="30%">-->
 <!--          <div slot="footer" class="dialog-footer">-->
@@ -204,7 +205,7 @@
         this.$confirm('确定清空回收站所有文件?', '清空回收站', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
-            type: 'success'
+            type: 'warning'
         }).then(() => {
             this.Empty();
         });
@@ -301,5 +302,11 @@
     top: 50%;
     transform: translateX(-50%)translateY(-50%);
   }
+}
+.emptytrash{
+    height: 40px;
+    width: 130px;
+    margin-top: 20px;
+    margin-right: 80px;
 }
 </style>

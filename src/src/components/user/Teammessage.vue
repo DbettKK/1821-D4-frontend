@@ -5,16 +5,22 @@
             <el-menu-item index="1" @click="toTeam">团队文档</el-menu-item>
             <el-menu-item index="2" @click="Teammessage">团队信息</el-menu-item>
           </el-menu>
-          <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="dialog=true">
-            <i class="el-icon-delete-solid bt">退出团队</i>
-          </el-card>
+            <el-button class="delfile" type="danger" @click.native="exitTeam" v-if="!is_creator">
+                <i class="el-icon-delete-solid"></i><span>退出团队</span>
+            </el-button>
+            <el-button class="delfile" type="danger" @click.native="dismissTeam" v-else>
+                <i class="el-icon-delete-solid"></i><span>解散团队</span>
+            </el-button>
+<!--          <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="dialog=true">-->
+<!--            <i class="el-icon-delete-solid bt">退出团队</i>-->
+<!--          </el-card>-->
         </el-header>
-        <el-dialog title="是否退出团队" :visible.sync="dialog" width="30%">
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dialog=false">取 消</el-button>
-            <el-button type="primary" @click="submit()">确 定</el-button>
-          </div>
-        </el-dialog>
+<!--        <el-dialog title="是否退出团队" :visible.sync="dialog" width="30%">-->
+<!--          <div slot="footer" class="dialog-footer">-->
+<!--            <el-button @click="dialog=false">取 消</el-button>-->
+<!--            <el-button type="primary" @click="submit()">确 定</el-button>-->
+<!--          </div>-->
+<!--        </el-dialog>-->
         <el-main>
           
         </el-main>
@@ -43,39 +49,89 @@ export default {
     inject: ['reload'],
   data() {
     return {
+        is_creator: false,
       file_id: null,
       team_id: null,
       id: null,
-      dialog: false,
+      //dialog: false,
       activeIndex:'2'
     };
   },
   created() {
+        var that=this;
     this.team_id=this.$route.params.id.toString();
+    this.$http.get('http://175.24.121.113:8000/myapp/team/check/creator/',
+        {headers: {token: window.sessionStorage.getItem('token')},
+        params: {team_id: that.team_id}}
+    ).then(()=>{
+        that.is_creator=true;
+    }).catch(()=>{
+        that.is_creator=false;
+    });
   },
   methods: {
-    toTeam(){
-      this.team_id = this.$route.params.id;
-      this.$router.push("/TeamSpace/"+this.team_id);
-    },
-    Teammessage(){
-      this.team_id = this.$route.params.id;
-      this.$router.push("/Teammessage/"+this.team_id);
-    },
-    time(a) {
-         this.doctime = a.toString().substr(0, 10)
-         return this.doctime
-    },
+      toTeam(){
+          this.team_id = this.$route.params.id;
+          this.$router.push("/TeamSpace/"+this.team_id);
+      },
+      Teammessage(){
+          this.team_id = this.$route.params.id;
+          this.$router.push("/Teammessage/"+this.team_id);
+      },
+      time(a) {
+        this.doctime = a.toString().substr(0, 10);
+        return this.doctime
+      },
+      exitTeam(){
+        this.$confirm('确定退出团队吗', '退出团队', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+        }).then(() => {
+            this.submit();
+        });
+      },
+      dismissTeam(){
+          this.$confirm('确定解散团队吗', '解散团队', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+          }).then(() => {
+              this.submitDismiss();
+          });
+      },
+      submitDismiss() {
+          var that = this;
+          this.$http.get('http://175.24.121.113:8000/myapp/team/dismiss/',
+              {headers: {token: window.sessionStorage.getItem("token")}, params: {team_id: that.team_id}}
+          ).then(() => {
+              that.$message({
+                  message: '成功解散团队',
+                  type: 'success'
+              });
+              that.reload();
+              //that.$router.push("/");
+          }).catch(function (error) {
+              that.$message.error(error.response.data.info);
+          });
+          //this.dialog=false;
+      },
     submit(){
       var that = this;
-      this.$http.get('http://175.24.121.113:8000/myapp/team/exit/', {headers: {token: window.sessionStorage.getItem("token")}, params: {team_id: that.team_id}}
-      ).then(function (res) {
-        console.log(res.data);
+      this.$http.get('http://175.24.121.113:8000/myapp/team/exit/',
+          {headers: {token: window.sessionStorage.getItem("token")}, params: {team_id: that.team_id}}
+      ).then(() => {
+          that.$message({
+              message: '成功退出团队',
+              type: 'success'
+          });
+          that.reload();
+          //that.$router.push("/");
       }).catch(function (error) {
-        console.log(error.response);
+          that.$message.error(error.response.data.info);
       });
-      this.dialog=false;
-      this.$router.push("/");
+      //this.dialog=false;
+
     }
   },
   computed: {
@@ -102,4 +158,10 @@ export default {
       transform: translateX(-50%)translateY(-50%);
     }
   }
+.delfile{
+ height: 40px;
+ width: 130px;
+ margin-top: 20px;
+ margin-right: 80px;
+}
 </style>

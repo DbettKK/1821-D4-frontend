@@ -19,6 +19,7 @@
                     <el-dropdown-item @click.native="changeInfo" v-if="isLogin && userinfo.username">
                         修改密码及个人信息
                     </el-dropdown-item>
+                    <el-dropdown-item v-if="isLogin && userinfo.username" @click.native="dialog=true">加入团队</el-dropdown-item>
 
                 </el-dropdown-menu>
             </el-dropdown>
@@ -82,6 +83,17 @@
                             </div>
                         </el-form>
                         </el-dialog>
+            <el-dialog title="请输入团队id" :visible.sync="dialog" width="30%">
+                <el-form>
+                    <el-form-item>
+                        <el-input v-model="join_team_id" placeholder="团队id"></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialog=false">取消</el-button>
+                    <el-button type="primary" @click="joinTeam" >确定</el-button>
+                </div>
+            </el-dialog>
             <el-main>
                 <router-view></router-view>
             </el-main>
@@ -100,6 +112,8 @@ export default {
                 email: "",
                 phone_num: "",
             },
+            join_team_id: '',
+            dialog: false,
             isLogin: false,
             isCollapse: false,
             createTeamVisible:false,
@@ -115,6 +129,7 @@ export default {
         }else{
             this.isLogin = false;
         }
+
     },
     methods: {
         logout() {
@@ -228,6 +243,21 @@ export default {
             });
             window.sessionStorage.clear();
             this.$router.push('/login')
+        },
+        joinTeam(){
+            var that=this;
+            this.$http.get('http://175.24.121.113:8000/myapp/team/join/'+this.join_team_id+'/',
+                {headers: {token: window.sessionStorage.getItem("token")}}
+            ).then(() => {
+                that.$message({
+                    message: '你已经成功加入团队',
+                    type: 'success'
+                });
+                that.reload();
+            }).catch((error) => {
+                that.$message.error(error.response.data.info);
+            });
+
         },
         toTeam(team_id){
             this.$router.push("/TeamSpace/"+team_id);
