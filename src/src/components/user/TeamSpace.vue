@@ -5,16 +5,16 @@
             <el-menu-item index="1" @click="toTeam()">团队文档</el-menu-item>
             <el-menu-item index="2" @click="Teammessage()">团队信息</el-menu-item>
           </el-menu>
-          <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="dialog=true">
+          <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="createFile">
             <i class="el-icon-circle-plus bt">新建文档</i>
           </el-card>
         </el-header>
-        <el-dialog title="是否新建团队文档" :visible.sync="dialog" width="30%">
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dialog=false">取 消</el-button>
-            <el-button type="primary" @click="submit()" >确 定</el-button>
-          </div>
-        </el-dialog>
+<!--        <el-dialog title="是否新建团队文档" :visible.sync="dialog" width="30%">-->
+<!--          <div slot="footer" class="dialog-footer">-->
+<!--            <el-button @click="dialog=false">取 消</el-button>-->
+<!--            <el-button type="primary" @click="submit()" >确 定</el-button>-->
+<!--          </div>-->
+<!--        </el-dialog>-->
         <el-main>
           <el-row v-for="(page, index) of pages" :key="index" style="margin-bottom: 40px;">
             <el-col :span="8" align="left" v-for="(item, innerindex) of page" :key="item.id" :offset="innerindex > 0 ? 2 : 0" style="margin-right: -60px;">
@@ -81,7 +81,7 @@ export default {
       doclist: [],
       five: 0,
       id: null,
-      dialog: false,
+      //dialog: false,
       dialog1: false
     };
   },
@@ -186,18 +186,29 @@ export default {
           this.reload();
           this.dialog1 = false;
     },
+    createFile(){
+      this.$confirm('确定新建一个团队文档吗?', '文档创建', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'success'
+      }).then(() => {
+        this.submit();
+      });
+    },
     submit(){
       var that = this;
       this.$http.get('http://175.24.121.113:8000/myapp/file/create/team/', {headers: {token: window.sessionStorage.getItem("token")}, params: {team_id: that.team_id}}
       ).then(function (res) {
-        console.log(res.data);
         that.file_id=res.data.data.id;
-        console.log(that.file_id);
+        that.$message({
+          message: '创建成功',
+          type: 'success'
+        })
         that.addrecent();
       }).catch(function (error) {
-        console.log(error.response);
+        that.$message.error(error.response.data.info);
       });
-      this.dialog=false;
+      //this.dialog=false;
       this.getDoclist();
       this.reload();
     }

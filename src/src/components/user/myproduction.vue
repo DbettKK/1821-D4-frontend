@@ -323,13 +323,8 @@ export default {
       this.file_id = file_id;
       this.addrecent();
       this.$router.push('/edit/' + file_id)
+
     },
-
-
-
-
-
-
     change_tp_type(file_id)//更改团队、私人类型
     {
       var that=this
@@ -338,19 +333,13 @@ export default {
                 headers: {token: window.sessionStorage.getItem("token")},
                 params:{file_id: file_id}
         }
-      ).then(function (res) {
+      ).then(function () {
         that.$message({
-                  message: "成功修改",//+res.data.file_id,
-                  type: "success",
-                  customClass: "c-msg",
-                  duration:3000,
-                  showClose: true
-                });
-        console.log(res.data);
-
+          message: "成功修改",//+res.data.file_id,
+          type: "success",
+        });
       }).catch(function (error) {
-        console.log(error.response.data);
-        console.log(window.sessionStorage.getItem("token"))
+        that.$message(error.response.data.info);
       });
       this.getDoclist();
       this.reload();

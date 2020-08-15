@@ -1,5 +1,5 @@
 <template>
-  <div class="background">
+  <div class="background" >
     <Header :can_comment="can_comment" :can_edit="can_edit" :can_share="can_share" :url="url" :title="title" :file_id="parseInt(file_id)" :content="content" :collect="collect" @event1="change($event)"></Header>
     <el-card style="height: 780px;">
       <el-container>
@@ -170,11 +170,17 @@
           {headers: {'token': window.sessionStorage.getItem('token')},
             params:{file_id:this.file_id}}
         ).then(res => {
+          if (res.data.data.is_edit_now){
+            this.$message({
+              message: '当前文档正在被修改 请稍等',
+              type: 'warning'
+            });
+            this.$router.push('/');
+          }
           this.title=res.data.data.file_title;
           this.content=res.data.data.file_content;
           this.collect=res.data.is_kept;
           this.file_type=res.data.data.type;
-          console.log(res);
           this.getPri(res.data.data.type);
         });
       },
@@ -207,7 +213,6 @@
             message: '由于您的权限问题，当前页面只能查看哦',
             type: 'warning'
           });
-          return;
         }else if(this.privilege >= 2){
           this.can_edit=true;
           this.$http.get('http://175.24.121.113:8000/myapp/file/edit/',
@@ -220,28 +225,35 @@
             }
           }
         }
-        console.log(this.privilege);
-        console.log(this.can_edit);
-        console.log(this.can_comment);
-        console.log(this.can_share);
       },
-      send_msg(){
-        this.$emit('func',this.can_comment, this.can_share);
-      }
 
     },
     watch:{
     },
     created(){
-      document.title=this.title;
-      this.url=this.$route.path;
-      this.file_id=this.$route.params.id;
-      console.log(this.$route.path)
-      //this.enterEdit();
-      this.send_msg();
-      this.GetContents();
-      this.get_comment();
-
+      //this.fullscreenLoading = true;
+      if(window.sessionStorage.getItem('token')){
+        this.url=this.$route.path;
+        this.file_id=this.$route.params.id;
+        document.title=this.title;
+        //this.enterEdit();
+        this.GetContents();
+        this.get_comment();
+      }
+      else{
+        this.$message({
+          message: '想查看文档 请先登录哦',
+          type: 'warning'
+        });
+        this.$router.push('/');
+      }
+      //this.fullscreenLoading = false;
+    },
+    destroyed(){
+      this.$http.get('http://175.24.121.113:8000/myapp/file/edit/save/',
+      {headers: {token: window.sessionStorage.getItem('token')},
+        params: {file_id: this.file_id}}
+      );
     }
   }
 </script>

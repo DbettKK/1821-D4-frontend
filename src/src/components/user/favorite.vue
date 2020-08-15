@@ -33,8 +33,10 @@
                     <el-dropdown trigger="hover" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item icon="el-icon-share" v-if="item.file_privi===4" @click.native="share(item.id)">分享</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-share" v-if="item.file_privi===4" @click.native="share(item.file)">分享</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-star-on" @click.native="cancelFavor(item.file)">取消收藏</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-delete-solid" v-if="item.file_creator_id==user_id" @click.native="toTrash(item.file)">移动到回收站
+                        </el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
                   </div>
@@ -58,6 +60,7 @@ export default {
   inject: ['reload'],
   data() {
     return {
+      user_id: '',
       activeIndex:'3',
       doclist: [],
       //dialog: false,
@@ -65,6 +68,7 @@ export default {
     };
   },
   created() {
+    this.user_id = window.sessionStorage.getItem('id')
     this.getDoclist()
   },
   methods: {
@@ -102,6 +106,23 @@ export default {
         duration:5000,
         showClose:true,
       })
+    },
+    toTrash(file_id){
+      var that=this
+      this.$http.get('http://175.24.121.113:8000/myapp/file/isdelete/',
+              {headers: {token: window.sessionStorage.getItem("token")},
+                params:{file_id: file_id}}
+      ).then(function () {
+        that.$message({
+          message: "成功移到回收站",//+res.data.file_id,
+          type: "success",
+        });
+      }).catch(function (error) {
+        that.$message.error(error.response.data.info);
+      });
+      this.getDoclist();
+      this.reload();
+      //location.reload();
     },
     cancelFavor(file_id){
       var that = this;
