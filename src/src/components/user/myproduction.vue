@@ -5,21 +5,19 @@
             <el-menu-item index="1" @click="recently">最近使用</el-menu-item>
             <el-menu-item index="2" @click="myproduction">我创建的</el-menu-item>
             <el-menu-item index="3" @click="favorite">我的收藏</el-menu-item>
-<!--            <el-menu-item index="4" @click="trashbin">回收站</el-menu-item>-->
           </el-menu>
-<!--        <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="createFile">-->
-<!--         <i class="el-icon-circle-plus bt">新建文档</i>-->
-<!--        </el-card>-->
-        <el-button class="createfile" type="info" @click.native="createFile" plain>
-          <i class="el-icon-circle-plus"></i><span>新建文档</span>
-        </el-button>
+        <el-dropdown v-if="token">
+          <el-button class="createfile" type="info"  plain>
+            <i class="el-icon-circle-plus"></i><span>新建文档</span>
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item @click.native="createFile('default')">快速创建文档</el-dropdown-item>
+            <el-dropdown-item @click.native="createFile('customize')">创建自定义文档</el-dropdown-item>
+            <el-dropdown-item @click.native="createFile('model')">基于模板创建文档</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+
         </el-header>
-<!--      <el-dialog title="是否新建私人文档" :visible.sync="dialog1" width="30%">-->
-<!--        <div slot="footer" class="dialog-footer">-->
-<!--          <el-button type="primary" @click="submit1()" >确 定</el-button>-->
-<!--          <el-button @click="dialog1=false">取 消</el-button>-->
-<!--        </div>-->
-<!--      </el-dialog>-->
         <el-main>
           <el-row v-for="(page, index) of pages" :key="index" style="margin-bottom: 40px;">
             <el-col :span="8" align="left" v-for="(item, innerindex) of page" :key="item.id" :offset="innerindex > 0 ? 2 : 0" style="margin-right: -60px;">
@@ -55,9 +53,53 @@
                   </div>
                 </div>
               </el-card>
+              <el-dialog :inline="true" title="基于模板的文档创建" :visible.sync="dialogModel" width="30%">
+                <el-form ref="modelFile" :model="modelFile" label-width="80px">
+                  <el-form-item label="文件名字" required>
+                    <el-input v-model="modelFile.file_name"></el-input>
+                  </el-form-item>
+                  <el-form-item label="文件模板" required>
+                    <el-select v-model="modelFile.file_mod" placeholder="请选择">
+                      <el-option label="会议模板" value="1"></el-option>
+                      <el-option label="API模板" value="2"></el-option>
+                      <el-option label="论文模板" value="3"></el-option>
+                    </el-select>
+                    <el-button type="primary" style="margin-left: 20px;" @click="preview(modelFile.file_mod)">模板预览</el-button>
+                  </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                  <el-button @click="dialogModel=false">取 消</el-button>
+                  <el-button type="primary" @click="Model" >确 定</el-button>
+                </div>
+              </el-dialog>
+              <el-dialog title="自定义文档创建" :visible.sync="dialogCustom" width="30%">
+                <el-form ref="CustomFile" :model="CustomFile" label-width="80px">
+                  <el-form-item label="文件名字" required>
+                    <el-input v-model="CustomFile.file_name"></el-input>
+                  </el-form-item>
+                  <el-form-item label="文件类型" required>
+                    <el-radio-group v-model="CustomFile.file_type">
+                      <el-radio label="私人文档"></el-radio>
+                      <el-radio label="团队文档"></el-radio>
+                    </el-radio-group>
+                  </el-form-item>
+                  <el-form-item label="文件权限" required>
+                    <el-select v-model="CustomFile.file_privilege" placeholder="请选择">
+                      <el-option label="仅查看" value="1"></el-option>
+                      <el-option label="可编辑" value="2"></el-option>
+                      <el-option label="可评论" value="3"></el-option>
+                      <el-option label="可分享" value="4"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                  <el-button @click="dialogCustom=false">取 消</el-button>
+                  <el-button type="primary" @click="Customize" >确 定</el-button>
+                </div>
+              </el-dialog>
               <el-dialog title="请选择想要上传的团队空间" :visible.sync="dialog3" width="30%">
                 <el-form>
-                  <el-form-item label="团队空间">
+                  <el-form-item label="团队空间" required>
                     <el-select v-model="teamspace" placeholder="请选择">
                       <el-option v-for="ts in teamspaces" :key="ts.id" :label="ts.name" :value="ts.id">
                       </el-option>
@@ -75,7 +117,7 @@
                       width="30%"
               >
                   <el-form>
-                    <el-form-item label="权限">
+                    <el-form-item label="权限" required>
                       <el-select v-model="privilege" placeholder="请选择">
                         <el-option label="仅查看" value="1"></el-option>
                         <el-option label="可编辑" value="2"></el-option>
@@ -89,13 +131,9 @@
                     <el-button type="primary" @click="submit()" >确定</el-button>
                   </div>
               </el-dialog>
-              <el-dialog
-                      title="重命名文档"
-                      :visible.sync="dialog2"
-                      width="30%"
-              >
+              <el-dialog title="重命名文档" :visible.sync="dialog2" width="30%">
                 <el-form>
-                  <el-form-item>
+                  <el-form-item label="文档名" required>
                     <el-input v-model="file_name" placeholder="请输入文档名字"></el-input>
                   </el-form-item>
                 </el-form>
@@ -125,13 +163,27 @@ export default {
       //dialog1: false,
       dialog2: false,
       dialog3: false,
+      dialogCustom: false,
+      dialogModel: false,
       teamspace: '',
       teamspaces: [],
       teamspace_file_id: '',
-      permission: ['仅查看','可编辑','可评论','可分享']
+      permission: ['仅查看','可编辑','可评论','可分享'],
+      token: '',
+      CustomFile: {
+        file_name: '',
+        file_type: '',
+        file_privilege: '',
+      },
+      modelFile: {
+        file_name: '',
+        file_mod: ''
+      },
     };
   },
   created() {
+    this.token = window.sessionStorage.getItem('token')
+    console.log(this.token);
     this.getDoclist()
   },
   methods: {
@@ -261,32 +313,93 @@ export default {
       this.dialog = false;
       this.reload();
     },
-    createFile() {
-      this.$confirm('确定新建一个私人文档吗?', '文档创建', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'success'
-      }).then(() => {
-        this.submit1();
-      });
+    createFile(type) {
+      if(type==='default'){
+        this.$confirm('确定新建一个私人文档吗?', '文档创建', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'success'
+        }).then(() => {
+          this.Default();
+        });
+      }else if(type==='customize'){
+        this.$confirm('确定新建一个自定义文档吗?', '文档创建', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'success'
+        }).then(() => {
+          this.dialogCustom=true;
+        });
+      }else if(type==='model'){
+        this.$confirm('确定新建一个基于模板的文档吗?', '文档创建', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'success'
+        }).then(() => {
+          this.dialogModel=true;
+        });
+      }
+
     },
-    submit1() {
+    Default() {
       var that = this;
       this.$http.get('http://175.24.121.113:8000/myapp/file/create/pri/',
               {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(function (res) {
         that.file_id = res.data.data.id;
-        that.$message({
-          message: '创建成功',
-          type: 'success'
-        })
+        that.$message({message: '创建成功', type: 'success'});
+        //that.getDoclist();
+        that.reload();
         that.addrecent();
       }).catch(function (error) {
         that.$message.error(error.response.data.info);
       });
-      //this.dialog1=false;
-      this.getDoclist();
-      this.reload();
+    },
+    Customize(){
+      if(this.CustomFile.file_type==='团队文档') this.CustomFile.file_type='team';
+      else this.CustomFile.file_type='private';
+      var that=this;
+      this.$http.post('http://175.24.121.113:8000/myapp/file/create/customize/',
+              this.$qs.stringify({
+                file_name: that.CustomFile.file_name,
+                file_type: that.CustomFile.file_type,
+                file_privilege: that.CustomFile.file_privilege,
+              }),{headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(function (res) {
+        that.file_id=res.data.data.id;
+        if(that.CustomFile.file_type==='team'){
+          that.$message({message: '创建成功 但本团队文档不属于任何团队空间', type: 'warning'});
+        }else that.$message({message: '创建成功', type: 'success'});
+        that.dialogCustom=false;
+        //that.getDoclist();
+        that.reload();
+        that.addrecent();
+        console.log(res.data);
+      }).catch(function (error) {
+        that.$message.error(error.response.data.info);
+      });
+    },
+    Model(){
+      var that=this;
+      this.$http.post('http://175.24.121.113:8000/myapp/file/create/model/',
+              this.$qs.stringify({
+                file_name: that.modelFile.file_name,
+                file_type: that.modelFile.file_mod,
+              }),{headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(function (res) {
+        that.file_id=res.data.data.id;
+        that.$message({message: '创建成功', type: 'success'});
+        that.dialogMod=false;
+        //that.getDoclist();
+        that.reload();
+        that.addrecent();
+        console.log(res.data);
+      }).catch(function (error) {
+        that.$message.error(error.response.data.info);
+      });
+    },
+    preview(mod){
+      return mod;
     },
     addrecent() {
       var that = this;
@@ -296,12 +409,12 @@ export default {
               }
       ).then(function (res) {
         console.log(res.data);
+        that.file_id = '';
+        that.getDoclist();
+        that.reload();
       }).catch(function (error) {
         console.log(error.response);
       });
-      this.file_id = '';
-      this.getDoclist();
-      this.reload();
     },
     renameFile() {
       var that = this;
@@ -317,7 +430,9 @@ export default {
           duration: 3000,
           showClose: true
         });
-
+        that.dialog2 = false;
+        that.getDoclist();
+        that.reload();
         console.log(res.data);
       }).catch(function (error) {
         that.$message({
@@ -329,9 +444,7 @@ export default {
         });
         console.log(error.response);
       });
-      this.dialog2 = false;
-      this.getDoclist();
-      this.reload();
+
     },
     renameClick(file_id) {
       this.dialog2 = true;

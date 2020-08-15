@@ -10,9 +10,16 @@
 <!--          <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="createFile">-->
 <!--            <i class="el-icon-circle-plus bt">新建文档</i>-->
 <!--          </el-card>-->
-        <el-button class="createfile" type="info" @click.native="createFile" plain>
-          <i class="el-icon-circle-plus"></i><span>新建文档</span>
-        </el-button>
+        <el-dropdown v-if="token">
+          <el-button class="createfile" type="info"  plain>
+            <i class="el-icon-circle-plus"></i><span>新建文档</span>
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item @click.native="createFile('default')">快速创建文档</el-dropdown-item>
+            <el-dropdown-item @click.native="createFile('customize')">创建自定义文档</el-dropdown-item>
+            <el-dropdown-item @click.native="createFile('model')">基于模板创建文档</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
         </el-header>
 <!--        <el-dialog title="是否新建私人文档" :visible.sync="dialog" width="30%">-->
 <!--          <div slot="footer" class="dialog-footer">-->
@@ -50,6 +57,50 @@
               </el-card>
             </el-col>
           </el-row>
+          <el-dialog :inline="true" title="基于模板的文档创建" :visible.sync="dialogModel" width="30%">
+            <el-form ref="modelFile" :model="modelFile" label-width="80px">
+              <el-form-item label="文件名字" required>
+                <el-input v-model="modelFile.file_name"></el-input>
+              </el-form-item>
+              <el-form-item label="文件模板" required>
+                <el-select v-model="modelFile.file_mod" placeholder="请选择">
+                  <el-option label="会议模板" value="1"></el-option>
+                  <el-option label="API模板" value="2"></el-option>
+                  <el-option label="论文模板" value="3"></el-option>
+                </el-select>
+                <el-button type="primary" style="margin-left: 20px;" @click="preview(modelFile.file_mod)">模板预览</el-button>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogModel=false">取 消</el-button>
+              <el-button type="primary" @click="Model" >确 定</el-button>
+            </div>
+          </el-dialog>
+          <el-dialog title="自定义文档创建" :visible.sync="dialogCustom" width="30%">
+            <el-form ref="CustomFile" :model="CustomFile" label-width="80px">
+              <el-form-item label="文件名字" required>
+                <el-input v-model="CustomFile.file_name"></el-input>
+              </el-form-item>
+              <el-form-item label="文件类型" required>
+                <el-radio-group v-model="CustomFile.file_type">
+                  <el-radio label="私人文档"></el-radio>
+                  <el-radio label="团队文档"></el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="文件权限" required>
+                <el-select v-model="CustomFile.file_privilege" placeholder="请选择">
+                  <el-option label="仅查看" value="1"></el-option>
+                  <el-option label="可编辑" value="2"></el-option>
+                  <el-option label="可评论" value="3"></el-option>
+                  <el-option label="可分享" value="4"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogCustom=false">取 消</el-button>
+              <el-button type="primary" @click="Customize" >确 定</el-button>
+            </div>
+          </el-dialog>
         </el-main>
     </el-container>
 </template>
@@ -64,10 +115,23 @@ export default {
       activeIndex:'3',
       doclist: [],
       //dialog: false,
-      permission: ['仅查看','可编辑','可评论','可分享']
+      permission: ['仅查看','可编辑','可评论','可分享'],
+      token: '',
+      CustomFile: {
+        file_name: '',
+        file_type: '',
+        file_privilege: '',
+      },
+      dialogCustom: false,
+      dialogModel: false,
+      modelFile: {
+        file_name: '',
+        file_mod: ''
+      },
     };
   },
   created() {
+    this.token = window.sessionStorage.getItem('token')
     this.user_id = window.sessionStorage.getItem('id')
     this.getDoclist()
   },
@@ -150,38 +214,92 @@ export default {
       this.getDoclist();
       this.reload();
     },
-    createFile(){
-      this.$confirm('确定新建一个私人文档吗?', '文档创建', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'success'
-      }).then(() => {
-        this.submit();
-      });
+    createFile(type) {
+      if(type==='default'){
+        this.$confirm('确定新建一个私人文档吗?', '文档创建', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'success'
+        }).then(() => {
+          this.Default();
+        });
+      }else if(type==='customize'){
+        this.$confirm('确定新建一个自定义文档吗?', '文档创建', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'success'
+        }).then(() => {
+          this.dialogCustom=true;
+        });
+      }else if(type==='model'){
+        this.$confirm('确定新建一个基于模板的文档吗?', '文档创建', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'success'
+        }).then(() => {
+          this.dialogModel=true;
+        });
+      }
     },
-    submit(){
+    Default() {
       var that = this;
       this.$http.get('http://175.24.121.113:8000/myapp/file/create/pri/',
               {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(function (res) {
-        that.file_id=res.data.data.id;
-        that.$message({
-          message: '创建成功 请前往我的创建中查看',
-          type: 'success'
-        })
-        that.addrecent();
+        that.$message({message: '创建成功', type: 'success'});
+        that.addrecent(res.data.data.id);
       }).catch(function (error) {
         that.$message.error(error.response.data.info);
       });
-      //this.dialog=false;
-      this.getDoclist();
-      this.reload();
     },
-    addrecent() {
-      var that = this;
+    Customize(){
+      if(this.CustomFile.file_type==='团队文档') this.CustomFile.file_type='team';
+      else this.CustomFile.file_type='private';
+      var that=this;
+      this.$http.post('http://175.24.121.113:8000/myapp/file/create/customize/',
+              this.$qs.stringify({
+                file_name: that.CustomFile.file_name,
+                file_type: that.CustomFile.file_type,
+                file_privilege: that.CustomFile.file_privilege,
+              }),{headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(function (res) {
+        if(that.CustomFile.file_type==='team'){
+          that.$message({message: '创建成功 但本团队文档不属于任何团队空间', type: 'warning'});
+        }else that.$message({message: '创建成功', type: 'success'});
+        that.dialogCustom=false;
+        that.addrecent(res.data.data.id);
+        console.log(res.data);
+      }).catch(function (error) {
+        that.$message.error(error.response.data.info);
+      });
+    },
+    Model(){
+      var that=this;
+      this.$http.post('http://175.24.121.113:8000/myapp/file/create/model/',
+              this.$qs.stringify({
+                file_name: that.modelFile.file_name,
+                file_type: that.modelFile.file_mod,
+              }),{headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(function (res) {
+        that.file_id=res.data.data.id;
+        that.$message({message: '创建成功', type: 'success'});
+        that.dialogMod=false;
+        //that.getDoclist();
+        that.reload();
+        that.addrecent();
+        console.log(res.data);
+      }).catch(function (error) {
+        that.$message.error(error.response.data.info);
+      });
+    },
+    preview(mod){
+      return mod;
+    },
+    addrecent(file_id) {
+      //var that = this;
       this.$http.get('http://175.24.121.113:8000/myapp/file/browse/', {
         headers: {token: window.sessionStorage.getItem("token")},
-        params:{file_id: that.file_id}
+        params:{file_id: file_id}
       }
       ).then(function (res) {
         console.log(res.data);
