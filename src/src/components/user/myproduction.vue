@@ -39,9 +39,9 @@
                         <el-dropdown-item icon="el-icon-s-custom" @click.native="selectPrivi(item.id)">设置文档权限</el-dropdown-item>
 
                         <el-dropdown-item icon="el-icon-delete-solid" @click.native="toTrash(item.id)">移动到回收站</el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-s-tools" v-if="item.type=='team'" @click.native="change_tp_type(item.id)">设置文档为私人文档</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-s-tools" v-if="item.type=='team'" @click.native="change_tp_type(item.id, item.type)">更改文档为私人文档</el-dropdown-item>
 
-                        <el-dropdown-item icon="el-icon-s-tools" v-if="item.type=='private'" @click.native="change_tp_type(item.id)">设置文档为团队文档</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-s-tools" v-if="item.type=='private'" @click.native="change_tp_type(item.id, item.type)">上传文档至团队空间</el-dropdown-item>
 
                       </el-dropdown-menu>
                     </el-dropdown>
@@ -55,6 +55,20 @@
                   </div>
                 </div>
               </el-card>
+              <el-dialog title="请选择想要上传的团队空间" :visible.sync="dialog3" width="30%">
+                <el-form>
+                  <el-form-item label="团队空间">
+                    <el-select v-model="teamspace" placeholder="请选择">
+                      <el-option v-for="ts in teamspaces" :key="ts.id" :label="ts.name" :value="ts.id">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                  <el-button @click="dialog3=false">取 消</el-button>
+                  <el-button type="primary" @click="submitTypeTeam" >确 定</el-button>
+                </div>
+              </el-dialog>
               <el-dialog
                       title="请设置其他人对该文档的权限"
                       :visible.sync="dialog"
@@ -110,6 +124,10 @@ export default {
       dialog: false,
       //dialog1: false,
       dialog2: false,
+      dialog3: false,
+      teamspace: '',
+      teamspaces: [],
+      teamspace_file_id: '',
       permission: ['仅查看','可编辑','可评论','可分享']
     };
   },
@@ -120,86 +138,86 @@ export default {
     getDoclist() {
       var that = this;
       Vue.axios.get(
-        'http://175.24.121.113:8000/myapp/file/create/all/get/',
-        {headers: {token: window.sessionStorage.getItem("token")}}
-      ).then(function(res){
+              'http://175.24.121.113:8000/myapp/file/create/all/get/',
+              {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(function (res) {
         console.log(res);
-        that.doclist=res.data.data;
-      }).catch(function(error){
-        console.log(error,Response);
+        that.doclist = res.data.data;
+      }).catch(function (error) {
+        console.log(error, Response);
       })
     },
     recently() {
-            this.$router.push('/recently')
+      this.$router.push('/recently')
     },
     myproduction() {
-        this.$router.push('/myproduction')
+      this.$router.push('/myproduction')
     },
     favorite() {
-        this.$router.push('/favorite')
+      this.$router.push('/favorite')
     },
     trashbin() {
-        this.$router.push('/trashbin')
+      this.$router.push('/trashbin')
     },
     time(a) {
       this.doctime = a.toString().substr(0, 10)
-         return this.doctime
+      return this.doctime
     },
-    shareMine(file_id){
+    shareMine(file_id) {
       this.$message({
-        message:"该文档的分享邀请码为："+file_id,
-        duration:5000,
-        showClose:true,
+        message: "该文档的分享邀请码为：" + file_id,
+        duration: 5000,
+        showClose: true,
       })
     },
-    addFavorite(file_id){
+    addFavorite(file_id) {
       var that = this;
       this.$http.get('http://175.24.121.113:8000/myapp/file/favorite/',
               {
                 headers: {token: window.sessionStorage.getItem("token")},
-                params:{file_id: file_id}
-                }
+                params: {file_id: file_id}
+              }
       ).then(function (res) {
         that.$message({
-                  message: "收藏成功",//+res.data.file_id,
-                  type: "success",
-                  customClass: "c-msg",
-                  duration:3000,
-                  showClose: true
-                });
+          message: "收藏成功",//+res.data.file_id,
+          type: "success",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
         console.log(res.data);
-        that.file_id=res.data.data.file;
+        that.file_id = res.data.data.file;
         console.log(that.file_id);
         that.addrecent();
       }).catch(function (error) {
-               that.$message({
-                  message: error.response.data.info,//+res.data.file_id,
-                  type: "error",
-                  customClass: "c-msg",
-                  duration:3000,
-                  showClose: true
-                });
+        that.$message({
+          message: error.response.data.info,//+res.data.file_id,
+          type: "error",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
         console.log(error.response.data);
         console.log(window.sessionStorage.getItem("token"))
       });
       this.getDoclist();
       this.reload();
     },
-    toTrash(file_id){
-      var that=this
+    toTrash(file_id) {
+      var that = this
       this.$http.get('http://175.24.121.113:8000/myapp/file/isdelete/',
               {
                 headers: {token: window.sessionStorage.getItem("token")},
-                params:{file_id: file_id}
+                params: {file_id: file_id}
               }
       ).then(function (res) {
         that.$message({
-                  message: "成功移到回收站",//+res.data.file_id,
-                  type: "success",
-                  customClass: "c-msg",
-                  duration:3000,
-                  showClose: true
-                });
+          message: "成功移到回收站",//+res.data.file_id,
+          type: "success",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
         console.log(res.data);
 
       }).catch(function (error) {
@@ -210,40 +228,40 @@ export default {
       this.reload();
       //location.reload();
     },
-    selectPrivi(file_id){
+    selectPrivi(file_id) {
       this.dialog = true;
       this.file_id_tmp = file_id
 
     },
-    submit(){
-      var that=this
-      this.$http.post('http://175.24.121.113:8000/myapp/file/privi/pri/',this.$qs.stringify({
-        privilege: this.privilege,
-        file_id: this.file_id_tmp
-      }), {headers: {token: window.sessionStorage.getItem("token")}}
+    submit() {
+      var that = this
+      this.$http.post('http://175.24.121.113:8000/myapp/file/privi/pri/', this.$qs.stringify({
+                privilege: this.privilege,
+                file_id: this.file_id_tmp
+              }), {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(function (res) {
-          that.$message({
-                  message: "权限设置成功",//+res.data.file_id,
-                  type: "success",
-                  customClass: "c-msg",
-                  duration:3000,
-                  showClose: true
-                });
+        that.$message({
+          message: "权限设置成功",//+res.data.file_id,
+          type: "success",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
         console.log(res.data);
       }).catch(function (error) {
-                         that.$message({
-                  message: error.resopnse.data.info,//+res.data.file_id,
-                  type: "error",
-                  customClass: "c-msg",
-                  duration:3000,
-                  showClose: true
-                });
+        that.$message({
+          message: error.resopnse.data.info,//+res.data.file_id,
+          type: "error",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
         console.log(error.response);
       });
-      this.dialog=false;
+      this.dialog = false;
       this.reload();
     },
-    createFile(){
+    createFile() {
       this.$confirm('确定新建一个私人文档吗?', '文档创建', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -252,12 +270,12 @@ export default {
         this.submit1();
       });
     },
-    submit1(){
-      var that=this;
+    submit1() {
+      var that = this;
       this.$http.get('http://175.24.121.113:8000/myapp/file/create/pri/',
               {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(function (res) {
-        that.file_id=res.data.data.id;
+        that.file_id = res.data.data.id;
         that.$message({
           message: '创建成功',
           type: 'success'
@@ -273,77 +291,119 @@ export default {
     addrecent() {
       var that = this;
       this.$http.get('http://175.24.121.113:8000/myapp/file/browse/', {
-        headers: {token: window.sessionStorage.getItem("token")},
-        params:{file_id: that.file_id}
-      }
+                headers: {token: window.sessionStorage.getItem("token")},
+                params: {file_id: that.file_id}
+              }
       ).then(function (res) {
         console.log(res.data);
       }).catch(function (error) {
         console.log(error.response);
       });
-      this.file_id='';
+      this.file_id = '';
       this.getDoclist();
       this.reload();
     },
-    renameFile(){
-            var that = this;
-      this.$http.post('http://175.24.121.113:8000/myapp/file/rename/',this.$qs.stringify({
+    renameFile() {
+      var that = this;
+      this.$http.post('http://175.24.121.113:8000/myapp/file/rename/', this.$qs.stringify({
                 file_id: this.file_id_tmp,
                 file_name: this.file_name
               }), {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(function (res) {
-         that.$message({
-                  message: "成功重命名",//+res.data.file_id,
-                  type: "success",
-                  customClass: "c-msg",
-                  duration:3000,
-                  showClose: true
-                });
+        that.$message({
+          message: "成功重命名",//+res.data.file_id,
+          type: "success",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
 
         console.log(res.data);
       }).catch(function (error) {
-                 that.$message({
-                  message: error.resopnse.data.info,//+res.data.file_id,
-                  type: "error",
-                  customClass: "c-msg",
-                  duration:3000,
-                  showClose: true
-                });
+        that.$message({
+          message: error.resopnse.data.info,//+res.data.file_id,
+          type: "error",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
         console.log(error.response);
       });
-      this.dialog2=false;
+      this.dialog2 = false;
       this.getDoclist();
       this.reload();
     },
-    renameClick(file_id){
+    renameClick(file_id) {
       this.dialog2 = true;
       this.file_id_tmp = file_id;
     },
-    edit(file_id){
+    edit(file_id) {
       this.file_id = file_id;
       this.addrecent();
       this.$router.push('/edit/' + file_id)
 
     },
-    change_tp_type(file_id)//更改团队、私人类型
+    change_tp_type(file_id, file_type)//更改团队、私人类型
     {
-      var that=this
-      this.$http.get('http://175.24.121.113:8000/myapp/file/privi/change/',
-        {
+      var that = this;
+      if (file_type == 'private') {
+        this.dialog3 = true;
+        this.$http.get('http://175.24.121.113:8000/myapp/team/all/get/',
+                {headers: {token: window.sessionStorage.getItem("token")}}
+        ).then(res => {
+          that.teamspaces = res.data.data;
+          that.teamspace_file_id = file_id;
+        });
+      } else if (file_type == 'team') {
+        this.$confirm('确定将文档从团队空间取出，别人将无法再和你协作编辑文档?', '文档类型改变', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          that.submitTypePri(file_id);
+        }).catch(() => {
+        });
+      }
+    },
+    submitTypePri(file_id) {
+      var that = this;
+      this.$http.get('http://175.24.121.113:8000/myapp/file/privi/change/pri/',
+              {
                 headers: {token: window.sessionStorage.getItem("token")},
-                params:{file_id: file_id}
-        }
+                params: {file_id: file_id}
+              }
       ).then(function () {
         that.$message({
-          message: "成功修改",//+res.data.file_id,
+          message: "成功修改为私人文档",//+res.data.file_id,
           type: "success",
         });
+        that.getDoclist();
+        that.reload();
       }).catch(function (error) {
-        that.$message(error.response.data.info);
+        that.$message.error(error.response.data.info);
       });
-      this.getDoclist();
-      this.reload();
-    }
+
+    },
+    submitTypeTeam() {
+      var that = this;
+      this.$http.get('http://175.24.121.113:8000/myapp/file/privi/change/team/',
+              {
+                headers: {token: window.sessionStorage.getItem("token")},
+                params: {file_id: that.teamspace_file_id, team_id: that.teamspace}
+              }
+      ).then(function () {
+        that.$message({
+          message: "成功上传到团队空间",//+res.data.file_id,
+          type: "success",
+        });
+        that.dialog3 = false;
+        that.getDoclist();
+        that.reload();
+      }).catch(function (error) {
+        that.$message.error(error.response.data.info);
+      });
+
+    },
   },
   computed: {
     pages () {
