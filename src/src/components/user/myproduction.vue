@@ -7,16 +7,16 @@
             <el-menu-item index="3" @click="favorite">我的收藏</el-menu-item>
             <el-menu-item index="4" @click="trashbin">回收站</el-menu-item>
           </el-menu>
-        <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="dialog1=true">
+        <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="createFile">
           <i class="el-icon-circle-plus bt">新建文档</i>
         </el-card>
         </el-header>
-      <el-dialog title="是否新建私人文档" :visible.sync="dialog1" width="30%">
-        <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="submit1()" >确 定</el-button>
-          <el-button @click="dialog1=false">取 消</el-button>
-        </div>
-      </el-dialog>
+<!--      <el-dialog title="是否新建私人文档" :visible.sync="dialog1" width="30%">-->
+<!--        <div slot="footer" class="dialog-footer">-->
+<!--          <el-button type="primary" @click="submit1()" >确 定</el-button>-->
+<!--          <el-button @click="dialog1=false">取 消</el-button>-->
+<!--        </div>-->
+<!--      </el-dialog>-->
         <el-main>
           <el-row v-for="(page, index) of pages" :key="index" style="margin-bottom: 40px;">
             <el-col :span="8" align="left" v-for="(item, innerindex) of page" :key="item.id" :offset="innerindex > 0 ? 2 : 0" style="margin-right: -60px;">
@@ -58,7 +58,7 @@
                       width="30%"
               >
                   <el-form>
-                    <el-form-item>
+                    <el-form-item label="权限">
                       <el-select v-model="privilege" placeholder="请选择">
                         <el-option label="仅查看" value="1"></el-option>
                         <el-option label="可编辑" value="2"></el-option>
@@ -79,12 +79,11 @@
               >
                 <el-form>
                   <el-form-item>
-                    <el-input v-model="file_name" placeholder="请输入文档名字" @keyup.enter.native="renameFile"></el-input>
-                    <!--这里有一个奇怪的bug 用回车重命名经常失败(但有时可以成功（成功也没有message提示）)  如果有闲可以看下咋回事。。。-->
+                    <el-input v-model="file_name" placeholder="请输入文档名字"></el-input>
                   </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                  <el-button @click="dialog2=false">取 消</el-button>
+                  <el-button @click="dialog2=false">取消</el-button>
                   <el-button type="primary" @click="renameFile" >确定</el-button>
                 </div>
               </el-dialog>
@@ -106,7 +105,7 @@ export default {
       doclist: [],
       privilege: '',
       dialog: false,
-      dialog1: false,
+      //dialog1: false,
       dialog2: false,
       permission: ['仅查看','可编辑','可评论','可分享']
     };
@@ -144,7 +143,6 @@ export default {
          return this.doctime
     },
     shareMine(file_id){
-
       this.$message({
         message:"该文档的分享邀请码为："+file_id,
         duration:5000,
@@ -242,19 +240,30 @@ export default {
       this.dialog=false;
       this.reload();
     },
+    createFile(){
+      this.$confirm('确定新建一个私人文档吗?', '文档创建', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'success'
+      }).then(() => {
+        this.submit1();
+      });
+    },
     submit1(){
       var that=this;
       this.$http.get('http://175.24.121.113:8000/myapp/file/create/pri/',
               {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(function (res) {
-        console.log(res.data);
         that.file_id=res.data.data.id;
-        console.log(that.file_id);
+        that.$message({
+          message: '创建成功',
+          type: 'success'
+        })
         that.addrecent();
       }).catch(function (error) {
-        console.log(error.response);
+        that.$message.error(error.response.data.info);
       });
-      this.dialog1=false;
+      //this.dialog1=false;
       this.getDoclist();
       this.reload();
     },

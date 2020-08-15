@@ -7,16 +7,16 @@
             <el-menu-item index="3" @click="favorite">我的收藏</el-menu-item>
             <el-menu-item index="4" @click="trashbin">回收站</el-menu-item>
           </el-menu>
-          <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="dialog=true">
+          <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="createFile">
             <i class="el-icon-circle-plus bt">新建文档</i>
           </el-card>
         </el-header>
-        <el-dialog title="是否新建私人文档" :visible.sync="dialog" width="30%">
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dialog=false">取 消</el-button>
-            <el-button type="primary" @click="submit()" >确 定</el-button>
-          </div>
-        </el-dialog>
+<!--        <el-dialog title="是否新建私人文档" :visible.sync="dialog" width="30%">-->
+<!--          <div slot="footer" class="dialog-footer">-->
+<!--            <el-button @click="dialog=false">取 消</el-button>-->
+<!--            <el-button type="primary" @click="submit()" >确 定</el-button>-->
+<!--          </div>-->
+<!--        </el-dialog>-->
         <el-main>
           <el-row v-for="(page, index) of pages" :key="index" style="margin-bottom: 40px;">
             <el-col :span="8" align="left" v-for="(item, innerindex) of page" :key="item.id" :offset="innerindex > 0 ? 2 : 0" style="margin-right: -60px;">
@@ -36,9 +36,10 @@
                     </el-dropdown>
                   </div>
                   <div class="bottom clearfix">
-                    <time class="time" style="margin-right: 40px;" >收藏时间：{{time(item.kept_time)}}</time>
+                    <time class="time" style="margin-right: 15px;" >收藏时间：{{time(item.kept_time)}}</time>
+                    <span style="font-size: 13px; color: #999;margin-right: 15px;">权限：{{permission[item.file_privi-1]}}</span>
                     <span style="font-size: 13px; color: #999;">该文档创建者：{{item.file_creator_name}}</span>
-                    <p style="font-size: 13px; color: #999;margin-right: 20px;">权限：{{permission[item.file_privi-1]}}</p>
+
                   </div>
                 </div>
               </el-card>
@@ -56,7 +57,7 @@ export default {
     return {
       activeIndex:'3',
       doclist: [],
-      dialog: false,
+      //dialog: false,
       permission: ['仅查看','可编辑','可评论','可分享']
     };
   },
@@ -125,19 +126,30 @@ export default {
       this.getDoclist();
       this.reload();
     },
+    createFile(){
+      this.$confirm('确定新建一个私人文档吗?', '文档创建', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'success'
+      }).then(() => {
+        this.submit();
+      });
+    },
     submit(){
       var that = this;
       this.$http.get('http://175.24.121.113:8000/myapp/file/create/pri/',
               {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(function (res) {
-        console.log(res.data);
         that.file_id=res.data.data.id;
-        console.log(that.file_id);
+        that.$message({
+          message: '创建成功 请前往我的创建中查看',
+          type: 'success'
+        })
         that.addrecent();
       }).catch(function (error) {
-        console.log(error.response);
+        that.$message.error(error.response.data.info);
       });
-      this.dialog=false;
+      //this.dialog=false;
       this.getDoclist();
       this.reload();
     },

@@ -7,62 +7,62 @@
             <el-menu-item index="3" @click="favorite">我的收藏</el-menu-item>
             <el-menu-item index="4" @click="trashbin">回收站</el-menu-item>
           </el-menu>
-          <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="dialog1=true">
+          <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="createFile">
             <i class="el-icon-circle-plus bt">新建文档</i>
           </el-card>
         </el-header>
-        <el-dialog title="是否新建私人文档" :visible.sync="dialog1" width="30%">
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dialog1=false">取 消</el-button>
-            <el-button type="primary" @click="submit()" >确 定</el-button>
-          </div>
-        </el-dialog>
+<!--        <el-dialog title="是否新建私人文档" :visible.sync="dialog1" width="30%">-->
+<!--          <div slot="footer" class="dialog-footer">-->
+<!--            <el-button @click="dialog1=false">取 消</el-button>-->
+<!--            <el-button type="primary" @click="submit()" >确 定</el-button>-->
+<!--          </div>-->
+<!--        </el-dialog>-->
         <el-main>
         <el-table :data="tableData" height=666px style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" :row-style="{height: '35px'}">
             <el-table-column prop="file_title" label="文件名称" @contextmenu.prevent=""></el-table-column>
             <el-table-column prop="creator_name" label="文档创建人" width="240px"></el-table-column>
             <el-table-column prop="delete_time" :formatter="dateFormat" label="删除日期" width="240px"></el-table-column>
             <el-table-column fixed="right" width="50">
-              <template slot-scope="scope">
+            <template slot-scope="scope">
                 <el-tooltip class="item" effect="dark" content="放回原处" placement="bottom-end">
-                  <el-button @click.native="redo(scope.row.id)" type="text" style="color: #999" size="mini">
+                  <el-button @click.native="redoFile(scope.row.id)" type="text" style="color: #999" size="mini">
                     <i class="el-icon-thumb"></i>
                   </el-button>
                 </el-tooltip>
-              </template>
+            </template>
             </el-table-column>
             <el-table-column fixed="right" width="50">
               <template slot-scope="scope">
                 <el-tooltip class="item" effect="dark" content="彻底删除" placement="bottom-end">
-                  <el-button @click.native="del(scope.row.id)" type="text" style="color: #999" size="mini">
+                  <el-button @click.native="delFile(scope.row.id)" type="text" style="color: #999" size="mini">
                     <i class="el-icon-delete-solid"></i>
                   </el-button>
                 </el-tooltip>
               </template>
             </el-table-column>
         </el-table>
-        <el-card :body-style="{ padding: '0px' }" shadow="hover" class="Empty" @click.native="dialog3=true" style="position: absolute; left: 85%;">
+        <el-card :body-style="{ padding: '0px' }" shadow="hover" class="Empty" @click.native="emptyTrash" style="position: absolute; left: 85%;">
           <i class="el-icon-delete bt">清空回收站</i>
         </el-card>
         </el-main>
-        <el-dialog title="确认清空回收站" :visible.sync="dialog3" width="30%">
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dialog3=false">取 消</el-button>
-            <el-button type="primary" @click="Empty()" >确定</el-button>
-          </div>
-        </el-dialog>
-        <el-dialog title="确认将文档从回收站放回原处" :visible.sync="dialog" width="30%">
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dialog=false">取 消</el-button>
-            <el-button type="primary" @click="submitredo()" >确定</el-button>
-          </div>
-        </el-dialog>
-        <el-dialog title="确认将文档从回收站彻底删除" :visible.sync="dialog2" width="30%">
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dialog2=false">取 消</el-button>
-            <el-button type="primary" @click="submitdel()" >确定</el-button>
-          </div>
-        </el-dialog>
+<!--        <el-dialog title="确认清空回收站" :visible.sync="dialog3" width="30%">-->
+<!--          <div slot="footer" class="dialog-footer">-->
+<!--            <el-button @click="dialog3=false">取 消</el-button>-->
+<!--            <el-button type="primary" @click="Empty()" >确定</el-button>-->
+<!--          </div>-->
+<!--        </el-dialog>-->
+<!--        <el-dialog title="确认将文档从回收站放回原处" :visible.sync="dialog" width="30%">-->
+<!--          <div slot="footer" class="dialog-footer">-->
+<!--            <el-button @click="dialog=false">取 消</el-button>-->
+<!--            <el-button type="primary" @click="submitredo()" >确定</el-button>-->
+<!--          </div>-->
+<!--        </el-dialog>-->
+<!--        <el-dialog title="确认将文档从回收站彻底删除" :visible.sync="dialog2" width="30%">-->
+<!--          <div slot="footer" class="dialog-footer">-->
+<!--            <el-button @click="dialog2=false">取 消</el-button>-->
+<!--            <el-button type="primary" @click="submitdel()" >确定</el-button>-->
+<!--          </div>-->
+<!--        </el-dialog>-->
     </el-container>
 </template>
 
@@ -75,10 +75,10 @@
       return {
         activeIndex:'4',
         tableData: [],
-        dialog: false,
-        dialog1: false,
-        dialog2: false,
-        dialog3: false,
+        //dialog: false,
+        //dialog1: false,
+        //dialog2: false,
+        //dialog3: false,
         id: '1'
       }
     },
@@ -92,18 +92,17 @@
         'http://175.24.121.113:8000/myapp/file/delete/get/',
         {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(function(res){
-        console.log(res);
         that.tableData=res.data.data;
       }).catch(function(error){
-        console.log(error,Response);
+        console.log(error.response.data.info);
       })
     },
     dateFormat(row, column, cellValue) {
         return cellValue ? fecha.format(new Date(cellValue), 'YYYY-MM-DD') : '';
       },
     time(a) {
-      this.doctime = a.toString().substr(0, 10)
-         return this.doctime
+      this.doctime = a.toString().substr(0, 10);
+         return this.doctime;
     },
     recently() {
           this.$router.push('/recently')
@@ -117,15 +116,15 @@
     trashbin() {
       this.$router.push('/trashbin')
     },
-    redo(a) {
-      this.id = a;
-      console.log(this.id);
-      this.dialog = true;
-    },
-    del(a) {
-      this.id = a;
-      console.log(this.id);
-      this.dialog2 = true;
+    redoFile(file_id){
+        this.$confirm('确定将回收站文件放回原处?', '文档恢复', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'success'
+        }).then(() => {
+            this.id = file_id
+            this.submitredo();
+        });
     },
     submitredo(){
       var that=this
@@ -133,28 +132,27 @@
                 headers: {token: window.sessionStorage.getItem("token")},
                 params:{file_id: this.id, is_delete: 'False'}
       }
-      ).then(function (res) {
+      ).then(function () {
           that.$message({
-                  message: "恢复成功",//+res.data.file_id,
-                  type: "success",
-                  customClass: "c-msg",
-                  duration:3000,
-                  showClose: true
-                });
-        console.log(res.data);
+              message: "恢复成功",//+res.data.file_id,
+              type: "success"
+          });
       }).catch(function (error) {
-        that.$message({
-                  message: error.response.data.info,//+res.data.file_id,
-                  type: "error",
-                  customClass: "c-msg",
-                  duration:3000,
-                  showClose: true
-                });
-        console.log(error.response);
+        that.$message.error(error.response.data.info);
       });
-      this.dialog=false;
+      //this.dialog=false;
       this.getTabledata();
       this.reload();
+    },
+    delFile(file_id){
+        this.$confirm('确定此文件彻底删除?', '文档彻底删除', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'success'
+        }).then(() => {
+            this.id = file_id
+            this.submitdel();
+        });
     },
     submitdel(){
       var that=this
@@ -162,55 +160,68 @@
                 headers: {token: window.sessionStorage.getItem("token")},
                 params:{file_id: this.id}
       }
-      ).then(function (res) {
-                  that.$message({
-                  message: "成功彻底删除",//+res.data.file_id,
-                  type: "success",
-                  customClass: "c-msg",
-                  duration:3000,
-                  showClose: true
-                });
-        console.log(res.data);
+      ).then(function () {
+          that.$message({
+              message: "成功彻底删除",//+res.data.file_id,
+              type: "success",
+          });
       }).catch(function (error) {
-        that.$message({
-                  message: error.response.data.info,//+res.data.file_id,
-                  type: "error",
-                  customClass: "c-msg",
-                  duration:3000,
-                  showClose: true
-                });
-        console.log(error.response);
+        that.$message.error(error.response.data.info);
       });
-      this.dialog2=false;
+      //this.dialog2=false;
       this.getTabledata();
       this.reload();
     },
+    createFile(){
+        this.$confirm('确定新建一个私人文档吗?', '文档创建', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'success'
+        }).then(() => {
+            this.submit();
+        });
+    }    ,
     submit(){
       var that = this;
       this.$http.get('http://175.24.121.113:8000/myapp/file/create/pri/',
               {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(function (res) {
-        console.log(res.data);
         that.file_id=res.data.data.id;
-        console.log(that.file_id);
+          that.$message({
+              message: '创建成功 请前往我的创建中查看',
+              type: 'success'
+          })
         that.addrecent();
       }).catch(function (error) {
-        console.log(error.response);
+          that.$message.error(error.response.data.info);
       });
-      this.dialog=false;
+      //this.dialog=false;
       this.getTabledata();
       this.reload();
     },
+    emptyTrash(){
+        this.$confirm('确定清空回收站所有文件?', '清空回收站', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'success'
+        }).then(() => {
+            this.Empty();
+        });
+    },
     Empty() {
+          var that=this;
       this.$http.get('http://175.24.121.113:8000/myapp/file/delete/all/',{
                 headers: {token: window.sessionStorage.getItem("token")}
       }
-      ).then(function (res) {
-        console.log(res.data);
+      ).then(function () {
+        that.$message({
+            message: '已经成功清空回收站',
+            type: 'success'
+        });
       }).catch(function (error) {
-        console.log(error.response);
+        that.$messgae.error(error.response.data.info);
       });
-      this.dialog3=false;
+      //this.dialog3=false;
       this.getTabledata();
       this.reload();
     },
@@ -228,7 +239,7 @@
       this.file_id='';
       this.getTabledata();
       this.reload();
-    }
+    },
     }
   }
 </script>
