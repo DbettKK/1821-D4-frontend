@@ -7,9 +7,12 @@
             <el-menu-item index="3" @click="favorite">我的收藏</el-menu-item>
             <el-menu-item index="4" @click="trashbin">回收站</el-menu-item>
           </el-menu>
-        <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="createFile">
-          <i class="el-icon-circle-plus bt">新建文档</i>
-        </el-card>
+<!--        <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="createFile">-->
+<!--          <i class="el-icon-circle-plus bt">新建文档</i>-->
+<!--        </el-card>-->
+        <el-button class="createfile" type="info" @click.native="createFile" plain>
+          <i class="el-icon-circle-plus"></i><span>新建文档</span>
+        </el-button>
         </el-header>
 <!--      <el-dialog title="是否新建私人文档" :visible.sync="dialog" width="30%">-->
 <!--        <div slot="footer" class="dialog-footer">-->
@@ -283,5 +286,11 @@ export default {
   
 .clearfix:after {
     clear: both
+}
+.createfile{
+  height: 40px;
+  width: 130px;
+  margin-top: 20px;
+  margin-right: 80px;
 }
 </style>

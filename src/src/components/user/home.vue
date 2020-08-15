@@ -40,8 +40,10 @@
             <el-aside :width="isCollapse ? '64px' : '250px'" style="background-color: #EDEEEF;">
                 <div class="toggle-button" @click="toggleCollapse">|||</div>
                 <el-menu :unique-opened="true" :collapse="isCollapse" :collapse-transition="false" style="background-color: #EDEEEF;">
-                    <el-menu-item index="1" @click="recently"><i class="el-icon-menu"></i><span>工作站</span></el-menu-item>
-                    <el-submenu index="2" style="background-color: #EDEEEF">
+                    <el-menu-item index="1" @click="welcome"><i class="el-icon-s-home"></i><span>主页</span></el-menu-item>
+                    <el-menu-item index="2" @click="recently"><i class="el-icon-menu"></i><span>工作站</span></el-menu-item>
+                    <el-menu-item index="3" @click="trashbin"><i class="el-icon-delete-solid"></i><span>回收站</span></el-menu-item>
+                    <el-submenu index="4" style="background-color: #EDEEEF">
                         <template slot="title">
                             <i class="el-icon-user-solid"></i><span>个人空间</span></template>
                         <el-menu-item-group style="background-color: #EDEEEF">
@@ -50,7 +52,7 @@
                             <el-menu-item index="2-2">消息通知</el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
-                    <el-submenu index="3" style="background-color: #EDEEEF" >
+                    <el-submenu index="5" style="background-color: #EDEEEF" >
                         <template slot="title" >
                             <i class="el-icon-s-claim" @click="getTeams" ></i><span style="margin-right: 50px" @click="getTeams"> 团队空间</span>
                             <i class="el-icon-circle-plus" @click="createTeamVisible=true" ></i>  </template>
@@ -66,8 +68,6 @@
                                     </el-menu-item>
                                 </template>
                         </el-menu-item-group>
-   
-
                     </el-submenu>
                 </el-menu>
             </el-aside>
@@ -163,6 +163,9 @@ export default {
                     type: 'error'})
                 that.reload();
             });
+        },
+        welcome(){
+            this.$router.push('/')
         },
         ue(){
             this.$router.push('/Edit')
