@@ -1,15 +1,16 @@
 <template>
     <el-container style="height: 100%; width: 100%; border: 0px">
         <el-header style="text-align: left; font-size: 20px; display: flex; justify-content: space-between;">
-          <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
-            <el-menu-item index="1" @click="recently">最近使用</el-menu-item>
-            <el-menu-item index="2" @click="myproduction">我创建的</el-menu-item>
-            <el-menu-item index="3" @click="favorite">我的收藏</el-menu-item>
-            <el-menu-item index="4" @click="trashbin">回收站</el-menu-item>
-          </el-menu>
-          <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="createFile">
-            <i class="el-icon-circle-plus bt">新建文档</i>
-          </el-card>
+            <span style="color: grey">回收站</span>
+<!--          <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">-->
+<!--            <el-menu-item index="1" @click="recently">最近使用</el-menu-item>-->
+<!--            <el-menu-item index="2" @click="myproduction">我创建的</el-menu-item>-->
+<!--            <el-menu-item index="3" @click="favorite">我的收藏</el-menu-item>-->
+<!--            <el-menu-item index="4" @click="trashbin">回收站</el-menu-item>-->
+<!--          </el-menu>-->
+<!--          <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="createFile">-->
+<!--            <i class="el-icon-circle-plus bt">新建文档</i>-->
+<!--          </el-card>-->
         </el-header>
 <!--        <el-dialog title="是否新建私人文档" :visible.sync="dialog1" width="30%">-->
 <!--          <div slot="footer" class="dialog-footer">-->

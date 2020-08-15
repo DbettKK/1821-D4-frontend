@@ -2,8 +2,8 @@
     <el-container style="height: 100%; width: 100%; border: 0px">
         <el-header style="text-align: left; font-size: 20px; display: flex; justify-content: space-between;">
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
-            <el-menu-item index="1" @click="toTeam()">团队文档</el-menu-item>
-            <el-menu-item index="2" @click="Teammessage()">团队信息</el-menu-item>
+            <el-menu-item index="1" @click="toTeam">团队文档</el-menu-item>
+            <el-menu-item index="2" @click="Teammessage">团队信息</el-menu-item>
           </el-menu>
           <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="dialog=true">
             <i class="el-icon-delete-solid bt">退出团队</i>

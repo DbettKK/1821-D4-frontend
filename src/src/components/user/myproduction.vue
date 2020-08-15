@@ -5,7 +5,7 @@
             <el-menu-item index="1" @click="recently">最近使用</el-menu-item>
             <el-menu-item index="2" @click="myproduction">我创建的</el-menu-item>
             <el-menu-item index="3" @click="favorite">我的收藏</el-menu-item>
-            <el-menu-item index="4" @click="trashbin">回收站</el-menu-item>
+<!--            <el-menu-item index="4" @click="trashbin">回收站</el-menu-item>-->
           </el-menu>
 <!--        <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="createFile">-->
 <!--         <i class="el-icon-circle-plus bt">新建文档</i>-->
