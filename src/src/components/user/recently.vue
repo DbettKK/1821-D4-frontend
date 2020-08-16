@@ -323,7 +323,7 @@ export default {
       });
     },
     preview(mod){
-      return mod;
+      this.$router.push('/preview/'+mod);
     },
     addrecent(file_id) {
       var that = this;

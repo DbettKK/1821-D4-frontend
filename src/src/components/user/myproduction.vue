@@ -399,7 +399,7 @@ export default {
       });
     },
     preview(mod){
-      return mod;
+      this.$router.push('/preview/'+mod);
     },
     addrecent() {
       var that = this;

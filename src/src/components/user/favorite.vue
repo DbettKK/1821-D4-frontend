@@ -293,8 +293,8 @@ export default {
       });
     },
     preview(mod){
-      return mod;
-    },
+      this.$router.push('/preview/'+mod);
+    },  
     addrecent(file_id) {
       //var that = this;
       this.$http.get('http://175.24.121.113:8000/myapp/file/browse/', {

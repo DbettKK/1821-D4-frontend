@@ -14,7 +14,7 @@ import Trashbin from './components/user/trashbin.vue'
 import ShowUserInfo from './components/user/showUserInfo.vue'
 import TeamSpace from './components/user/TeamSpace.vue'
 import Teammessage from './components/user/Teammessage.vue'
-
+import Preview from './components/edit/preview.vue'
 
 Vue.use(Router)
 /*
@@ -85,6 +85,12 @@ const router = new Router({
       component:Ue,
       name:'Edit',
       meta:{title:'无'}
+    },
+    {
+      path:'/preview/:mode',
+      component:Preview,
+      name:'Preview',
+      meta:{title:'模板预览'}
     }
   ],
   mode:"history"
