@@ -29,7 +29,8 @@
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
                           <!--可以修改就不用单独写下拉菜单-->
-                        <el-dropdown-item icon="el-icon-edit-outline" @click.native="comment" v-if="item.team_permission>1">评论</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-edit-outline" @click.native="comment" v-if="item.team_permission>6">评论</el-dropdown-item>
+                        <!--评论不在这里做-->
                      <!--    <el-dropdown-item icon="el-icon-edit" @click.native="edit(item.id)" v-if="item.team_permission>2">修改</el-dropdown-item>-->
                          <el-dropdown-item icon="el-icon-share" @click.native="share_function" v-if="item.team_permission>3">分享</el-dropdown-item>
                          <!--限制了只有拥有足够的权限才能够更改团队文档的权限-->
