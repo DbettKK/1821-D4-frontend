@@ -11,10 +11,10 @@
             </el-button>
         </el-header>
         <el-main>
-          <el-row v-for="(page, index) of pages" :key="index" style="margin-bottom: 40px;">
-            <el-col :span="16" align="left" v-for="(item, innerindex) of page" :key="item.id" :offset="innerindex > 0 ? 2 : 0" style="margin-right: -60px;">
+          <el-row v-for="(item, index) of messagelist" :key="index" style="margin-bottom: 40px;">
+            <el-col :span="16" align="left" style="margin-right: -60px;">
                 <el-badge :value="read(item.msg_is_read)" class="msg">
-              <el-card class="item" :body-style="{ padding: '0px' }" shadow="hover" @click.native="setread(item.msg_id)" style="cursor: pointer;">
+              <el-card class="item" :body-style="{ padding: '0px' }" shadow="hover" @click.native="setread(item.id)" style="cursor: pointer;">
                 <div style="padding: 14px;">
                   <div class="top">
                     <div style="display: flex; align-items: start;">
@@ -61,13 +61,13 @@ export default {
   },
   methods: {
     getmessageist(type) {
-      var that = this;
+        var that=this;
       Vue.axios.get(
         'http://175.24.121.113:8000/myapp/getmsg/',
         {headers: {token: window.sessionStorage.getItem("token")},
         params: {msg_types: type}}
       ).then(function(res){
-        console.log(res);
+        console.log(res.data.data);
         that.messagelist=res.data.data;
       }).catch(function(error){
         console.log(error,Response);
@@ -80,11 +80,11 @@ export default {
         params: {msg_id: id}}
       ).then(function(res){
         console.log(res);
+        this.reload();
       }).catch(function(error){
         console.log(error,Response);
       })
-      this.getmessageist('favor');
-      this.reload();
+
     },
     time(a) {
          this.messagetime = a.toString().substr(0, 10)
