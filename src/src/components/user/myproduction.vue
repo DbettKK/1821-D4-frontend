@@ -31,7 +31,7 @@
                     <el-dropdown trigger="hover" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item icon="el-icon-share" @click.native="shareMine(item.id)">分享</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-share" @click.native="file_id_tmp = item.id; dialogVisible = true; shareURL = baseURL+item.id">分享</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-star-on" @click.native="addFavorite(item.id)">收藏</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-edit" @click.native="renameClick(item.id)">重命名</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-s-custom" @click.native="selectPrivi(item.id)">设置文档权限</el-dropdown-item>
@@ -43,6 +43,27 @@
 
                       </el-dropdown-menu>
                     </el-dropdown>
+                    <el-dialog
+                      title="获得链接的人都可以查看"
+                      :visible.sync="dialogVisible"
+                      width="30%">
+                      <el-form>
+                        <el-form-item label="分享链接">
+                          {{shareURL}}
+                        </el-form-item>
+                        <el-form-item label="权限" required>
+                          <el-select v-model="privilege" placeholder="请选择">
+                            <el-option label="仅查看" value="1"></el-option>
+                            <el-option label="可编辑" value="2"></el-option>
+                            <el-option label="可评论" value="3"></el-option>
+                            <el-option label="可分享" value="4"></el-option>
+                          </el-select>
+                        </el-form-item>
+                      </el-form>
+                      <div slot="footer" class="dialog-footer">
+                        <el-button type="primary" @click=";dialogVisible=false;submit()" >确定</el-button>
+                      </div>
+                    </el-dialog>
                   </div>
                   <div class="bottom clearfix">
                     <time class="time" style="margin-right: 30px;" >创建时间：{{time(item.create_time)}}</time>
@@ -154,6 +175,9 @@ export default {
   inject: ['reload'],
   data() {
     return {
+      baseURL: 'http://localhost:8080/edit/',
+      shareURL: '',
+      dialogVisible: false,
       file_name: '',
       file_id_tmp: null,
       activeIndex:'2',
