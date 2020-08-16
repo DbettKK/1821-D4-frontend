@@ -12,10 +12,11 @@
             :editable="false"
             placeholder="请输入文档内容..."
             :boxShadow="true"
-            subfield="true"
+            :subfield="false"
             defaultOpen="preview"
             style="z-index:1;border: 1px solid #d9d9d9;height:85vh"
             v-model="content"
+            :toolbarsFlag="false"
             :toolbars="toolbars"/>
         </el-main>
       </el-container>
@@ -89,21 +90,16 @@
         this.drawer=data;
       },
       GetContents(){
-        Vue.axios.get('http://175.24.121.113:8000/myapp/file/get/',
-          {headers: {'token': window.sessionStorage.getItem('token')},
-            params:{file_id:this.file_id}}
-        ).then(res => {
-          if (res.data.data.is_edit_now){
-            this.$message({
-              message: '当前文档正在被修改 请稍等',
-              type: 'warning'
-            });
-            this.$router.push('/');
+        Vue.axios.post('http://175.24.121.113:8000/myapp/file/create/preview/',
+        this.$qs.stringify({
+          model:this.$route.params.mode,
+        }),
+          {
+            headers: {'token': window.sessionStorage.getItem('token')},
           }
-          this.title=res.data.data.file_title;
-          this.content=res.data.data.file_content;
-          this.collect=res.data.is_kept;
-          this.file_type=res.data.data.type;
+        ).then(res => {
+          this.file_id=res.data.data.mod_title;
+          this.content=res.data.data.mod_content;
         });
       },
     },
@@ -113,7 +109,6 @@
       //this.fullscreenLoading = true;
       if(window.sessionStorage.getItem('token')){
         this.url=this.$route.path;
-        this.file_id=this.$route.params.id;
         document.title=this.title;
         //this.enterEdit();
         this.GetContents();
@@ -126,12 +121,6 @@
         this.$router.push('/');
       }
       //this.fullscreenLoading = false;
-    },
-    destroyed(){
-      this.$http.get('http://175.24.121.113:8000/myapp/file/edit/save/',
-      {headers: {token: window.sessionStorage.getItem('token')},
-        params: {file_id: this.file_id}}
-      );
     },
     goBack() {
             window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
