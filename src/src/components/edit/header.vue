@@ -114,6 +114,7 @@
       };
     },
     created:function(){
+      this.get_G();
     },
     watch:{
       collect:function () {
