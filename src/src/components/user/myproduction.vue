@@ -81,9 +81,10 @@
                   </el-form-item>
                   <el-form-item label="文件模板" required>
                     <el-select v-model="modelFile.file_mod" placeholder="请选择">
-                      <el-option label="会议模板" value="1"></el-option>
-                      <el-option label="API模板" value="2"></el-option>
-                      <el-option label="论文模板" value="3"></el-option>
+                      <el-option label="API接口模板" value="1"></el-option>
+                      <el-option label="计划书模板" value="2"></el-option>
+                      <el-option label="服务器操作模板" value="3"></el-option>
+                      <el-option label="算法题整理模板" value="4"></el-option>
                     </el-select>
                     <el-button type="primary" style="margin-left: 20px;" @click="preview(modelFile.file_mod)">模板预览</el-button>
                   </el-form-item>
@@ -409,7 +410,8 @@ export default {
       {
         that.$message({message: '请输入一个文件名', type: 'error'});
       }
-      else if(that.modelFile.file_mod !=1 && that.modelFile.file_mod !=2 && that.modelFile.file_mod !=3)
+      else if(that.modelFile.file_mod !=1 && that.modelFile.file_mod !=2 && that.modelFile.file_mod !=3
+              && that.modelFile.file_mod != 4)
       {
         that.$message({message: '请选择一个模板类型', type: 'error'});
       }
@@ -435,7 +437,7 @@ export default {
       }
     },
     preview(mod){
-      if(mod != 1 && mod !=2 && mod!=3)
+      if(mod != 1 && mod !=2 && mod!=3 && mod!=4)
       {
           this.$message({message: '请选择一个模板', type: 'error'});
       }
