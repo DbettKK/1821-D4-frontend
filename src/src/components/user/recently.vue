@@ -47,11 +47,11 @@
                     </el-dropdown>
                   </div>
                   <div class="bottom clearfix">
-                    <time class="time" style="margin-right: 20px;">{{time(item.last_modified)}} 我 打开</time>
+                    <time class="time" style="margin-right: 15px;">最近使用:{{time(item.last_modified)}}</time>
                     <span style="font-size: 13px; color: #999;margin-right: 15px;">
-                      权限：{{permission[item.file_privi-1>3?3:item.file_privi-1]}}
+                      权限:{{permission[item.file_privi-1>3?3:item.file_privi-1]}}
                     </span>
-                    <span style="font-size: 13px; color: #999;margin-right: 15px;">该文档创建者：{{item.file_creator_name}}</span>
+                    <span style="font-size: 13px; color: #999;margin-right: 15px;">创建者:{{item.file_creator_name}}</span>
                     <span style="font-size: 13px; color: #999;" v-if="item.is_delete">已被创建者删除</span>
                   </div>
                 </div>
