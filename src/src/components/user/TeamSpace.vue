@@ -28,15 +28,22 @@
                     <el-dropdown trigger="hover" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
+                          <!--可以查看就不用单独写下拉菜单-->
+                        <el-dropdown-item icon="el-icon-edit-outline" @click.native="comment" v-if="item.team_permission>1">评论</el-dropdown-item>
+                         <el-dropdown-item icon="el-icon-edit" @click.native="rewrite" v-if="item.team_permission>2">修改</el-dropdown-item>
+                         <el-dropdown-item icon="el-icon-share" @click.native="share_function" v-if="item.team_permission>3">分享</el-dropdown-item>
+
                         <el-dropdown-item icon="el-icon-star-on" @click.native="addFavorite(item.id)">收藏</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-delete-solid" v-if="item.creator == id" @click.native="delfile(item.id)">删除团队文档</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
                   </div>
                   <div class="bottom clearfix">
-                    <time class="time" style="margin-right: 40px;">{{time(item.last_modified)}} 最后一次修改</time>
+                    <time class="time" style="margin-right: 20px;">{{time(item.last_modified)}} 最后一次修改</time>
                     <span style="font-size: 13px; color: #999;">该文档创建者：</span>
-                    <span style="font-size: 13px; color: #999;">{{item.creator_name}}</span>
+                    <span style="font-size: 13px; color: #999;margin-right: 20px;">{{item.creator_name}}</span>
+                    <span style="font-size: 13px; color: #999;">成员权限：</span>
+                    <span style="font-size: 13px; color: #999;">{{permission_transfer(item.team_permission)}}</span>
                   </div>
                 </div>
               </el-card>
@@ -211,6 +218,19 @@ export default {
       //this.dialog=false;
       this.getDoclist();
       this.reload();
+    },
+    permission_transfer(team_permission)//用于显示团队权限
+    {
+        if(team_permission==1)
+        return "可查看";
+        else if(team_permission==2)
+        return "可评论";
+          else if(team_permission==3)
+          return "可修改";
+            else if(team_permission==4)
+            return"可分享";
+            else return "wrong"
+
     }
   },
   computed: {
