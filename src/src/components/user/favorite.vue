@@ -48,9 +48,9 @@
                     </el-dropdown>
                   </div>
                   <div class="bottom clearfix">
-                    <time class="time" style="margin-right: 15px;" >收藏时间：{{time(item.kept_time)}}</time>
-                    <span style="font-size: 13px; color: #999;margin-right: 15px;">权限：{{permission[item.file_privi-1]}}</span>
-                    <span style="font-size: 13px; color: #999;">该文档创建者：{{item.file_creator_name}}</span>
+                    <time class="time" style="margin-right: 15px;" >收藏时间:{{time(item.kept_time)}}</time>
+                    <span style="font-size: 13px; color: #999;margin-right: 15px;">权限:{{permission[item.file_privi-1]}}</span>
+                    <span style="font-size: 13px; color: #999;">创建者:{{item.file_creator_name}}</span>
 
                   </div>
                 </div>
