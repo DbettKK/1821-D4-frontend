@@ -6,27 +6,33 @@
                 <el-menu-item index="2" @click="msgcomments">评论消息</el-menu-item>
                 <el-menu-item index="3" @click="msgteam">团队消息</el-menu-item>
             </el-menu>
-            <el-button class="createfile" type="info">
+            <el-button class="createfile" type="info" @click.native="setallread()">
                 <i class="el-icon-success"></i><span>全部设为已读</span>
             </el-button>
         </el-header>
         <el-main>
-          <el-row v-for="(page, index) of pages" :key="index" style="margin-bottom: 40px;">
-            <el-col :span="16" align="left" v-for="(item, innerindex) of page" :key="item.id" :offset="innerindex > 0 ? 2 : 0" style="margin-right: -60px;">
-                <el-badge :value="read(item.msg_is_read)" class="msg">
-              <el-card class="item" :body-style="{ padding: '0px' }" shadow="hover" @click.native="setread(item.msg_id)" style="cursor: pointer;">
+          <el-row v-for="(item, index) of messagelist" :key="index" style="margin-bottom: 40px;">
+            <el-col :span="16" align="left" style="margin-right: -60px;">
+                <el-badge :value="item.msg_is_read" class="msg">
+              <el-card class="item" :body-style="{ padding: '0px' }" shadow="hover" @click.native="setread(item.id)" style="cursor: pointer;">
                 <div style="padding: 14px;">
                   <div class="top">
                     <div style="display: flex; align-items: start;">
                         <i class="el-icon-warning-outline icon"></i>
                         <span>{{item.msg_title}}</span>
                     </div>
+                    <el-dropdown trigger="hover" style="font-size: 1px; color: #999;" placement="bottom-start">
+                      <span class="el-dropdown-link">···</span>
+                      <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item icon="el-icon-view" @click.native="setunread(item.id)">设为未读</el-dropdown-item>
+                      </el-dropdown-menu>
+                    </el-dropdown>
                   </div>
                   <div class="middle">
                       <span style="font-size: 13px; margin-right: 15px;">{{item.msg_content}}</span>
                   </div>
                   <div class="bottom clearfix">
-                    <time class="time" style="margin-right: 20px;">{{time(item.msg_time)}}</time>
+                    <time class="time" style="margin-right: 20px;">{{item.msg_time}}</time>
                     <span style="font-size: 13px; color: #999; margin-right: 15px;">
                       来自你的文档：{{item.msg_from}}
                     </span>
@@ -57,10 +63,10 @@ export default {
   created() {
     this.token = window.sessionStorage.getItem('token')
     this.user_id = window.sessionStorage.getItem('id')
-    this.getmessageist('team');
+    this.getmessagelist('team');
   },
   methods: {
-    getmessageist(type) {
+    getmessagelist(type) {
       var that = this;
       Vue.axios.get(
         'http://175.24.121.113:8000/myapp/getmsg/',
@@ -69,22 +75,55 @@ export default {
       ).then(function(res){
         console.log(res);
         that.messagelist=res.data.data;
+        that.data();
       }).catch(function(error){
         console.log(error,Response);
       })
     },
     setread(id) {
+      var that = this;
       Vue.axios.get(
         'http://175.24.121.113:8000/myapp/set/read/',
         {headers: {token: window.sessionStorage.getItem("token")},
         params: {msg_id: id}}
       ).then(function(res){
         console.log(res);
+        that.reload();
       }).catch(function(error){
         console.log(error,Response);
       })
-      this.getmessageist('team');
-      this.reload();
+    },
+    setunread(id) {
+      var that=this;
+      Vue.axios.get(
+        'http://175.24.121.113:8000/myapp/set/unread/',
+        {headers: {token: window.sessionStorage.getItem("token")},
+        params: {msg_id: id}}
+      ).then(function(res){
+        console.log(res);
+        that.reload();
+      }).catch(function(error){
+        console.log(error,Response);
+      })
+    },
+    setallread() {
+      var that=this;
+      Vue.axios.get(
+        'http://175.24.121.113:8000/myapp/set/type/read/all/',
+        {headers: {token: window.sessionStorage.getItem("token")},
+        params: {msg_types: 'team'}}
+      ).then(function(res){
+        console.log(res);
+        that.reload();
+      }).catch(function(error){
+        console.log(error,Response);
+      })
+    },
+    data() {
+      this.messagelist.forEach((item) => {
+        item.msg_time = this.time(item.msg_time);
+        item.msg_is_read = this.read(item.msg_is_read);
+      })
     },
     time(a) {
          this.messagetime = a.toString().substr(0, 10)
@@ -103,19 +142,6 @@ export default {
     },
     msgteam() {
         this.$router.push('/message_team')
-    }
-  },
-  computed: {
-    pages () {
-      const pages = []
-      this.messagelist.forEach((item, index) => {
-        const page = Math.floor(index / 1)
-        if (!pages[page]) {
-          pages[page] = []
-        }
-        pages[page].push(item)
-      })
-      return pages
     }
   }
 }
