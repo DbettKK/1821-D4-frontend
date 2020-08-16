@@ -41,6 +41,7 @@
                   <span style="font-size: 13px; color: #999;margin-right: 30px;">
                     评论用户：{{item.username}}
                   </span>
+                  <span style="font-size: 13px; color: #999;">评论时间：{{time(item.create_time)}}</span>
                 </div>
               </div>
             </el-card>
@@ -133,6 +134,10 @@
     methods:{
       L_comment(){
         this.CommentdialogFormVisible=true;
+      },
+      time(a) {
+        this.doctime = a.toString().substr(0, 10)
+        return this.doctime
       },
       add_comment(){
         this.CommentdialogFormVisible = false;
@@ -285,7 +290,7 @@
     height: 700px;
   }
   .el-row {
-    margin-bottom: 2px;
+    margin-bottom: 3px;
   }
   .font_type{
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
