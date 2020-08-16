@@ -14,7 +14,7 @@
           <el-row v-for="(page, index) of pages" :key="index" style="margin-bottom: 40px;">
             <el-col :span="16" align="left" v-for="(item, innerindex) of page" :key="item.id" :offset="innerindex > 0 ? 2 : 0" style="margin-right: -60px;">
                 <el-badge :value="read(item.msg_is_read)" class="msg">
-              <el-card class="item" :body-style="{ padding: '0px' }" shadow="hover">
+              <el-card class="item" :body-style="{ padding: '0px' }" shadow="hover" @click.native="setread(item.msg_id)" style="cursor: pointer;">
                 <div style="padding: 14px;">
                   <div class="top">
                     <div style="display: flex; align-items: start;">
@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 export default {
   inject: ['reload'],
   data() {
@@ -50,69 +51,41 @@ export default {
       token: '',
       messagetime: '',
       isread: 'new',
-      messagelist: [
-          {
-            user: 1,
-            msg_type: 'favor',
-            msg_title: '收藏1',
-            msg_content: '有人收藏了你的文档1',
-            msg_from: '文档1',
-            msg_time: '2017-10-16T03:00:16',
-            msg_is_read: true
-          },
-          {
-            user: 1,
-            msg_type: 'favor',
-            msg_title: '收藏2',
-            msg_content: '有人收藏了你的文档2',
-            msg_from: '文档2',
-            msg_time: '2017-10-16T03:00:16',
-            msg_is_read: false
-          },
-          {
-            user: 1,
-            msg_type: 'favor',
-            msg_title: '收藏3',
-            msg_content: '有人收藏了你的文档3',
-            msg_from: '文档3',
-            msg_time: '2017-10-16T03:00:16',
-            msg_is_read: true
-          },
-          {
-            user: 1,
-            msg_type: 'favor',
-            msg_title: '收藏4',
-            msg_content: '有人收藏了你的文档4',
-            msg_from: '文档4',
-            msg_time: '2017-10-16T03:00:16',
-            msg_is_read: false
-          },
-          {
-            user: 1,
-            msg_type: 'favor',
-            msg_title: '收藏5',
-            msg_content: '有人收藏了你的文档5',
-            msg_from: '文档5',
-            msg_time: '2017-10-16T03:00:16',
-            msg_is_read: true
-          },
-          {
-            user: 1,
-            msg_type: 'favor',
-            msg_title: '收藏6',
-            msg_content: '有人收藏了你的文档6',
-            msg_from: '文档6',
-            msg_time: '2017-10-16T03:00:16',
-            msg_is_read: false
-          }
-      ]
+      messagelist: []
     };
   },
   created() {
     this.token = window.sessionStorage.getItem('token')
     this.user_id = window.sessionStorage.getItem('id')
+    this.getmessageist('favor');
   },
   methods: {
+    getmessageist(type) {
+      var that = this;
+      Vue.axios.get(
+        'http://175.24.121.113:8000/myapp/getmsg/',
+        {headers: {token: window.sessionStorage.getItem("token")},
+        params: {msg_types: type}}
+      ).then(function(res){
+        console.log(res);
+        that.messagelist=res.data.data;
+      }).catch(function(error){
+        console.log(error,Response);
+      })
+    },
+    setread(id) {
+      Vue.axios.get(
+        'http://175.24.121.113:8000/myapp/set/read/',
+        {headers: {token: window.sessionStorage.getItem("token")},
+        params: {msg_id: id}}
+      ).then(function(res){
+        console.log(res);
+      }).catch(function(error){
+        console.log(error,Response);
+      })
+      this.getmessageist('favor');
+      this.reload();
+    },
     time(a) {
          this.messagetime = a.toString().substr(0, 10)
          return this.messagetime
