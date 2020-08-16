@@ -14,6 +14,9 @@ import Trashbin from './components/user/trashbin.vue'
 import ShowUserInfo from './components/user/showUserInfo.vue'
 import TeamSpace from './components/user/TeamSpace.vue'
 import Teammessage from './components/user/Teammessage.vue'
+import message_favorite from './components/user/message_favorite.vue'
+import message_comments from './components/user/message_comments.vue'
+import message_team from './components/user/message_team.vue'
 
 
 Vue.use(Router)
@@ -72,6 +75,9 @@ const router = new Router({
         {path: '/changeInfo', component: ChangeUserInfo, name:'ChangeInfo',meta:{title:'金刚石文档编辑器:个人信息'}},
         {path: '/showUserInfo', component: ShowUserInfo, name:'ShowUserInfo',meta:{title:'金刚石文档编辑器:个人信息'}},
         //{ path:'/TeamSpace', component:TeamSpace,  name:'Teamspace',meta:{title:'团队空间'} }
+        {path: '/message_favorite', component: message_favorite, name:'message_favorite', meta:{title:'收藏消息'}},
+        {path: '/message_comments', component: message_comments, name:'message_comments', meta:{title:'评论消息'}},
+        {path: '/message_team', component: message_team, name:'message_team', meta:{title:'团队消息'}},
       ]
     },
     /*{
