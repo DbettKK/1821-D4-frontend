@@ -37,7 +37,7 @@
                     <el-dropdown trigger="hover" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item icon="el-icon-share" v-if="item.file_privi>=4" @click.native="share(item.id)">分享</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-share" v-if="item.file_privi>=4" @click.native="file_id_tmp = item.id; dialogVisible = true; shareURL = baseURL+item.id">分享</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-star-on" @click.native="addFavorite(item.file)">收藏</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-delete-solid" @click.native="remove(item.file)">从列表中删除</el-dropdown-item>
 <!--                        <el-dropdown-item icon="el-icon-delete-solid" v-if="item.person">移到回收站</el-dropdown-item>-->
@@ -45,13 +45,34 @@
                         </el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
+                    <el-dialog
+                      title="获得链接的人都可以查看"
+                      :visible.sync="dialogVisible"
+                      width="30%">
+                      <el-form>
+                        <el-form-item label="分享链接">
+                          {{shareURL}}
+                        </el-form-item>
+                        <el-form-item label="权限" required>
+                          <el-select v-model="privilege" placeholder="请选择">
+                            <el-option label="仅查看" value="1"></el-option>
+                            <el-option label="可编辑" value="2"></el-option>
+                            <el-option label="可评论" value="3"></el-option>
+                            <el-option label="可分享" value="4"></el-option>
+                          </el-select>
+                        </el-form-item>
+                      </el-form>
+                      <div slot="footer" class="dialog-footer">
+                        <el-button type="primary" @click=";dialogVisible=false;submit()" >确定</el-button>
+                      </div>
+                    </el-dialog>
                   </div>
                   <div class="bottom clearfix">
-                    <time class="time" style="margin-right: 20px;">{{time(item.last_modified)}} 我 打开</time>
+                    <time class="time" style="margin-right: 15px;">最近使用:{{time(item.last_modified)}}</time>
                     <span style="font-size: 13px; color: #999;margin-right: 15px;">
-                      权限：{{permission[item.file_privi-1>3?3:item.file_privi-1]}}
+                      权限:{{permission[item.file_privi-1>3?3:item.file_privi-1]}}
                     </span>
-                    <span style="font-size: 13px; color: #999;margin-right: 15px;">该文档创建者：{{item.file_creator_name}}</span>
+                    <span style="font-size: 13px; color: #999;margin-right: 15px;">创建者:{{item.file_creator_name}}</span>
                     <span style="font-size: 13px; color: #999;" v-if="item.is_delete">已被创建者删除</span>
                   </div>
                 </div>
@@ -112,6 +133,11 @@ export default {
   inject: ['reload'],
   data() {
     return {
+      baseURL: 'http://localhost:8080/edit/',
+      shareURL: '',
+      dialogVisible: false,
+      file_id_tmp: null,
+      privilege: '',
       user_id: '',
       activeIndex:'1',
       doclist: [],
@@ -267,6 +293,34 @@ export default {
       }
 
     },
+    submit() {
+      var that = this
+      this.$http.post('http://175.24.121.113:8000/myapp/file/privi/pri/', this.$qs.stringify({
+                privilege: this.privilege,
+                file_id: this.file_id_tmp
+              }), {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(function (res) {
+        that.$message({
+          message: "权限设置成功",//+res.data.file_id,
+          type: "success",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
+        console.log(res.data);
+      }).catch(function (error) {
+        that.$message({
+          message: error.resopnse.data.info,//+res.data.file_id,
+          type: "error",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
+        console.log(error.response);
+      });
+      this.dialog = false;
+      this.reload();
+    },
     Default() {
       var that = this;
       this.$http.get('http://175.24.121.113:8000/myapp/file/create/pri/',
@@ -305,25 +359,46 @@ export default {
     },
     Model(){
       var that=this;
-      this.$http.post('http://175.24.121.113:8000/myapp/file/create/model/',
+      if(that.modelFile.file_name =='' || that.modelFile.file_name == null)
+      {
+        that.$message({message: '请输入一个文件名', type: 'error'});
+      }
+      else if(that.modelFile.file_mod !=1 && that.modelFile.file_mod !=2 && that.modelFile.file_mod !=3)
+      {
+        that.$message({message: '请选择一个模板类型', type: 'error'});
+      }
+      else{
+        this.$http
+          .post('http://175.24.121.113:8000/myapp/file/create/model/',
               this.$qs.stringify({
-                file_name: that.modelFile.file_name,
-                file_type: that.modelFile.file_mod,
-              }),{headers: {token: window.sessionStorage.getItem("token")}}
-      ).then(function (res) {
-        that.file_id=res.data.data.id;
-        that.$message({message: '创建成功', type: 'success'});
-        that.dialogMod=false;
-        //that.getDoclist();
-        that.reload();
-        that.addrecent();
-        console.log(res.data);
-      }).catch(function (error) {
-        that.$message.error(error.response.data.info);
-      });
+                'file_name': that.modelFile.file_name,
+                'model': that.modelFile.file_mod,
+              }),{headers: {token: window.sessionStorage.getItem("token")}})
+          .then(function (res) {
+            that.file_id=res.data.data.id;
+            that.$message({message: '创建成功', type: 'success'});
+            that.dialogMod=false;
+            //that.getDoclist();
+            that.reload();
+            that.addrecent();
+            console.log(res.data);
+          })
+          .catch(function (error) {
+            that.$message.error(error.response.data.info);
+          });
+      }
     },
     preview(mod){
-      this.$router.push('/preview/'+mod);
+      if(mod != 1 && mod !=2 && mod!=3)
+      {
+          this.$message({message: '请选择一个模板', type: 'error'});
+      }
+      else{
+        let routeUrl = this.$router.resolve({
+          path: '/preview/'+mod,
+        });
+        window.open(routeUrl .href, '_blank');
+      }
     },
     addrecent(file_id) {
       var that = this;

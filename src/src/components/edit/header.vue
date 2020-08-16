@@ -52,6 +52,20 @@
           </el-dropdown>
           </div>
         </el-col>
+        <el-dialog title="请选择想要上传的团队空间" :visible.sync="dialog_G" width="30%">
+          <el-form>
+            <el-form-item label="团队空间" required>
+              <el-select v-model="teamspace" placeholder="请选择">
+                <el-option v-for="ts in teamspaces" :key="ts.id" :label="ts.name" :value="ts.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialog_G=false">取 消</el-button>
+            <el-button type="primary" @click="Choose_G" >确 定</el-button>
+          </div>
+        </el-dialog>
     </el-row>
     
 </template>
@@ -85,15 +99,22 @@
         can_edit:{
           type:Boolean,
         },
+        team_belong:{
+          type:Boolean,
+        }
     },
     data() {
       return {
         show_collect:false,
         dialogVisible:false,
+        dialog_G:false,
         show:true,
+        teamspace:'',
+        teamspaces: [],
       };
     },
     created:function(){
+      this.get_G();
     },
     watch:{
       collect:function () {
@@ -107,8 +128,18 @@
       recently() {
             this.$router.push('/recently')
       },
+      getdata(val){
+        this.team_belong=val;
+      },
       home(){
         this.$router.push('/')
+      },
+      get_G(){
+        this.$http.get('http://175.24.121.113:8000/myapp/team/all/get/',
+                {headers: {token: window.sessionStorage.getItem("token")}}
+        ).then(res => {
+          this.teamspaces = res.data.data;
+        });
       },
       showcomment(){
           if(this.can_comment){
@@ -152,7 +183,34 @@
         );
       },
       Add_G(){
-
+        console.log("team:"+this.team_belong);
+        if(this.team_belong == false){
+          this.dialog_G=true
+        }
+        else
+          this.$message({
+              message: '该文件已经添加团队！',
+              type: 'warning'
+            });
+      },
+      Choose_G(){
+        this.dialog_G=false;
+        Vue.axios.get('http://175.24.121.113:8000/myapp/file/privi/change/team/',
+              {
+                headers: {token: window.sessionStorage.getItem("token")},
+                params: {file_id: this.file_id, team_id: this.teamspace}
+              }
+        ).then((res)=> {
+          this.$message({
+            message: "成功上传到团队空间",//+res.data.file_id,
+            type: "success",
+          });
+          this.dialog_G = false;
+          console.log(res);
+          this.team_belong=true;
+        }).catch((error)=> {
+          this.$message.error(error.response.data.info);
+        });
       },
       exit(){
         window.sessionStorage.clear()

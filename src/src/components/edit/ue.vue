@@ -1,6 +1,6 @@
 <template>
   <div class="background" >
-    <Header :can_comment="can_comment" :can_edit="can_edit" :can_share="can_share" :url="url" :title="title" :file_id="parseInt(file_id)" :content="content" :collect="collect" @event1="change($event)"></Header>
+    <Header :can_comment="can_comment" :can_edit="can_edit" :can_share="can_share" :url="url" :title="title" :file_id="parseInt(file_id)" :content="content" :collect="collect" v-bind:team_belong="team_belong" @event1="change($event)" ></Header>
     <el-card style="height: 780px;">
       <el-container>
         <el-header style="height: 50px">
@@ -128,7 +128,9 @@
           /* 2.2.1 */
           subfield: true, // 单双栏模式
           preview: true // 预览
-        }
+        },
+          team_belong:true,
+        
       }
     },
     methods:{
@@ -190,6 +192,9 @@
           this.content=res.data.data.file_content;
           this.collect=res.data.is_kept;
           this.file_type=res.data.data.type;
+          if(res.data.data.team_belong==null)
+            this.team_belong=false;
+          //this.$refs.tran.getdata(this.params.team_belong);
           this.getPri(res.data.data.type);
         });
       },
@@ -235,7 +240,6 @@
           }
         }
       },
-
     },
     watch:{
     },

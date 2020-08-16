@@ -405,25 +405,46 @@ export default {
     },
     Model(){
       var that=this;
-      this.$http.post('http://175.24.121.113:8000/myapp/file/create/model/',
+      if(that.modelFile.file_name =='' || that.modelFile.file_name == null)
+      {
+        that.$message({message: '请输入一个文件名', type: 'error'});
+      }
+      else if(that.modelFile.file_mod !=1 && that.modelFile.file_mod !=2 && that.modelFile.file_mod !=3)
+      {
+        that.$message({message: '请选择一个模板类型', type: 'error'});
+      }
+      else{
+        this.$http
+          .post('http://175.24.121.113:8000/myapp/file/create/model/',
               this.$qs.stringify({
-                file_name: that.modelFile.file_name,
-                file_type: that.modelFile.file_mod,
-              }),{headers: {token: window.sessionStorage.getItem("token")}}
-      ).then(function (res) {
-        that.file_id=res.data.data.id;
-        that.$message({message: '创建成功', type: 'success'});
-        that.dialogMod=false;
-        //that.getDoclist();
-        that.reload();
-        that.addrecent();
-        console.log(res.data);
-      }).catch(function (error) {
-        that.$message.error(error.response.data.info);
-      });
+                'file_name': that.modelFile.file_name,
+                'model': that.modelFile.file_mod,
+              }),{headers: {token: window.sessionStorage.getItem("token")}})
+          .then(function (res) {
+            that.file_id=res.data.data.id;
+            that.$message({message: '创建成功', type: 'success'});
+            that.dialogMod=false;
+            //that.getDoclist();
+            that.reload();
+            that.addrecent();
+            console.log(res.data);
+          })
+          .catch(function (error) {
+            that.$message.error(error.response.data.info);
+          });
+      }
     },
     preview(mod){
-      this.$router.push('/preview/'+mod);
+      if(mod != 1 && mod !=2 && mod!=3)
+      {
+          this.$message({message: '请选择一个模板', type: 'error'});
+      }
+      else{
+        let routeUrl = this.$router.resolve({
+          path: '/preview/'+mod,
+        });
+        window.open(routeUrl .href, '_blank');
+      }
     },
     addrecent() {
       var that = this;
