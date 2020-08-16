@@ -28,11 +28,13 @@
                     <el-dropdown trigger="hover" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
-                          <!--可以查看就不用单独写下拉菜单-->
+                          <!--可以修改就不用单独写下拉菜单-->
                         <el-dropdown-item icon="el-icon-edit-outline" @click.native="comment" v-if="item.team_permission>1">评论</el-dropdown-item>
-                         <el-dropdown-item icon="el-icon-edit" @click.native="rewrite" v-if="item.team_permission>2">修改</el-dropdown-item>
+                     <!--    <el-dropdown-item icon="el-icon-edit" @click.native="edit(item.id)" v-if="item.team_permission>2">修改</el-dropdown-item>-->
                          <el-dropdown-item icon="el-icon-share" @click.native="share_function" v-if="item.team_permission>3">分享</el-dropdown-item>
-
+                         <!--限制了只有拥有足够的权限才能够更改团队文档的权限-->
+                         <el-dropdown-item icon="el-icon-setting" @click.native="click_set_pri(item.id)" v-if="true">设置文档权限</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-edit" @click.native="renameClick(item.id)">重命名</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-star-on" @click.native="addFavorite(item.id)">收藏</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-delete-solid" v-if="item.creator == id" @click.native="delfile(item.id)">删除团队文档</el-dropdown-item>
                       </el-dropdown-menu>
@@ -56,6 +58,39 @@
             <el-button type="primary" @click="deletefile(del)" >确 定</el-button>
           </div>
         </el-dialog>
+        <!--重命名dialog-->
+                 <el-dialog title="重命名文档" :visible.sync="dialog_rename" width="30%">
+                <el-form>
+                  <el-form-item label="文档名" required>
+                    <el-input v-model="file_name" placeholder="请输入文档名字"></el-input>
+                  </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                  <el-button @click="dialog2=false">取消</el-button>
+                  <el-button type="primary" @click="renameFile" >确定</el-button>
+                </div>
+              </el-dialog>
+              <!--团队成员权限dialog-->
+                            <el-dialog
+                      title="请设置团队成员对该文档的权限"
+                      :visible.sync="dialog_setpri"
+                      width="30%"
+              >
+                  <el-form>
+                    <el-form-item label="权限" required>
+                      <el-select v-model="privilege" placeholder="请选择">
+                        <el-option label="仅查看" value="1"></el-option>
+                        <el-option label="可评论" value="2"></el-option>
+                        <el-option label="可编辑" value="3"></el-option>
+                        <el-option label="可分享" value="4"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-form>
+                  <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialog_setpri=false">取 消</el-button>
+                    <el-button type="primary" @click="submit_setpri()" >确定</el-button>
+                  </div>
+              </el-dialog>
 <!--        <div class="right_pannels">&lt;!&ndash;右边按钮栏&ndash;&gt;-->
 <!--            <div class="button_container">-->
 <!--            <div class="button_create_team_doc">   -->
@@ -81,6 +116,7 @@ export default {
     inject: ['reload'],
   data() {
     return {
+        file_name:'',
       file_id: null,
       del: null,
       team_id: null,
@@ -89,8 +125,12 @@ export default {
       five: 0,
       id: null,
       //dialog: false,
-      dialog1: false
-    };
+      dialog1: false,
+      dialog_rename:false,
+      file_id_tmp:null,
+      dialog_setpri:false,
+      privilege:''
+          };
   },
   created() {
     this.getDoclist();
@@ -231,6 +271,73 @@ export default {
             return"可分享";
             else return "wrong"
 
+    },
+        renameClick(file_id) {
+      this.dialog_rename = true;
+      this.file_id_tmp = file_id;
+    },
+      renameFile() {
+      var that = this;
+      this.$http.post('http://175.24.121.113:8000/myapp/file/rename/', this.$qs.stringify({
+                file_id: this.file_id_tmp,
+                file_name: this.file_name
+              }), {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(function (res) {
+        that.$message({
+          message: "成功重命名",//+res.data.file_id,
+          type: "success",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
+        that.dialog2 = false;
+        that.getDoclist();
+        that.reload();
+        console.log(res.data);
+      }).catch(function (error) {
+        that.$message({
+          message: error.resopnse.data.info,//+res.data.file_id,
+          type: "error",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
+        console.log(error.response);
+      });
+      },
+        submit_setpri() {
+      var that = this
+      this.$http.post('http://175.24.121.113:8000/myapp/file/privi/team/', this.$qs.stringify({
+                privilege: this.privilege,
+                file_id: this.file_id_tmp,
+                team_id:this.team_id
+              }), {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(function (res) {
+        that.$message({
+          message: "权限设置成功",//+res.data.file_id,
+          type: "success",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
+        console.log(res.data);
+      }).catch(function (error) {
+        that.$message({
+          message: error.resopnse.data.info,//+res.data.file_id,
+          type: "error",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
+        console.log(error.response);
+      });
+      this.dialog = false;
+      this.reload();
+    },
+    click_set_pri(file_id)
+    {
+      this.dialog_setpri= true;
+      this.file_id_tmp = file_id
     }
   },
   computed: {
