@@ -5,9 +5,14 @@
             <el-menu-item index="1" @click="toTeam()">团队文档</el-menu-item>
             <el-menu-item index="2" @click="Teammessage()">团队信息</el-menu-item>
           </el-menu>
+          <!--创建者本人才能看到按钮-->
+          <el-button class="manage_member" type="info" @click.native="manage_member" plain v-if="userinfo.id==teaminfo.creator" >
+            <i class="el-icon-setting"></i><span>成员管理</span>
+          </el-button>
           <el-button class="createfile" type="info" @click.native="createFile" plain>
             <i class="el-icon-circle-plus"></i><span>新建文档</span>
           </el-button>
+
         </el-header>
 <!--        <el-dialog title="是否新建团队文档" :visible.sync="dialog" width="30%">-->
 <!--          <div slot="footer" class="dialog-footer">-->
@@ -117,6 +122,7 @@ export default {
     inject: ['reload'],
   data() {
     return {
+       
         file_name:'',
       file_id: null,
       del: null,
@@ -130,12 +136,30 @@ export default {
       dialog_rename:false,
       file_id_tmp:null,
       dialog_setpri:false,
-      privilege:''
+      privilege:'',
+       userinfo: {
+                id: "",
+                username: "",
+                email: "",
+                phone_num: "",
+            },
+        teaminfo:
+        {
+            id:"",
+            name:"",
+            create_time:"",
+            creator:"",
+            members:[]
+
+        },
+        islogin:false
           };
   },
   created() {
     this.getDoclist();
     this.team_id=this.$route.params.id.toString();
+     this.getUserInfo();
+     this.getTeamInfo();
   },
     watch: {//监听下个访问的东西是不是还是teamspace，是则重新获取
         '$route' (to, from) {
@@ -170,6 +194,11 @@ export default {
     Teammessage(){
       this.team_id = this.$route.params.id;
       this.$router.push("/Teammessage/"+this.team_id);
+    },
+    manage_member()
+    {
+        this.team_id=this.$route.params.id;
+        this.$router.push('/Teammember/'+this.team_id)
     },
     time(a) {
          this.doctime = a.toString().substr(0, 10)
@@ -274,8 +303,11 @@ export default {
 
     },
         renameClick(file_id) {
+      //      console.log(window.sessionStorage.getItem("token"));
       this.dialog_rename = true;
       this.file_id_tmp = file_id;
+                      console.log(this.userinfo.id);
+                console.log(this.teaminfo.creator)
     },
       renameFile() {
       var that = this;
@@ -339,6 +371,39 @@ export default {
     {
       this.dialog_setpri= true;
       this.file_id_tmp = file_id
+    },
+    //获取个人信息 为了对照权限
+  getUserInfo() {
+            this.$http.get(
+                'http://175.24.121.113:8000/myapp/user/info/',
+                {headers: {token: window.sessionStorage.getItem("token")}}
+            ).then(res=>{
+                this.userinfo.username=res.data.data.username;
+                this.userinfo.phone_num=res.data.data.phone_num;
+                this.userinfo.id=res.data.data.id;
+                this.userinfo.email=res.data.data.email;
+                console.log(res);
+            }).catch(function(error){
+                console.log(error);
+            })
+        },
+    getTeamInfo()
+    {
+        var that=this;
+         this.$http.get(
+                  'http://175.24.121.113:8000/myapp/team/get/', {
+              headers: {'token': window.sessionStorage.getItem('token')},
+              params:{team_id: that.$route.params.id.toString()}}
+            ).then(res=>{
+                this.teaminfo.team_id=res.data.data.id;
+                this.teaminfo.name=res.data.data.name;
+                this.teaminfo.creator=res.data.data.creator;
+                this.teaminfo.members=res.data.data.members;
+                console.log(res);
+
+            }).catch(function(error){
+                console.log(error);
+            })
     }
   },
   computed: {
@@ -423,5 +488,12 @@ export default {
   width: 130px;
   margin-top: 20px;
   margin-right: 80px;
+}
+.manage_member
+{
+    height:40px;
+    width:130px;
+    margin-top:20px;
+    margin-right:0px;
 }
 </style>
