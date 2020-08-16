@@ -1,7 +1,6 @@
 <template>
   <div class="background" >
     <el-card style="height: 780px;">
-        <el-button @click.native="goBack">返回</el-button>
       <el-container>
         <el-header style="height: 50px">
           <div class="font_type">{{title}}</div>

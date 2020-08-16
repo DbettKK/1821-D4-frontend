@@ -33,8 +33,8 @@
               <div style="padding: 14px;">
                 <div slot="header" class="clearfix">
                   <div style="display: flex; align-items: start;">
-                    <div class="docicon"><i class="el-icon-document"></i></div>
-                    <span>{{item.content}}</span>
+                    <div class="docicon"><i class="el-icon-chat-line-round"></i></div>
+                    <span style="margin-left: 5px;">{{item.content}}</span>
                   </div>
                 </div>
                 <div class="bottom clearfix">
