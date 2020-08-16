@@ -26,7 +26,7 @@
                   <div class="top">
                     <div style="display: flex; align-items: start;">
                       <div class="docicon"><i class="el-icon-document"></i></div>
-                      <span>{{item.file_title}}</span>
+                      <span @click.stop="renameClick(item.id)">{{item.file_title}}</span>
                     </div>
                     <el-dropdown trigger="hover" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
@@ -423,7 +423,7 @@ export default {
       });
     },
     preview(mod){
-      return mod;
+      this.$router.push('/preview/'+mod);
     },
     addrecent() {
       var that = this;
