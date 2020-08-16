@@ -27,21 +27,26 @@
       :visible.sync="drawer"
       :direction="direction">
       <el-main>
-        <el-table
-          :data="comments"
-          stripe
-          style="width: 100%">
-          <el-table-column
-            prop="username"
-            label="姓名"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="content"
-            label="评论"
-            width="290">
-          </el-table-column>
-        </el-table>
+        <el-row v-for="item in comments" :key="item.id">
+          <el-col :span="24">
+            <el-card :body-style="{ padding: '1px' }" shadow="hover" class="box-card">
+              <div style="padding: 14px;">
+                <div slot="header" class="clearfix">
+                  <div style="display: flex; align-items: start;">
+                    <div class="docicon"><i class="el-icon-document"></i></div>
+                    <span>{{item.content}}</span>
+                  </div>
+                </div>
+                <div class="bottom clearfix">
+                  <span style="font-size: 13px; color: #999;margin-right: 30px;">
+                    评论用户：{{item.username}}
+                  </span>
+                  <span style="font-size: 13px; color: #999;">评论时间：{{time(item.create_time)}}</span>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
       </el-main>
       <el-footer>
         <el-button type="primary" round @click="L_comment">编写评论</el-button>
@@ -129,6 +134,10 @@
     methods:{
       L_comment(){
         this.CommentdialogFormVisible=true;
+      },
+      time(a) {
+        this.doctime = a.toString().substr(0, 10)
+        return this.doctime
       },
       add_comment(){
         this.CommentdialogFormVisible = false;
@@ -280,6 +289,9 @@
   .el-main{
     height: 700px;
   }
+  .el-row {
+    margin-bottom: 3px;
+  }
   .font_type{
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 50px;
@@ -288,12 +300,25 @@
     background-color: #F2F6FC;
   }
   .el-main{
-    height: 90%;
+    height: 85%;
     width: 100%;
   }
   .el-footer{
     text-align: center;
     line-height: 30px;
     vertical-align: middle;
+  }
+  .box-card{
+    width: 100%;
+    height: 90%;
+    padding-top: 2px;
+  }
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+  .clearfix:after {
+    clear: both
   }
 </style>
