@@ -37,8 +37,11 @@
                   </div>
                   <div class="bottom clearfix">
                     <time class="time" style="margin-right: 20px;">{{item.msg_time}}</time>
-                    <span style="font-size: 13px; color: #999; margin-right: 15px;">
-                      来自你的文档：{{item.msg_from}}
+                    <span style="font-size: 13px; color: #999; margin-right: 15px;" v-if = "item.msg_is_invite == true">
+                      来自 {{item.msg_type_from_name}} {{item.msg_person_from_name}} 的团队邀请
+                    </span>
+                    <span style="font-size: 13px; color: #999; margin-right: 15px;" v-else>
+                      来自 {{item.msg_type_from_name}} {{item.msg_person_from_name}} 的团队消息
                     </span>
                   </div>
                 </div>

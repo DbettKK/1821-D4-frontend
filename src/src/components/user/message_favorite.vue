@@ -34,7 +34,7 @@
                   <div class="bottom clearfix">
                     <time class="time" style="margin-right: 20px;">{{item.msg_time}}</time>
                     <span style="font-size: 13px; color: #999; margin-right: 15px;">
-                      来自你的文档：{{item.msg_from}}
+                      来自你的文档：{{item.msg_type_from_name}}
                     </span>
                   </div>
                 </div>
