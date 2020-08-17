@@ -23,7 +23,26 @@
 <!--          </div>-->
 <!--        </el-dialog>-->
         <el-main>
-          
+            <el-card class="item" :body-style="{ padding: '0px' }">
+                <el-button class="invite" type="primary" @click="dialogVisible = true">邀请成员</el-button>
+            </el-card>
+            <el-dialog
+                title="提示"
+                :visible.sync="dialogVisible"
+                width="30%">
+                <div style="margin-bottom: 20px">
+                    <span>被邀请人的ID:</span>
+                </div>
+                <el-form ref="inviteFormRef" :model="inviteForm" label-width="0px" class="invite_form">
+                    <el-form-item prop="id">
+                        <el-input placeholder="ID:" v-model="inviteForm.id"></el-input>
+                    </el-form-item>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click.native="invite()">确 定</el-button>
+                </span>
+            </el-dialog>
         </el-main>
         
 <!--        <div class="right_pannels">&lt;!&ndash;右边按钮栏&ndash;&gt;-->
@@ -56,7 +75,10 @@ export default {
       id: null,
       //dialog: false,
       activeIndex:'2',
-      
+      inviteForm: {
+        id: ''
+      },
+      dialogVisible: false
     };
   },
   created() {
@@ -71,6 +93,7 @@ export default {
         that.is_creator=true;
     }).catch(()=>{
         that.is_creator=false;
+        console.log(that.is_creator);
     });
   },
  watch: {//监听下个访问的东西是不是还是teamspace，是则重新获取
@@ -150,38 +173,22 @@ export default {
       //this.dialog=false;
 
     },
-      getUserInfo() {
-            this.$http.get(
-                'http://175.24.121.113:8000/myapp/user/info/',
-                {headers: {token: window.sessionStorage.getItem("token")}}
-            ).then(res=>{
-                this.userinfo.username=res.data.data.username;
-                this.userinfo.phone_num=res.data.data.phone_num;
-                this.userinfo.id=res.data.data.id;
-                this.userinfo.email=res.data.data.email;
-                console.log(res);
-            }).catch(function(error){
-                console.log(error);
-            })
-        },
-    getTeamInfo()
-    {
-        var that=this;
-         this.$http.get(
-                  'http://175.24.121.113:8000/myapp/team/get/', {
-              headers: {'token': window.sessionStorage.getItem('token')},
-              params:{team_id: that.$route.params.id.toString()}}
-            ).then(res=>{
-                this.teaminfo.team_id=res.data.data.id;
-                this.teaminfo.name=res.data.data.name;
-                this.teaminfo.creator=res.data.data.creator;
-                this.teaminfo.members=res.data.data.members;
-                console.log(res);
-
-            }).catch(function(error){
-                console.log(error);
-            })
-    },
+    invite() {
+        var that = this;
+        this.$http.post('http://175.24.121.113:8000/myapp/team/invite/', this.$qs.stringify({
+                team_id: that.team_id, member_id: that.inviteForm.id
+              }), {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(() => {
+            that.$message({
+                message: '邀请信息发送成功',
+                type: 'success'
+            });
+            that.reload();
+        }).catch(function (error) {
+            that.$message.error(error.response.data.info);
+        });
+        that.dialogVisible = false;
+    }
   },
   computed: {
   }
@@ -213,4 +220,22 @@ export default {
  margin-top: 20px;
  margin-right: 80px;
 }
+
+.item{
+    height: 40%;
+    width: 40%;
+    .invite{
+        position: absolute;
+        left: 40%;
+        top: 23%
+    }
+}
+
+.invite_form {
+    opacity: 100%;
+    padding-top: 0;
+    width: 100%;
+    padding-left: 0;
+    box-sizing: border-box;
+  }
 </style>

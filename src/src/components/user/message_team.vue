@@ -28,8 +28,12 @@
                       </el-dropdown-menu>
                     </el-dropdown>
                   </div>
-                  <div class="middle">
+                  <div class="middle" style="display: flex; justify-content: space-between;">
                       <span style="font-size: 13px; margin-right: 15px;">{{item.msg_content}}</span>
+                      <div>
+                        <el-button type="success" size="mini" style="margin-right: 15px" v-if = "item.msg_is_invite == true" @click.native="accept(item.id)">加入团队</el-button>
+                        <el-button type="info" size="mini" style="margin-right: 60px" v-if = "item.msg_is_invite == true" @click.native="refuse(item.id)">拒绝</el-button>
+                      </div>
                   </div>
                   <div class="bottom clearfix">
                     <time class="time" style="margin-right: 20px;">{{item.msg_time}}</time>
@@ -142,6 +146,32 @@ export default {
     },
     msgteam() {
         this.$router.push('/message_team')
+    },
+    accept(msg_id) {
+      var that = this
+      Vue.axios.get(
+        'http://175.24.121.113:8000/myapp/team/accept/',
+        {headers: {token: window.sessionStorage.getItem("token")},
+        params: {msg_id: msg_id}}
+      ).then(function(res){
+        console.log(res);
+        that.reload();
+      }).catch(function(error){
+        console.log(error,Response);
+      })
+    },
+    refuse(msg_id) {
+      var that = this
+      Vue.axios.get(
+        'http://175.24.121.113:8000/myapp/team/refuse/',
+        {headers: {token: window.sessionStorage.getItem("token")},
+        params: {msg_id: msg_id}}
+      ).then(function(res){
+        console.log(res);
+        that.reload();
+      }).catch(function(error){
+        console.log(error,Response);
+      })
     }
   }
 }
