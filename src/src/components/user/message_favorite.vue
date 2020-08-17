@@ -6,9 +6,19 @@
                 <el-menu-item index="2" @click="msgcomments">评论消息</el-menu-item>
                 <el-menu-item index="3" @click="msgteam">团队消息</el-menu-item>
             </el-menu>
-            <el-button class="createfile" type="info" @click.native="setallread()">
+            <div>
+              <el-button class="createfile" type="info" @click.native="setallread()">
                 <i class="el-icon-success"></i><span>全部设为已读</span>
-            </el-button>
+              </el-button>
+              <el-dropdown trigger="hover" class="set">
+                <span class="el-dropdown-link">
+                    <i class="el-icon-s-tools el-icon--right icon-setting"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="delmsgall()">清空收藏消息列表</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </div>
         </el-header>
         <el-main>
           <el-row v-for="(item, index) of messagelist" :key="index" style="margin-bottom: 40px;">
@@ -25,6 +35,7 @@
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item icon="el-icon-view" @click.native="setunread(item.id)">设为未读</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-delete" @click.native="delmsg(item.id)">删除消息</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
                   </div>
@@ -142,6 +153,32 @@ export default {
     },
     msgteam() {
         this.$router.push('/message_team')
+    },
+    delmsg(msg_id) {
+      var that = this
+      Vue.axios.get(
+        'http://175.24.121.113:8000/myapp/msg/delete/',
+        {headers: {token: window.sessionStorage.getItem("token")},
+        params: {msg_id: msg_id}}
+      ).then(function(res){
+        console.log(res);
+        that.reload();
+      }).catch(function(error){
+        console.log(error,Response);
+      })
+    },
+    delmsgall() {
+      var that = this
+      Vue.axios.get(
+        'http://175.24.121.113:8000/myapp/msg/delete/all/',
+        {headers: {token: window.sessionStorage.getItem("token")},
+        params: {msg_type: 'favor'}}
+      ).then(function(res){
+        console.log(res);
+        that.reload();
+      }).catch(function(error){
+        console.log(error,Response);
+      })
     }
   }
 }
@@ -193,6 +230,10 @@ export default {
   height: 40px;
   width: 200px;
   margin-top: 20px;
+  margin-right: 15px;
+}
+
+.set{
   margin-right: 80px;
 }
 </style>

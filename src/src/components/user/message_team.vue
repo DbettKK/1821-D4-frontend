@@ -6,9 +6,19 @@
                 <el-menu-item index="2" @click="msgcomments">评论消息</el-menu-item>
                 <el-menu-item index="3" @click="msgteam">团队消息</el-menu-item>
             </el-menu>
-            <el-button class="createfile" type="info" @click.native="setallread()">
+            <div>
+              <el-button class="createfile" type="info" @click.native="setallread()">
                 <i class="el-icon-success"></i><span>全部设为已读</span>
-            </el-button>
+              </el-button>
+              <el-dropdown trigger="hover" class="set">
+                <span class="el-dropdown-link">
+                    <i class="el-icon-s-tools el-icon--right icon-setting"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="delmsgall()">清空团队消息列表</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </div>
         </el-header>
         <el-main>
           <el-row v-for="(item, index) of messagelist" :key="index" style="margin-bottom: 40px;">
@@ -25,14 +35,17 @@
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item icon="el-icon-view" @click.native="setunread(item.id)">设为未读</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-delete" @click.native="delmsg(item.id)">删除消息</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
                   </div>
                   <div class="middle" style="display: flex; justify-content: space-between;">
                       <span style="font-size: 13px; margin-right: 15px;">{{item.msg_content}}</span>
                       <div>
-                        <el-button type="success" size="mini" style="margin-right: 15px" v-if = "item.msg_is_invite == true" @click.native="accept(item.id)">加入团队</el-button>
-                        <el-button type="info" size="mini" style="margin-right: 60px" v-if = "item.msg_is_invite == true" @click.native="refuse(item.id)">拒绝</el-button>
+                        <el-button type="success" size="mini" style="margin-right: 15px" v-if = "item.msg_is_invite == true && item.msg_is_accept == null" @click.native="accept(item.id)">加入团队</el-button>
+                        <span v-if = "item.msg_is_accept == true" style="font-size: 13px; color: #999; margin-right: 15px;">已同意</span>
+                        <el-button type="info" size="mini" style="margin-right: 60px" v-if = "item.msg_is_invite == true && item.msg_is_accept == null" @click.native="refuse(item.id)">拒绝</el-button>
+                        <span v-if = "item.msg_is_accept == false" style="font-size: 13px; color: #999; margin-right: 15px;">已拒绝</span>
                       </div>
                   </div>
                   <div class="bottom clearfix">
@@ -175,6 +188,32 @@ export default {
       }).catch(function(error){
         console.log(error,Response);
       })
+    },
+    delmsg(msg_id) {
+      var that = this
+      Vue.axios.get(
+        'http://175.24.121.113:8000/myapp/msg/delete/',
+        {headers: {token: window.sessionStorage.getItem("token")},
+        params: {msg_id: msg_id}}
+      ).then(function(res){
+        console.log(res);
+        that.reload();
+      }).catch(function(error){
+        console.log(error,Response);
+      })
+    },
+    delmsgall() {
+      var that = this
+      Vue.axios.get(
+        'http://175.24.121.113:8000/myapp/msg/delete/all/',
+        {headers: {token: window.sessionStorage.getItem("token")},
+        params: {msg_type: 'team'}}
+      ).then(function(res){
+        console.log(res);
+        that.reload();
+      }).catch(function(error){
+        console.log(error,Response);
+      })
     }
   }
 }
@@ -226,6 +265,10 @@ export default {
   height: 40px;
   width: 200px;
   margin-top: 20px;
+  margin-right: 15px;
+}
+
+.set{
   margin-right: 80px;
 }
 </style>
