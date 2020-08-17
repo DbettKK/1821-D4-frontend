@@ -373,9 +373,9 @@ export default {
     permission_transfer(team_permission)//用于显示团队权限
     {
         if(team_permission==1)
-        return "可查看";
+        return "仅查看";
         else if(team_permission==2)
-        return "可评论";
+        return "可修改";
           else if(team_permission==3)
           return "可修改";
             else if(team_permission==4)
