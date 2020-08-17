@@ -28,8 +28,12 @@
                       </el-dropdown-menu>
                     </el-dropdown>
                   </div>
-                  <div class="middle">
+                  <div class="middle" style="display: flex; justify-content: space-between;">
                       <span style="font-size: 13px; margin-right: 15px;">{{item.msg_content}}</span>
+                      <div>
+                        <el-button type="success" size="mini" style="margin-right: 15px" v-if = "item.msg_is_invite == true">加入团队</el-button>
+                        <el-button type="info" size="mini" style="margin-right: 60px" v-if = "item.msg_is_invite == true">拒绝</el-button>
+                      </div>
                   </div>
                   <div class="bottom clearfix">
                     <time class="time" style="margin-right: 20px;">{{item.msg_time}}</time>
