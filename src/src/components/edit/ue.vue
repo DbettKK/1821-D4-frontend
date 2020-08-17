@@ -45,8 +45,8 @@
                     评论用户：{{item.username}}
                   </span>
                   <span style="font-size: 13px; color: #999;margin-right: 25px;">评论时间：{{time(item.create_time)}}</span>
-                  <span style="font-size: 13px; color: #999;margin-right: 15px;" @click="agree(item.id)"><i class="el-icon-good"></i>{{item.agree_set.length}}</span>
-                  <span style="font-size: 13px; color: #999;"><i class="el-icon-bad" @click="disagree(item.id)"></i>{{item.disagree_set.length}}</span>
+                  <span style="font-size: 13px; color: #999;margin-right: 15px;cursor: pointer;" @click="agree(item.id)"><i class="el-icon-good"></i>{{item.agree_set.length}}</span>
+                  <span style="font-size: 13px; color: #999;cursor: pointer"><i class="el-icon-bad" @click="disagree(item.id)"></i>{{item.disagree_set.length}}</span>
                 </div>
               </div>
             </el-card>
@@ -151,6 +151,7 @@
         return this.doctime
       },
       agree(id){
+
         Vue.axios.get(
           "http://175.24.121.113:8000/myapp/comment/agree/",
           {
@@ -161,9 +162,10 @@
             }
           }).then((res)=>  {
             console.log(res)
-            this.$message({message: res.data.info, type: 'success'})
+            this.$message({message: '点赞成功',type: 'success'})
             this.get_comment();
           }).catch(res => {
+            this.$message.error(res.response.data.info);
               console.log(res);
         });
       },
@@ -178,8 +180,11 @@
             }
           }).then((res)=>  {
             console.log(res)
+          this.$message({message: '反对成功',type: 'success'})
             this.get_comment();
+
           }).catch(res => {
+            this.$message.error(res.response.data.info);
               console.log(res);
         });
       },
