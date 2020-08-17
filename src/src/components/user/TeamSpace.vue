@@ -57,10 +57,10 @@
                      <!--    <el-dropdown-item icon="el-icon-edit" @click.native="edit(item.id)" v-if="item.team_permission>2">修改</el-dropdown-item>-->
                          <el-dropdown-item icon="el-icon-share" @click.native="share_function" v-if="item.team_permission>3">分享</el-dropdown-item>
                          <!--限制了只有拥有足够的权限才能够更改团队文档的权限-->
-                         <el-dropdown-item icon="el-icon-setting" @click.native="click_set_pri(item.id)" v-if="true">设置文档权限</el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-edit" @click.native="renameClick(item.id)">重命名</el-dropdown-item>
+                         <el-dropdown-item icon="el-icon-setting" @click.native="click_set_pri(item.id)" v-if="pri_visible(item.creator)">设置文档权限</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-edit" @click.native="renameClick(item.id)" v-if="pri_visible(item.creator)">重命名</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-star-on" @click.native="addFavorite(item.id)">收藏</el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-delete-solid" v-if="item.creator == id" @click.native="delfile(item.id)">删除团队文档</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-delete-solid"  @click.native="delfile(item.id)" v-if="pri_visible(item.creator)">删除团队文档</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
                   </div>
@@ -104,8 +104,8 @@
                     <el-form-item label="权限" required>
                       <el-select v-model="privilege" placeholder="请选择">
                         <el-option label="仅查看" value="1"></el-option>
-                        <el-option label="可评论" value="2"></el-option>
-                        <el-option label="可编辑" value="3"></el-option>
+                        <el-option label="可编辑" value="2"></el-option>
+                        <el-option label="可评论" value="3"></el-option>
                         <el-option label="可分享" value="4"></el-option>
                       </el-select>
                     </el-form-item>
@@ -587,6 +587,14 @@ export default {
         window.open(routeUrl .href, '_blank');
       }
     },
+    pri_visible(creator_id)
+    {
+      if(this.userinfo.id===this.teaminfo.creator)
+      return true;
+      if(this.userinfo.id===creator_id)
+      return true;
+      return false;
+    }
   },
   computed: {
     pages () {
