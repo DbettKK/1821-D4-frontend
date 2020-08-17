@@ -26,18 +26,8 @@
         </el-col>
         <el-col :span="1">
             <el-tooltip class="item" effect="light" content="分享" placement="bottom-end">
-                <el-button class="share-button" icon="el-icon-share" type="primary" @click="judgeShare"></el-button>
+                <el-button class="share-button" icon="el-icon-share" type="primary" @click.native="dialogVisible = true; shareURL = baseURL+file_id"></el-button>
             </el-tooltip>
-          <el-dialog
-            title=文档分享
-            :visible.sync="dialogVisible"
-            width="30%"
-            :before-close="handleClose">
-            <span>您的文档邀请码url为：{{url}}</span>
-            <span slot="footer" class="dialog-footer">
-              <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-            </span>
-          </el-dialog>
         </el-col>
         <el-col :span="2"><el-button type="primary" @click="Submit">保存</el-button></el-col>
         <el-col :span="2"><div class="grid-content2 bg-purple">{{can_edit?'正在编辑':'浏览模式'}}</div></el-col>
@@ -64,6 +54,25 @@
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialog_G=false">取 消</el-button>
             <el-button type="primary" @click="Choose_G" >确 定</el-button>
+          </div>
+        </el-dialog>
+        <el-dialog
+          title="获得链接的人都可以查看"
+          :visible.sync="dialogVisible"
+          width="30%">
+          <el-form>
+            <el-form-item label="分享链接">
+              {{shareURL}}
+            </el-form-item>
+            <el-form-item label="点击复制">
+              <el-button 
+                v-clipboard:copy="shareURL"
+                v-clipboard:success="onCopy"
+                v-clipboard:error="onError">复制链接</el-button>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click=";dialogVisible=false;" >确定</el-button>
           </div>
         </el-dialog>
     </el-row>
@@ -102,6 +111,8 @@
     },
     data() {
       return {
+        baseURL: 'http://localhost:8080/edit/',
+        shareURL: '',
         show_collect:false,
         dialogVisible:false,
         dialog_G:false,
@@ -122,6 +133,24 @@
       }
     },
     methods: {
+      onCopy: function () {
+      this.$message({
+          message: "已经复制到剪贴版",//+res.data.file_id,
+          type: "success",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
+    },
+    onError: function () {
+      this.$message({
+          message: "复制失败",//+res.data.file_id,
+          type: "success",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
+    },
       recently() {
             this.$router.push('/recently')
       },
