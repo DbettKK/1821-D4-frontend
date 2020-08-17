@@ -55,11 +55,16 @@
                         <el-dropdown-item icon="el-icon-edit-outline" @click.native="comment" v-if="item.team_permission>6">评论</el-dropdown-item>
                         <!--评论不在这里做-->
                      <!--    <el-dropdown-item icon="el-icon-edit" @click.native="edit(item.id)" v-if="item.team_permission>2">修改</el-dropdown-item>-->
+                         <!--
                          <el-dropdown-item icon="el-icon-share" @click.native="share_function" v-if="item.team_permission>3">分享</el-dropdown-item>
+                         -->
+                         <!--当文件拥有可分享权限或用户为创建者是可以看到团队空间的下拉栏中的分享-->
+                          <el-dropdown-item icon="el-icon-share" v-if="item.team_permission>=4||pri_visible(item.creator)" @click.native="file_id_tmp = item.id; sharedialogVisible = true; shareURL = baseURL+item.id">分享</el-dropdown-item>
+
                          <!--限制了只有拥有足够的权限才能够更改团队文档的权限-->
                          <el-dropdown-item icon="el-icon-setting" @click.native="click_set_pri(item.id)" v-if="pri_visible(item.creator)">设置文档权限</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-edit" @click.native="renameClick(item.id)" v-if="pri_visible(item.creator)">重命名</el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-star-on" @click.native="addFavorite(item.id)">收藏</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-star-on" @click.native="addFavorite(item.id,item.file_privilege)">收藏</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-delete-solid"  @click.native="delfile(item.id)" v-if="pri_visible(item.creator)">删除团队文档</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
@@ -177,6 +182,36 @@
               <el-button type="primary" @click="Customize" >确 定</el-button>
             </div>
           </el-dialog>
+          <!--分享时的dialog-->
+            <el-dialog
+          title="获得链接的人都可以查看"
+          :visible.sync="sharedialogVisible"
+          width="30%">
+          <el-form>
+            <el-form-item label="分享链接">
+              {{shareURL}}
+            </el-form-item>
+            <el-form-item label="点击复制">
+              <el-button 
+                v-clipboard:copy="shareURL"
+                v-clipboard:success="onCopy"
+                v-clipboard:error="onError">复制链接</el-button>
+            </el-form-item>
+            <!--
+            <el-form-item label="权限" required>
+              <el-select v-model="privilege" placeholder="请选择">
+                <el-option label="仅查看" value="1"></el-option>
+                <el-option label="可编辑" value="2"></el-option>
+                <el-option label="可评论" value="3"></el-option>
+                <el-option label="可分享" value="4"></el-option>
+              </el-select>
+            </el-form-item>
+            -->
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="sharedialogVisible=false;" >确定</el-button>
+          </div>
+        </el-dialog>
     </el-container>
 </template>
 
@@ -230,6 +265,11 @@ export default {
         file_mod: '',
         team_id:'',
       },
+       sharedialogVisible:false,
+    //   file_id_tmp :'',
+       shareURL:'',
+       //这里会出问题，不过等部署再说
+       baseURL: 'http://localhost:8080/edit/',
           };
 
   },
@@ -304,7 +344,9 @@ export default {
       this.addrecent();
       this.$router.push('/edit/' + file_id)
     },
-    addFavorite(file_id){
+    addFavorite(file_id,file_pri){
+      console.log("pri");
+      console.log(file_pri);
           var that = this;
           this.$http.get('http://175.24.121.113:8000/myapp/file/favorite/',
               {
@@ -385,10 +427,11 @@ export default {
             else return "wrong"
 
     },
-        renameClick(file_id) {
+        renameClick(file_id,file_pri) {
       //      console.log(window.sessionStorage.getItem("token"));
       this.dialog_rename = true;
       this.file_id_tmp = file_id;
+      console.log(file_pri)
                       console.log(this.userinfo.id);
                 console.log(this.teaminfo.creator)
     },
@@ -594,7 +637,25 @@ export default {
       if(this.userinfo.id===creator_id)
       return true;
       return false;
-    }
+    },
+     onCopy: function () {
+      this.$message({
+          message: "已经复制到剪贴版",//+res.data.file_id,
+          type: "success",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
+    },
+    onError: function () {
+      this.$message({
+          message: "复制失败",//+res.data.file_id,
+          type: "success",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
+    },
   },
   computed: {
     pages () {
