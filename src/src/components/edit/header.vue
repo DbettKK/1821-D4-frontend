@@ -26,7 +26,7 @@
         </el-col>
         <el-col :span="1">
             <el-tooltip class="item" effect="light" content="分享" placement="bottom-end">
-                <el-button class="share-button" icon="el-icon-share" type="primary" @click.native="dialogVisible = true; shareURL = baseURL+file_id"></el-button>
+                <el-button class="share-button" icon="el-icon-share" type="primary" @click.native="judgeShare"></el-button>
             </el-tooltip>
         </el-col>
         <el-col :span="2"><el-button type="primary" @click="Submit">保存</el-button></el-col>
@@ -173,6 +173,7 @@
         judgeShare(){
           if(this.can_share){
               this.dialogVisible = true
+              this.shareURL = this.baseURL + this.file_id
           }else{
               this.$message({message: '您没有这个权限哦', type: 'warning'})
           }
@@ -297,7 +298,7 @@
             }).catch(function(error){
                 console.log(error);
             })
-      }
+      },
     }
   }
 </script>
