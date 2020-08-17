@@ -45,27 +45,6 @@
                         </el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
-                    <el-dialog
-                      title="获得链接的人都可以查看"
-                      :visible.sync="dialogVisible"
-                      width="30%">
-                      <el-form>
-                        <el-form-item label="分享链接">
-                          {{shareURL}}
-                        </el-form-item>
-                        <el-form-item label="权限" required>
-                          <el-select v-model="privilege" placeholder="请选择">
-                            <el-option label="仅查看" value="1"></el-option>
-                            <el-option label="可编辑" value="2"></el-option>
-                            <el-option label="可评论" value="3"></el-option>
-                            <el-option label="可分享" value="4"></el-option>
-                          </el-select>
-                        </el-form-item>
-                      </el-form>
-                      <div slot="footer" class="dialog-footer">
-                        <el-button type="primary" @click=";dialogVisible=false;submit()" >确定</el-button>
-                      </div>
-                    </el-dialog>
                   </div>
                   <div class="bottom clearfix">
                     <time class="time" style="margin-right: 15px;">最近使用:{{time(item.last_modified)}}</time>
@@ -125,6 +104,33 @@
             </div>
           </el-dialog>
         </el-main>
+        <el-dialog
+          title="获得链接的人都可以查看"
+          :visible.sync="dialogVisible"
+          width="30%">
+          <el-form>
+            <el-form-item label="分享链接">
+              {{shareURL}}
+            </el-form-item>
+            <el-form-item label="点击复制">
+              <el-button 
+                v-clipboard:copy="shareURL"
+                v-clipboard:success="onCopy"
+                v-clipboard:error="onError">复制链接</el-button>
+            </el-form-item>
+            <el-form-item label="权限" required>
+              <el-select v-model="privilege" placeholder="请选择">
+                <el-option label="仅查看" value="1"></el-option>
+                <el-option label="可编辑" value="2"></el-option>
+                <el-option label="可评论" value="3"></el-option>
+                <el-option label="可分享" value="4"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click=";dialogVisible=false;submit()" >确定</el-button>
+          </div>
+        </el-dialog>
     </el-container>
 </template>
 
@@ -164,6 +170,24 @@ export default {
     this.getDoclist()
   },
   methods: {
+    onCopy: function () {
+      this.$message({
+          message: "已经复制到剪贴版",//+res.data.file_id,
+          type: "success",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
+    },
+    onError: function () {
+      this.$message({
+          message: "复制失败",//+res.data.file_id,
+          type: "success",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
+    },
     getDoclist() {
       var that = this;
       Vue.axios.get(
