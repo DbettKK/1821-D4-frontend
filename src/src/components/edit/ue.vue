@@ -38,11 +38,11 @@
                   </div>
                 </div>
                 <div class="bottom clearfix">
-                  <span style="font-size: 13px; color: #999;margin-right: 15px;">
+                  <span style="font-size: 13px; color: #999;margin-right: 20px;">
                     评论用户：{{item.username}}
                   </span>
-                  <span style="font-size: 13px; color: #999;margin-right: 15px;">评论时间：{{time(item.create_time)}}</span>
-                  <span style="font-size: 13px; color: #999;margin-right: 5px;" @click="agree(item.id)"><i class="el-icon-good"></i>{{item.agree_set.length}}</span>
+                  <span style="font-size: 13px; color: #999;margin-right: 25px;">评论时间：{{time(item.create_time)}}</span>
+                  <span style="font-size: 13px; color: #999;margin-right: 15px;" @click="agree(item.id)"><i class="el-icon-good"></i>{{item.agree_set.length}}</span>
                   <span style="font-size: 13px; color: #999;"><i class="el-icon-bad" @click="disagree(item.id)"></i>{{item.disagree_set.length}}</span>
                 </div>
               </div>
@@ -158,6 +158,7 @@
             }
           }).then((res)=>  {
             console.log(res)
+            this.$message({message: res.data.info, type: 'success'})
             this.get_comment();
           }).catch(res => {
               console.log(res);
