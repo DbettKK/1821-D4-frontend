@@ -223,10 +223,12 @@ export default {
         file_name: '',
         file_type:'团队文档',
         file_privilege: '',
+        team_id:'',
       },
      modelFile: {
         file_name: '',
-        file_mod: ''
+        file_mod: '',
+        team_id:'',
       },
           };
 
@@ -502,6 +504,7 @@ export default {
           type: 'success'
         }).then(() => {
           this.dialogCustom=true;
+          this.CustomFile.team_id=this.teaminfo.team_id;
         });
       }else if(type==='model'){
         this.$confirm('确定新建一个基于模板的文档吗?', '文档创建', {
@@ -510,6 +513,7 @@ export default {
           type: 'success'
         }).then(() => {
           this.dialogModel=true;
+          this.modelFile.team_id=this.teaminfo.team_id;
         });
       }
 
@@ -517,18 +521,18 @@ export default {
     //这两个函数还没改完
      Customize(){
       if(this.CustomFile.file_type==='团队文档') this.CustomFile.file_type='team';
-      else this.CustomFile.file_type='private';
       var that=this;
-      this.$http.post('http://175.24.121.113:8000/myapp/file/create/customize/',
+      this.$http.post('http://175.24.121.113:8000/myapp/file/create/customize/team/',
               this.$qs.stringify({
                 file_name: that.CustomFile.file_name,
                 file_type: that.CustomFile.file_type,
                 file_privilege: that.CustomFile.file_privilege,
+                team_id:that.CustomFile.team_id,
               }),{headers: {token: window.sessionStorage.getItem("token")}}
       ).then(function (res) {
-        if(that.CustomFile.file_type==='team'){
-          that.$message({message: '创建成功 但本团队文档不属于任何团队空间', type: 'warning'});
-        }else that.$message({message: '创建成功', type: 'success'});
+        console.log(that.CustomFile.file_privilege);
+          that.$message({message: '创建成功', type: 'success'});
+
         that.dialogCustom=false;
         //that.getDoclist();
         that.reload();
@@ -551,10 +555,11 @@ export default {
       }
       else{
         this.$http
-          .post('http://175.24.121.113:8000/myapp/file/create/model/',
+          .post('http://175.24.121.113:8000/myapp/file/create/model/team/',
               this.$qs.stringify({
                 'file_name': that.modelFile.file_name,
                 'model': that.modelFile.file_mod,
+                'team_id':that.modelFile.team_id,
               }),{headers: {token: window.sessionStorage.getItem("token")}})
           .then(function (res) {
             that.file_id=res.data.data.id;
@@ -568,6 +573,18 @@ export default {
           .catch(function (error) {
             that.$message.error(error.response.data.info);
           });
+      }
+    },
+       preview(mod){
+      if(mod != 1 && mod !=2 && mod!=3 && mod!=4)
+      {
+          this.$message({message: '请选择一个模板', type: 'error'});
+      }
+      else{
+        let routeUrl = this.$router.resolve({
+          path: '/preview/'+mod,
+        });
+        window.open(routeUrl .href, '_blank');
       }
     },
   },
