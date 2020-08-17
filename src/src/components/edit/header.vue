@@ -33,7 +33,7 @@
             :visible.sync="dialogVisible"
             width="30%"
             :before-close="handleClose">
-            <span>您的文档邀请码为：{{file_id}}</span>
+            <span>您的文档邀请码url为：{{url}}</span>
             <span slot="footer" class="dialog-footer">
               <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
             </span>
@@ -90,9 +90,6 @@
         collect:{
           type:Boolean,
         },
-        can_comment:{
-            type:Boolean,
-        },
         can_share:{
             type:Boolean,
         },
@@ -142,11 +139,7 @@
         });
       },
       showcomment(){
-          if(this.can_comment){
-              this.$emit('event1',this.show)
-          }else{
-              this.$message({message: '您没有这个权限哦', type: 'warning'})
-          }
+          this.$emit('event1',this.show)
       },
         judgeShare(){
           if(this.can_share){
