@@ -44,7 +44,7 @@
           </div>
           <div class="message">
             <p>团队名称：{{this.teaminfo.name}}</p>
-            <p>创建者：{{this.teaminfo.creator}}</p>
+            <p>创建者：{{this.teaminfo.creator_name}}</p>
             <p>创建日期：{{time(this.teaminfo.create_time)}}</p>
             <p>成员人数：{{this.teaminfo.members.length}}</p>
             <p>拥有文件：{{this.teaminfo.teamfiles.length}}</p>
@@ -320,7 +320,7 @@
 <style lang="less" scoped>
 .info {
   height: 50%;
-  width: 99.7%;
+  width: 100%;
   position: relative;
   .avatar_box {
     height: 180px;
@@ -363,10 +363,10 @@
 }
 
 .table {
-  height: 35%;
-  width: 80%;
-  position: absolute;
-  top: 62%;
+  height: 45%;
+  width: 100%;
+  position: relative;
+  top: 5%;
   .usertable{
     width: 98%;
     height: 100%;
