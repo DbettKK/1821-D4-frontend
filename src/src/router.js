@@ -19,7 +19,7 @@ import Preview from './components/edit/preview.vue'
 import message_favorite from './components/user/message_favorite.vue'
 import message_comments from './components/user/message_comments.vue'
 import message_team from './components/user/message_team.vue'
-
+import N404 from './components/NotFoundComponent.vue'
 
 Vue.use(Router)
 /*
@@ -100,6 +100,16 @@ const router = new Router({
       component:Preview,
       name:'Preview',
       meta:{title:'模板预览'}
+    },
+    {
+      path: '/404',
+      name: '404',
+      component:N404,
+      meta:{title: '乌乌，页面丢失了',},
+    },
+    {
+      path: '*',    // 此处需特别注意至于最底部
+      redirect: '/404'
     }
   ],
   mode:"history"
