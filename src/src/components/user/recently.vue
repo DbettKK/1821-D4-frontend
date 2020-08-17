@@ -118,6 +118,7 @@
                 v-clipboard:success="onCopy"
                 v-clipboard:error="onError">复制链接</el-button>
             </el-form-item>
+            
             <el-form-item label="权限" required>
               <el-select v-model="privilege" placeholder="请选择">
                 <el-option label="仅查看" value="1"></el-option>
@@ -140,6 +141,7 @@ export default {
   inject: ['reload'],
   data() {
     return {
+    //  <!--这里写死会出问题-->
       baseURL: 'http://localhost:8080/edit/',
       shareURL: '',
       dialogVisible: false,
