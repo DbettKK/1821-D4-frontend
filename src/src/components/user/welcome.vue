@@ -2,12 +2,12 @@
 
     <el-container class="Info_Container">
         <el-header>
-        <el-row  class="row-bg" gutter="10">
+        <el-row  class="row-bg" :gutter="10">
         <el-col :span="3"><div class="grid-content bg-purple">
             <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="64"></el-avatar>
             </div>
         </el-col>
-        <el-col span="4">
+        <el-col :span="4">
             <br>
             <p style="text-align:center" font-size="xx-large"><strong>{{username}}</strong></p>
         </el-col>
@@ -28,19 +28,19 @@
         <el-divider></el-divider>
         <el-container>
         <el-main>
-            <el-row gutter="20">
-                <el-col span="10">
+            <el-row :gutter="20">
+                <el-col :span="10">
                     <div style="margin-top:5px">ID: {{id}}</div>
                 </el-col>
-                <el-col span="10">
+                <el-col :span="10">
                     <div style="margin-top:5px" >角色：<el-tag type="worning">注册用户</el-tag></div>
                 </el-col>
             </el-row>
-            <el-row gutter="20">
-                <el-col span="10">
+            <el-row :gutter="20">
+                <el-col :span="10">
                     <div style="margin-top:5px">手机号：{{phone_num}}</div>
                 </el-col>
-                <el-col span="10">
+                <el-col :span="10">
                     <div style="margin-top:5px">邮箱：{{email}}</div>
                 </el-col>
             </el-row>
