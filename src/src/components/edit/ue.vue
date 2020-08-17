@@ -13,8 +13,11 @@
             @imgAdd="$imgAdd"
             placeholder="请输入文档内容..."
             :boxShadow="true"
+            :subfield="can_edit"
+            defaultOpen="preview"
             style="z-index:1;border: 1px solid #d9d9d9;height:85vh"
             v-model="content"
+            :toolbarsFlag="can_edit"
             :toolbars="toolbars"/>
         </el-main>
         <!-- el-footer>
