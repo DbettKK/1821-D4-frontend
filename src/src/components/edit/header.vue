@@ -1,7 +1,7 @@
 <template>
     <el-row type="flex" class="row-bg">
         <!-- 居中 -->
-        <el-col :span="3"><div class="grid-content bg-purple">金刚石文档</div></el-col>
+        <el-col :span="3"><div class="grid-content bg-purple fonttitle">金刚石文档</div></el-col>
         <el-col :span="6">
             <div class="grid-content bg-purple">
                 <el-breadcrumb separator="/" >
@@ -44,7 +44,7 @@
         <el-col :span="2">
           <div class="grid-content bg-purple">
           <el-dropdown>
-            <el-avatar> user </el-avatar>
+            <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="40"></el-avatar>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item><router-link to="/changeinfo" class="a">信息修改</router-link></el-dropdown-item>
                 <el-dropdown-item><div @click="exit">退出登录</div></el-dropdown-item>
@@ -293,10 +293,12 @@
   .grid-content {
     border-radius: 4px;
     min-height: 36px;
-    font-size: 15px;
     display:flex;
     justify-content:center;
     align-items:center;
+  }
+  .fonttitle{
+    font-size: 20px;
   }
   .grid-content2{
     border-radius: 4px;

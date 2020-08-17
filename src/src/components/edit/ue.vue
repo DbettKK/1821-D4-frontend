@@ -38,10 +38,12 @@
                   </div>
                 </div>
                 <div class="bottom clearfix">
-                  <span style="font-size: 13px; color: #999;margin-right: 30px;">
+                  <span style="font-size: 13px; color: #999;margin-right: 15px;">
                     评论用户：{{item.username}}
                   </span>
-                  <span style="font-size: 13px; color: #999;">评论时间：{{time(item.create_time)}}</span>
+                  <span style="font-size: 13px; color: #999;margin-right: 15px;">评论时间：{{time(item.create_time)}}</span>
+                  <span style="font-size: 13px; color: #999;margin-right: 5px;" @click="agree(item.id)"><i class="el-icon-good"></i>{{item.agree_set.length}}</span>
+                  <span style="font-size: 13px; color: #999;"><i class="el-icon-bad" @click="disagree(item.id)"></i>{{item.disagree_set.length}}</span>
                 </div>
               </div>
             </el-card>
@@ -70,6 +72,7 @@
 <script>
   import Header from './header.vue' 
   import Footer from './footer.vue'
+  import '@/assets/iconfont/iconfont.css'
   import Vue from 'vue'
   export default {
     name: 'FuncFormsEdit',
@@ -141,6 +144,38 @@
         this.doctime = a.toString().substr(0, 10)
         return this.doctime
       },
+      agree(id){
+        Vue.axios.get(
+          "http://175.24.121.113:8000/myapp/comment/agree/",
+          {
+            headers: {token: window.sessionStorage.getItem('token')},
+            
+            params:{
+              comment_id:id
+            }
+          }).then((res)=>  {
+            console.log(res)
+            this.get_comment();
+          }).catch(res => {
+              console.log(res);
+        });
+      },
+      disagree(id){
+        Vue.axios.get(
+          "http://175.24.121.113:8000/myapp/comment/disagree/",
+          {
+            headers: {token: window.sessionStorage.getItem('token')},
+            
+            params:{
+              comment_id:id
+            }
+          }).then((res)=>  {
+            console.log(res)
+            this.get_comment();
+          }).catch(res => {
+              console.log(res);
+        });
+      },
       add_comment(){
         this.CommentdialogFormVisible = false;
         Vue.axios.post(
@@ -150,16 +185,14 @@
           }),{headers: {token: window.sessionStorage.getItem('token')}
           }).then((res)=>  {
               console.log(res);
-              this.comments.push({id:res.data.data.id,username:res.data.data.username,content:this.comment})
-              this.$notify({
-                title: '成功',
+              this.$message({
                 message: '您已成功提交！',
                 type: 'success'
               });
+              this.get_comment();
           }).catch(res => {
               console.log(res);
         });
-        this.get_comment();
       },
       get_comment(){
         Vue.axios.get(
