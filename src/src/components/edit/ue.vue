@@ -268,6 +268,7 @@
           this.$http.get('http://175.24.121.113:8000/myapp/file/edit/',
                   {headers: {token: window.sessionStorage.getItem('token')},
                     params: {file_id: this.file_id}});
+          console.log('quanxian'+this.privilege)
           if (this.privilege >= 3){
             this.can_comment=true;
             if (this.privilege >= 4){
