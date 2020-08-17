@@ -11,10 +11,11 @@
             <el-button class="delfile" type="danger" @click.native="dismissTeam" v-else>
                 <i class="el-icon-delete-solid"></i><span>解散团队</span>
             </el-button>
+                   </el-header>
 <!--          <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="dialog=true">-->
 <!--            <i class="el-icon-delete-solid bt">退出团队</i>-->
 <!--          </el-card>-->
-        </el-header>
+ 
 <!--        <el-dialog title="是否退出团队" :visible.sync="dialog" width="30%">-->
 <!--          <div slot="footer" class="dialog-footer">-->
 <!--            <el-button @click="dialog=false">取 消</el-button>-->
@@ -54,12 +55,15 @@ export default {
       team_id: null,
       id: null,
       //dialog: false,
-      activeIndex:'2'
+      activeIndex:'2',
+      
     };
   },
   created() {
         var that=this;
     this.team_id=this.$route.params.id.toString();
+     this.getUserInfo();
+     this.getTeamInfo();
     this.$http.get('http://175.24.121.113:8000/myapp/team/check/creator/',
         {headers: {token: window.sessionStorage.getItem('token')},
         params: {team_id: that.team_id}}
@@ -69,6 +73,19 @@ export default {
         that.is_creator=false;
     });
   },
+ watch: {//监听下个访问的东西是不是还是teamspace，是则重新获取
+        '$route' (to, from) {
+            if(to.name === 'Teamspace'){
+                this.getDoclist();
+                this.getUserInfo();
+                 this.getTeamInfo();
+            }
+            if(from.name==='post')//纯粹为了避免unused
+            {
+                this.five++;
+            }
+        }
+    },
   methods: {
       toTeam(){
           this.team_id = this.$route.params.id;
@@ -132,7 +149,39 @@ export default {
       });
       //this.dialog=false;
 
-    }
+    },
+      getUserInfo() {
+            this.$http.get(
+                'http://175.24.121.113:8000/myapp/user/info/',
+                {headers: {token: window.sessionStorage.getItem("token")}}
+            ).then(res=>{
+                this.userinfo.username=res.data.data.username;
+                this.userinfo.phone_num=res.data.data.phone_num;
+                this.userinfo.id=res.data.data.id;
+                this.userinfo.email=res.data.data.email;
+                console.log(res);
+            }).catch(function(error){
+                console.log(error);
+            })
+        },
+    getTeamInfo()
+    {
+        var that=this;
+         this.$http.get(
+                  'http://175.24.121.113:8000/myapp/team/get/', {
+              headers: {'token': window.sessionStorage.getItem('token')},
+              params:{team_id: that.$route.params.id.toString()}}
+            ).then(res=>{
+                this.teaminfo.team_id=res.data.data.id;
+                this.teaminfo.name=res.data.data.name;
+                this.teaminfo.creator=res.data.data.creator;
+                this.teaminfo.members=res.data.data.members;
+                console.log(res);
+
+            }).catch(function(error){
+                console.log(error);
+            })
+    },
   },
   computed: {
   }

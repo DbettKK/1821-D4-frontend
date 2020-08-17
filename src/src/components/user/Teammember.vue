@@ -20,7 +20,7 @@
             <el-menu-item index="1" @click.native="toTeam()">团队文档</el-menu-item>
             <el-menu-item index="2" @click="manage_member">团队信息</el-menu-item>
           </el-menu>
-            <el-button class="emptytrash" type="primary" @click.native="addmember" plain>
+            <el-button class="emptytrash" type="primary" @click.native="addmember" >
                 <i class="el-icon-circle-plus-outline"></i><span>添加成员</span>
             </el-button>
           <el-button class="delfile" type="danger" @click.native="exitTeam" v-if="!is_creator">
@@ -147,21 +147,60 @@
             members:[]
 
         },
-        iscreator:false,
+               userinfo: {
+                id: "",
+                username: "",
+                email: "",
+                phone_num: "",
+            },
+        is_creator:false,
       }
     },
     created() {
-
+                var that=this;
+    this.team_id=this.$route.params.id.toString();
+     this.getUserInfo();
+     this.getTeamInfo();
+        this.getmembers();
+    this.$http.get('http://175.24.121.113:8000/myapp/team/check/creator/',
+        {headers: {token: window.sessionStorage.getItem('token')},
+        params: {team_id: that.team_id}}
+    ).then(()=>{
+        that.is_creator=true;
+    }).catch(()=>{
+        that.is_creator=false;
+    });
+    /*
+        var that = this;
       this.getmembers();
      this.getUserInfo();
      this.getTeamInfo();
+      this.$http.get('http://175.24.121.113:8000/myapp/team/check/creator/',
+        {headers: {token: window.sessionStorage.getItem('token')},
+        params: {team_id: that.team_id}}
+    ).then(()=>{
+        that.is_creator=true;
+    }).catch(()=>{
+        that.is_creator=false;
+    });
+    */
     },
         watch: {//监听下个访问的东西是不是还是teamspace，是则重新获取
+
         '$route' (to, from) {
-            if(to.name === 'Teamspace'){
+            if(to.name === 'Teamsmember'){
+                        var that = this;
                 this.getDoclist();
                 this.getUserInfo();
                  this.getTeamInfo();
+                  this.$http.get('http://175.24.121.113:8000/myapp/team/check/creator/',
+            {headers: {token: window.sessionStorage.getItem('token')},
+            params: {team_id: that.team_id}}
+        ).then(()=>{
+            that.is_creator=true;
+         }).catch(()=>{
+             that.is_creator=false;
+               });
             }
             if(from.name==='post')//纯粹为了避免unused
             {
@@ -410,6 +449,61 @@
                 console.log(error);
             })
     },
+        manage_member()
+    {
+        this.team_id=this.$route.params.id;
+        this.$router.push('/Teammember/'+this.team_id)
+    },
+       exitTeam(){
+        this.$confirm('确定退出团队吗', '退出团队', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+        }).then(() => {
+            this.submitexit();
+        });
+      },
+      dismissTeam(){
+          this.$confirm('确定解散团队吗', '解散团队', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+          }).then(() => {
+              this.submitDismiss();
+          });
+      },
+      submitDismiss() {
+          var that = this;
+          this.$http.get('http://175.24.121.113:8000/myapp/team/dismiss/',
+              {headers: {token: window.sessionStorage.getItem("token")}, params: {team_id: that.team_id}}
+          ).then(() => {
+              that.$message({
+                  message: '成功解散团队',
+                  type: 'success'
+              });
+              that.reload();
+              that.$router.push("/");
+          }).catch(function (error) {
+              that.$message.error(error.response.data.info);
+          });
+          //this.dialog=false;
+      },
+    submitexit(){
+      var that = this;
+      this.$http.get('http://175.24.121.113:8000/myapp/team/exit/',
+          {headers: {token: window.sessionStorage.getItem("token")}, params: {team_id: that.team_id}}
+      ).then(() => {
+          that.$message({
+              message: '成功退出团队',
+              type: 'success'
+          });
+          that.reload();
+          that.$router.push("/");
+      }).catch(function (error) {
+          that.$message.error(error.response.data.info);
+      });
+      //this.dialog=false;
+    }
     }
   }
 </script>
@@ -475,7 +569,8 @@
     height: 40px;
     width: 130px;
     margin-top: 20px;
-    margin-left:600px;
+    position:absolute;
+    margin-left:700px;
 }
 .delfile{
  height: 40px;
