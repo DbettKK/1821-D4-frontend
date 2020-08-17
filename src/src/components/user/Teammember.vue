@@ -20,16 +20,35 @@
             <el-menu-item index="1" @click.native="toTeam()">团队文档</el-menu-item>
             <el-menu-item index="2" @click="manage_member">团队信息</el-menu-item>
           </el-menu>
-            <el-button class="emptytrash" type="primary" @click.native="addmember" >
-                <i class="el-icon-circle-plus-outline"></i><span>添加成员</span>
+            <el-button class="emptytrash" type="primary" @click.native="invite_dialogVisible = true" >
+                <i class="el-icon-circle-plus-outline"></i><span>邀请成员</span>
             </el-button>
+         <!--     <el-button class="invite" type="primary" @click="dialogVisible = true">邀请成员</el-button>-->
           <el-button class="delfile" type="danger" @click.native="exitTeam" v-if="!is_creator">
                 <i class="el-icon-delete-solid"></i><span>退出团队</span>
             </el-button>
             <el-button class="delfile" type="danger" @click.native="dismissTeam" v-else>
                 <i class="el-icon-delete-solid"></i><span>解散团队</span>
             </el-button>
+            <!--邀请-->
           </el-header>
+                    <el-dialog
+                title="提示"
+                :visible.sync="invite_dialogVisible"
+                width="30%">
+                <div style="margin-bottom: 20px">
+                    <span>被邀请人的ID:</span>
+                </div>
+                <el-form ref="inviteFormRef" :model="inviteForm" label-width="0px" class="invite_form">
+                    <el-form-item prop="id">
+                        <el-input placeholder="ID:" v-model="inviteForm.id"></el-input>
+                    </el-form-item>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click.native="invite()">确 定</el-button>
+                </span>
+            </el-dialog>
           <!--
           <el-header>
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
@@ -154,6 +173,10 @@
                 phone_num: "",
             },
         is_creator:false,
+        inviteForm: {
+        id: ''
+      },
+      invite_dialogVisible: false
       }
     },
     created() {
@@ -170,20 +193,7 @@
     }).catch(()=>{
         that.is_creator=false;
     });
-    /*
-        var that = this;
-      this.getmembers();
-     this.getUserInfo();
-     this.getTeamInfo();
-      this.$http.get('http://175.24.121.113:8000/myapp/team/check/creator/',
-        {headers: {token: window.sessionStorage.getItem('token')},
-        params: {team_id: that.team_id}}
-    ).then(()=>{
-        that.is_creator=true;
-    }).catch(()=>{
-        that.is_creator=false;
-    });
-    */
+
     },
         watch: {//监听下个访问的东西是不是还是teamspace，是则重新获取
 
@@ -503,6 +513,22 @@
           that.$message.error(error.response.data.info);
       });
       //this.dialog=false;
+    },
+       invite() {
+        var that = this;
+        this.$http.post('http://175.24.121.113:8000/myapp/team/invite/', this.$qs.stringify({
+                team_id: that.team_id, member_id: that.inviteForm.id
+              }), {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(() => {
+            that.$message({
+                message: '邀请信息发送成功',
+                type: 'success'
+            });
+            that.reload();
+        }).catch(function (error) {
+            that.$message.error(error.response.data.info);
+        });
+        that.dialogVisible = false;
     }
     }
   }
