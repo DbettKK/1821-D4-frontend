@@ -13,7 +13,6 @@ import Favorite from './components/user/favorite.vue'
 import Trashbin from './components/user/trashbin.vue'
 import ShowUserInfo from './components/user/showUserInfo.vue'
 import TeamSpace from './components/user/TeamSpace.vue'
-import Teammessage from './components/user/Teammessage.vue'
 import Teammember from './components/user/Teammember.vue'
 import Preview from './components/edit/preview.vue'
 import message_favorite from './components/user/message_favorite.vue'
@@ -73,7 +72,6 @@ const router = new Router({
         // {path: '/changeInfo', component: User, name:'ChangeInfo',meta:{title:'金刚石文档编辑器:个人信息'}},
          //name:'Teamspace',meta:{title:'团队空间'} }
         { path:'/TeamSpace/:id', component:TeamSpace, name:'Teamspace',meta:{title:'团队空间'} },
-        { path:'/Teammessage/:id', component:Teammessage, name:'Teammessage',meta:{title:'团队信息'} },
         { path:'/Teammember/:id',component:Teammember,name:'Teammember',meta:{title:'团队成员'}},
         {path: '/changeInfo', component: ChangeUserInfo, name:'ChangeInfo',meta:{title:'金刚石文档编辑器:个人信息'}},
         {path: '/showUserInfo', component: ShowUserInfo, name:'ShowUserInfo',meta:{title:'金刚石文档编辑器:个人信息'}},
