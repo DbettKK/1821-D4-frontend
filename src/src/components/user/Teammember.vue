@@ -96,7 +96,7 @@
                 </el-tooltip>
             </template>
             </el-table-column>
-            <el-table-column fixed="right" width="50">
+            <el-table-column v-if="is_creator" fixed="right" width="50">
               <template slot-scope="scope">
                 <el-tooltip class="item" effect="dark" content="移除用户" placement="bottom-end">
                   <el-button @click.native="DelMember(scope.row.member,scope.row.team)" type="text" style="color: #999" size="mini">
