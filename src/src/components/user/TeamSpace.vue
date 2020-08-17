@@ -1,17 +1,19 @@
 <template>
     <el-container style="height: 100%; width: 100%; border: 0px">
-  <el-header style="text-align: left;height:44px font-size: 10px; justify-content: space-between; margin-top:0px;">
-      <p>{{teaminfo.name}}</p>
+  <el-header style="text-align: left; font-size: 20px; display: flex; justify-content: space-between;">
+            <span style="color: grey;font-size: 30px">{{teaminfo.name}}</span>
           </el-header> 
         <el-header style="text-align: left; font-size: 20px; display: flex; justify-content: space-between; margin-top:0px;">
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
             <el-menu-item index="1" @click="toTeam()">团队文档</el-menu-item>
-            <el-menu-item index="2" @click="Teammessage()">团队信息</el-menu-item>
+            <el-menu-item index="2" @click="manage_member">团队信息</el-menu-item>
           </el-menu>
           <!--创建者本人才能看到按钮-->
+          <!--
           <el-button class="manage_member" type="info" @click.native="manage_member" plain v-if="userinfo.id==teaminfo.creator" >
             <i class="el-icon-setting"></i><span>成员管理</span>
           </el-button>
+          -->
           <!--
           <el-button class="createfile" type="info" @click.native="createFile" plain>
             <i class="el-icon-circle-plus"></i><span>新建文档</span>
@@ -239,6 +241,8 @@ export default {
         '$route' (to, from) {
             if(to.name === 'Teamspace'){
                 this.getDoclist();
+                this.getUserInfo();
+                 this.getTeamInfo();
             }
             if(from.name==='post')//纯粹为了避免unused
             {
