@@ -366,8 +366,16 @@ export default {
           this.reload();
     },
     delfile(file_id) {
-      this.del = file_id;
-      this.dialog1 = true;
+   //   this.del = file_id;
+      
+    //  this.dialog1 = true;
+      this.$confirm('确定删除此文档吗?', '文档创建', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'success'
+        }).then(() => {
+          this.deletefile(file_id);
+        });
     },
     deletefile(file_id){
           this.$http.get('http://175.24.121.113:8000/myapp/file/realdelete/',
