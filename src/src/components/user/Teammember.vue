@@ -319,12 +319,10 @@
 
 <style lang="less" scoped>
 .info {
-  height: 50%;
+  height: 350px;
   width: 100%;
   position: relative;
-  .avatar_box {
-    height: 180px;
-    width: 180px;
+  .avatar_box { 
     border: 1px solid #eee;
     border-radius: 50%;
     padding: 10px;
@@ -344,8 +342,8 @@
 
   .changeteampic {
     position: absolute;
-    left: 8%;
-    top: 77%;
+    left: 8.7%;
+    top: 80%;
   }
 
   .invite {
@@ -356,17 +354,16 @@
 
   .message {
     position:absolute;
-    left: 25%;
-    top: 10%;
+    left: 28%;
+    top: 12%;
     color: rgb(100, 100, 100);
   }
 }
 
 .table {
-  height: 45%;
   width: 100%;
   position: relative;
-  top: 5%;
+  top: 20px;
   .usertable{
     width: 98%;
     height: 100%;
