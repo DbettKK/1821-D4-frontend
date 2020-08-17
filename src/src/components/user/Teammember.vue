@@ -1,12 +1,50 @@
 <template>
     <el-container style="height: 100%; width: 100%; border: 0px">
+        <!--
         <el-header style="text-align: left; font-size: 20px; display: flex; justify-content: space-between;">
             <span style="color: grey;font-size: 30px">成员管理</span>
             
             <el-button class="emptytrash" type="info" @click.native="addmember" plain>
                 <i class="el-icon-circle-plus-outline"></i><span>添加成员</span>
             </el-button>
-            
+                    </el-header>
+
+                    -->
+       
+
+                <el-header style="text-align: left; font-size: 20px; display: flex; justify-content: space-between;">
+            <span style="color: grey;font-size: 30px">{{teaminfo.name}}</span>
+          </el-header> 
+          <el-header style="text-align: left; font-size: 20px; display: flex; justify-content: space-between; margin-top:0px;">
+          <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
+            <el-menu-item index="1" @click.native="toTeam()">团队文档</el-menu-item>
+            <el-menu-item index="2" @click="manage_member">团队信息</el-menu-item>
+          </el-menu>
+            <el-button class="emptytrash" type="primary" @click.native="addmember" plain>
+                <i class="el-icon-circle-plus-outline"></i><span>添加成员</span>
+            </el-button>
+          <el-button class="delfile" type="danger" @click.native="exitTeam" v-if="!is_creator">
+                <i class="el-icon-delete-solid"></i><span>退出团队</span>
+            </el-button>
+            <el-button class="delfile" type="danger" @click.native="dismissTeam" v-else>
+                <i class="el-icon-delete-solid"></i><span>解散团队</span>
+            </el-button>
+          </el-header>
+          <!--
+          <el-header>
+          <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
+            <el-menu-item index="1" @click="toTeam">团队文档</el-menu-item>
+            <el-menu-item index="2" @click="Teammessage">团队信息</el-menu-item>
+          </el-menu>
+            <el-button class="delfile" type="danger" @click.native="exitTeam" v-if="!is_creator">
+                <i class="el-icon-delete-solid"></i><span>退出团队</span>
+            </el-button>
+            <el-button class="delfile" type="danger" @click.native="dismissTeam" v-else>
+                <i class="el-icon-delete-solid"></i><span>解散团队</span>
+            </el-button>
+                   </el-header>
+                   -->
+
 <!--          <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">-->
 <!--            <el-menu-item index="1" @click="recently">最近使用</el-menu-item>-->
 <!--            <el-menu-item index="2" @click="myproduction">我创建的</el-menu-item>-->
@@ -16,7 +54,7 @@
 <!--          <el-card :body-style="{ padding: '0px' }" shadow="hover" class="newfile" @click.native="createFile">-->
 <!--            <i class="el-icon-circle-plus bt">新建文档</i>-->
 <!--          </el-card>-->
-        </el-header>
+
 <!--        <el-dialog title="是否新建私人文档" :visible.sync="dialog1" width="30%">-->
 <!--          <div slot="footer" class="dialog-footer">-->
 <!--            <el-button @click="dialog1=false">取 消</el-button>-->
@@ -99,14 +137,43 @@
                 team:''
 
             },
-        ]
+        ],
+           teaminfo:
+        {
+            id:"",
+            name:"",
+            create_time:"",
+            creator:"",
+            members:[]
+
+        },
+        iscreator:false,
       }
     },
     created() {
 
       this.getmembers();
+     this.getUserInfo();
+     this.getTeamInfo();
+    },
+        watch: {//监听下个访问的东西是不是还是teamspace，是则重新获取
+        '$route' (to, from) {
+            if(to.name === 'Teamspace'){
+                this.getDoclist();
+                this.getUserInfo();
+                 this.getTeamInfo();
+            }
+            if(from.name==='post')//纯粹为了避免unused
+            {
+                this.five++;
+            }
+        }
     },
     methods:{
+             toTeam(){
+          this.team_id = this.$route.params.id;
+          this.$router.push("/TeamSpace/"+this.team_id);
+      },
       getTabledata() {
       var that = this;
       Vue.axios.get(
@@ -311,6 +378,38 @@
       this.getTabledata();
       this.reload();
     },
+     getUserInfo() {
+            this.$http.get(
+                'http://175.24.121.113:8000/myapp/user/info/',
+                {headers: {token: window.sessionStorage.getItem("token")}}
+            ).then(res=>{
+                this.userinfo.username=res.data.data.username;
+                this.userinfo.phone_num=res.data.data.phone_num;
+                this.userinfo.id=res.data.data.id;
+                this.userinfo.email=res.data.data.email;
+                console.log(res);
+            }).catch(function(error){
+                console.log(error);
+            })
+        },
+    getTeamInfo()
+    {
+        var that=this;
+         this.$http.get(
+                  'http://175.24.121.113:8000/myapp/team/get/', {
+              headers: {'token': window.sessionStorage.getItem('token')},
+              params:{team_id: that.$route.params.id.toString()}}
+            ).then(res=>{
+                this.teaminfo.team_id=res.data.data.id;
+                this.teaminfo.name=res.data.data.name;
+                this.teaminfo.creator=res.data.data.creator;
+                this.teaminfo.members=res.data.data.members;
+                console.log(res);
+
+            }).catch(function(error){
+                console.log(error);
+            })
+    },
     }
   }
 </script>
@@ -376,6 +475,12 @@
     height: 40px;
     width: 130px;
     margin-top: 20px;
-    margin-right: 80px;
+    margin-left:600px;
+}
+.delfile{
+ height: 40px;
+ width: 130px;
+ margin-top: 20px;
+ margin-right:20px;
 }
 </style>
