@@ -17,6 +17,9 @@ import 'element-ui/lib/theme-chalk/index.css';
 //import 'quill/dist/quill.bubble.css'
 import qs from 'qs';
 
+//复制到粘贴板插件
+import VueClipboard from 'vue-clipboard2'
+
 axios.defaults.baseURL = 'http://175.24.121.113:8000/myapp/register'
 //axios请求拦截
 axios.interceptors.request.use(config => {
@@ -32,6 +35,8 @@ Vue.use(VueAxios, axios)
 Vue.use(Vuex)
 Vue.use(mavonEditor);
 //Vue.use(VueQuillEditor, /* { default global options } */)
+
+Vue.use(VueClipboard)
 
 Vue.config.productionTip = false
 

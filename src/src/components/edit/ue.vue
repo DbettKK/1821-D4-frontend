@@ -1,6 +1,6 @@
 <template>
   <div class="background" >
-    <Header :can_comment="can_comment" :can_edit="can_edit" :can_share="can_share" :url="url" :title="title" :file_id="parseInt(file_id)" :content="content" :collect="collect" v-bind:team_belong="team_belong" @event1="change($event)" ></Header>
+    <Header :can_edit="can_edit" :can_share="can_share" :url="url" :title="title" :file_id="parseInt(file_id)" :content="content" :collect="collect" v-bind:team_belong="team_belong" @event1="change($event)" ></Header>
     <el-card style="height: 780px;">
       <el-container>
         <el-header style="height: 50px">
@@ -138,7 +138,10 @@
     },
     methods:{
       L_comment(){
-        this.CommentdialogFormVisible=true;
+        if(this.can_comment==true)
+          this.CommentdialogFormVisible=true;
+        else
+          this.$message({message: '您没有这个权限哦', type: 'warning'})
       },
       time(a) {
         this.doctime = a.toString().substr(0, 10)
