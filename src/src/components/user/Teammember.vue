@@ -54,7 +54,7 @@
           </el-button>
         </el-card>
         <el-card class="table" :body-style="{ padding: '0px' }">
-        <el-table :data="members" class="usertable" :default-sort = "{prop: 'member_name', order: 'descending'}" :row-style="{height: '35px'}">
+        <el-table :data="members" height="300px" class="usertable" :default-sort = "{prop: 'member_name', order: 'descending'}" :row-style="{height: '35px'}">
             <el-table-column prop="member_name" label="用户名称" @contextmenu.prevent=""></el-table-column>
             <el-table-column prop="member_phone_num" label="手机号码" width="240px"></el-table-column>
             <el-table-column prop="member_email" label="邮箱地址" width='240px'></el-table-column>
@@ -322,13 +322,11 @@
   height: 50%;
   width: 100%;
   position: relative;
-  .avatar_box {
-    height: 180px;
-    width: 180px;
+  .avatar_box { 
     border: 1px solid #eee;
     border-radius: 50%;
     padding: 10px;
-    box-shadow: 0 0 10px #ddd;
+    box-shadow: 0 0 0px #ddd;
     position: absolute;
     left: 5%;
     top: 10%;
@@ -344,8 +342,8 @@
 
   .changeteampic {
     position: absolute;
-    left: 8%;
-    top: 77%;
+    left: 8.7%;
+    top: 80%;
   }
 
   .invite {
@@ -356,7 +354,7 @@
 
   .message {
     position:absolute;
-    left: 25%;
+    left: 30%;
     top: 10%;
     color: rgb(100, 100, 100);
   }
