@@ -42,7 +42,7 @@
                   </div>
                   <div class="middle">
                       <span style="font-size: 13px; margin-right: 15px;">{{item.msg_content}}</span>
-                      <el-button @click="jumpto(item.msg_type_from, item.id)" style="float:right">查看</el-button>
+                      <el-button @click.stop="jumpto(item.msg_type_from, item.id)" style="float:right">查看</el-button>
                   </div>
                   <div class="bottom clearfix">
                     <time class="time" style="margin-right: 20px;">{{item.msg_time}}</time>
