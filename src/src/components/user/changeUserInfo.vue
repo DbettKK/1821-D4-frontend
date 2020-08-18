@@ -2,7 +2,7 @@
     <el-container class="Info_Container">
         <el-header>
             <span><i class="el-icon-s-custom" style="font-size: 20px"></i >&nbsp;
-                <b style="font-size: 20px">个人信息修改</b></span>
+                <b style="font-size: 20px">密保信息修改</b></span>
         </el-header>
         <el-container class="Inner_container">
             <el-aside width="30%">
@@ -13,23 +13,20 @@
             <el-divider direction="vertical"></el-divider>
             <el-main>
                 <el-form ref="form" :model="form" label-width="80px">
+                    <el-form-item label="ID">
+                        <el-input v-model="form.ID" prefix-icon="el-icon-user" :disabled="true"></el-input>
+                    </el-form-item>
                     <el-form-item label="用户">
                         <el-input v-model="form.name" prefix-icon="el-icon-user-solid" disabled></el-input>
                     </el-form-item>
-                    <el-form-item label="密码">
+                    <el-form-item label="新密码">
                         <el-input v-model="form.password" placeholder="请输入新密码" prefix-icon="el-icon-key" type=password></el-input>
-                    </el-form-item>
-                    <el-form-item label="手机">
-                        <el-input v-model="form.phone" prefix-icon="el-icon-phone" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="邮箱">
                         <el-input v-model="form.email" prefix-icon="el-icon-s-promotion" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="权限">
                         <el-input v-model="form.type" prefix-icon="el-icon-unlock" :disabled="true"></el-input>
-                    </el-form-item>
-                    <el-form-item label="ID">
-                        <el-input v-model="form.ID" prefix-icon="el-icon-user" :disabled="true"></el-input>
                     </el-form-item>
                     <div>
                         <el-button type="primary" round @click="dialogFormVisible=true">确认修改</el-button>
@@ -158,7 +155,7 @@ export default {
 
 <style lang="less" scoped>
     .Info_Container{
-        background-color:#F2F6FC;
+        //background-color:#F2F6FC;
         text-align: center;
         height:100%;
         padding-left: 20%;

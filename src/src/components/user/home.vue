@@ -17,7 +17,7 @@
                     <el-dropdown-item v-if="isLogin && userinfo.username">你好，{{userinfo.username}}</el-dropdown-item>
                     <el-dropdown-item v-else @click.native="logout">请登录</el-dropdown-item>
                     <el-dropdown-item @click.native="changeInfo" v-if="isLogin && userinfo.username">
-                        修改密码及个人信息
+                        修改密码及绑定邮箱
                     </el-dropdown-item>
                     <el-dropdown-item v-if="isLogin && userinfo.username" @click.native="dialog=true">加入团队</el-dropdown-item>
 
