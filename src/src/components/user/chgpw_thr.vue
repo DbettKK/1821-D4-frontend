@@ -65,7 +65,7 @@ export default {
             })
         },
         ChangeInfocheck() {
-            if (this.pemail !== (this.Form.email !== null ? this.Form.email : this.userdata.email)) {
+            if (this.pemail !== (this.Form.email ? this.Form.email : this.userdata.email)) {
                 this.$message({
                     message: '两次输入的邮箱不一致！',
                     type: 'warning'
@@ -79,7 +79,7 @@ export default {
                 });
                 this.reload();
             }
-            if (this.pemail == (this.Form.email !== null ? this.Form.email : this.userdata.email) && this.ppassword == this.Form.password) {
+            if (this.pemail == (this.Form.email ? this.Form.email : this.userdata.email) && this.ppassword == this.Form.password) {
                 this.ChangeInfo();
             }
         },
