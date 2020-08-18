@@ -63,11 +63,14 @@ export default {
                     headers: {
                         'token': this.token
                     }
-                }).then(res => {
-                    console.log(res);
+                }).then(() => {
+                this.$message({
+                    message: '旧密码正确',
+                    type: 'success'
+                })
                     this.secstep();
                 }).catch(res => {
-                    console.log(res);
+                    this.$message.error(res.response.data.info)
             });
         },
         secstep() {
