@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import Login from './components/user/login.vue'
 import Register from './components/user/register.vue'
 import FindPassword from './components/user/FindPassword.vue'
-import ChangeUserInfo from './components/user/changeUserInfo.vue'
 import Home from './components/user/home.vue'
 import Welcome from './components/user/welcome.vue'
 import Ue from './components/edit/ue.vue'
@@ -77,7 +76,6 @@ const router = new Router({
          //name:'Teamspace',meta:{title:'团队空间'} }
         { path:'/TeamSpace/:id', component:TeamSpace, name:'Teamspace',meta:{title:'团队空间'} },
         { path:'/Teammember/:id',component:Teammember,name:'Teammember',meta:{title:'团队成员'}},
-        {path: '/changeInfo', component: ChangeUserInfo, name:'ChangeInfo',meta:{title:'金刚石文档编辑器:个人信息'}},
         {path: '/checkpassword', component: checkpassword, name:'checkpassword', meta:{title:'金刚石文档编辑器:验证密码'}},
         {path: '/newpassword', component: newpassword, name:'newpassword', meta:{title:'金刚石文档编辑器:新密码'}},
         {path: '/changepassword', component: changepassword, name:'changepassword', meta:{title:'金刚石文档编辑器:修改密码'}},
