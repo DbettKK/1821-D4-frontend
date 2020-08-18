@@ -103,10 +103,10 @@
 </template>
 
 <script>
-import Footer from './footer.vue'
+//import Footer from './footer.vue'
 export default {
     components:{
-        Footer
+        //Footer
     },
     inject: ['reload'],
     data() {
