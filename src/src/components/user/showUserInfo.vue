@@ -3,6 +3,11 @@
     <el-container class="Info_Container">
         <el-header>
             <el-card class="top" :body-style="{ padding: '0px' }">
+                
+                <div class="background">
+                    <img src="../../assets/toppic.jpg" width="100%" height="100%" alt="" />
+                </div>
+                
                 <div class="topcard_1">
                     <el-avatar :size="50" :src="userdata.avatar" style="margin-right: 20px"></el-avatar>
                     <div>
@@ -13,15 +18,15 @@
             </el-card>
             <el-card class="middle">
                 <div class="tips1">
-                    <span style="color: rgb(100, 100, 100)"><i class="el-icon-s-order"></i> 最近使用:</span>
+                    <span style="color: rgb(100, 100, 100)"><i class="el-icon-s-order" style="color: #6dc9fd"></i> 最近使用:</span>
                     <span style="margin-left: 20px; margin-right: 60px">{{recently}}</span>
                 </div>
                 <div class="tips2">
-                    <span style="color: rgb(100, 100, 100)"><i class="el-icon-s-opportunity"></i> 我创建的:</span>
+                    <span style="color: rgb(100, 100, 100)"><i class="el-icon-s-opportunity" style="color: #fdd808"></i> 我创建的:</span>
                     <span style="margin-left: 20px; margin-right: 60px">{{myproduction}}</span>
                 </div>
                 <div class="tips3">
-                    <span style="color: rgb(100, 100, 100)"><i class="el-icon-star-on"></i> 我的收藏:</span>
+                    <span style="color: rgb(100, 100, 100)"><i class="el-icon-star-on" style="color: #ff8a7a"></i> 我的收藏:</span>
                     <span style="margin-left: 20px; margin-right: 60px">{{favorite}}</span>
                 </div>
             </el-card>
@@ -259,9 +264,16 @@ export default {
     position: relative;
     width: 1210px;
     height: 180px;
+    .background{
+        width:100%;  
+        height:100%;  /**宽高100%是为了图片铺满屏幕 */
+        //z-index:-1;
+        position: absolute;
+    }
     .topcard_1 {
         display: flex; 
         justify-content: start;
+        z-index:1;
         position: relative;
         top: 120px;
         left: 30px;
