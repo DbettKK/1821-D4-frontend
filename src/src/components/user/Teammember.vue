@@ -158,19 +158,19 @@
         },
         is_creator:false,
         inviteForm: {
-        id: '',
-        name:'',
-        email:''
+//        id: '',
+//        name:'',
+//        email:''
       },
       invite_dialogVisible: false,
       invite_mod:'2',
       //1 使用id  2使用昵称  3 使用邮箱
       found_user_format:[
-        {
-          username:'',
-          email:'',
-          create_time:''
-        }
+//        {
+//          username:'',
+//          email:'',
+//          create_time:''
+//        }
       ]
 
       }
@@ -372,7 +372,7 @@
                 message: '邀请信息发送成功',
                 type: 'success'
             });
-            that.reload();
+         //   that.reload();
         }).catch(function (error) {
             that.$message.error(error.response.data.info);
         });
@@ -387,7 +387,7 @@
                 message: '邀请信息发送成功',
                 type: 'success'
             });
-            that.reload();
+        //    that.reload();
         }).catch(function (error) {
             that.$message.error(error.response.data.info);
         });
@@ -402,7 +402,7 @@
                 message: '邀请信息发送成功',
                 type: 'success'
             });
-            that.reload();
+        //    that.reload();
         }).catch(function (error) {
             that.$message.error(error.response.data.info);
         });
@@ -452,7 +452,7 @@
                 message: '邀请信息发送成功',
                 type: 'success'
             });
-            that.reload();
+        //    that.reload();
         }).catch(function (error) {
             that.$message.error(error.response.data.info);
         });
