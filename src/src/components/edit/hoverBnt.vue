@@ -1,8 +1,8 @@
 
 <template>
 	<div>
-		<button @click="onClick" @mousedown="down" @touchstart="down" @mousemove="move" @touchmove="move" @mouseup="end" @touchend="end"  ref="fu" class="float">
-			<i class="el-icon-info"></i>
+		<button @dblclick="onClick" @mousedown="down" @touchstart="down" @mousemove="move" @touchmove="move" @mouseup="end" @touchend="end"  ref="fu" class="float">
+			<i style="font-size: 40px;" class="el-icon-info"></i>
 		</button>
 	</div>
 </template>
@@ -89,13 +89,18 @@ export default {
     right: 40px;
     top: 30%;
     touch-action: none ;
-    text-align: center;
+    display:flex;
+    justify-content:center;
+    align-items:center;
     width: 48px;
     height: 48px;
     border-radius: 24px;
-    line-height: 48px;
-    background: rgba(95, 95, 105, 0.88);
+    border-color: #F2F6FC;
+    outline-color: #F2F6FC;
+    line-height: 10px;
+    background: rgba(147, 147, 243, 0.88);
     color: white;
+    
   }
 </style>
 
