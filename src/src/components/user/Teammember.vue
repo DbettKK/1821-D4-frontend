@@ -295,7 +295,7 @@
          this.$http.get(
                   'http://175.24.121.113:8000/myapp/team/get/', {
               headers: {'token': window.sessionStorage.getItem('token')},
-              params:{team_id: that.team_id.toString()}}
+              params:{team_id: that.team_id}}
             ).then(res=>{
                 this.teaminfo=res.data.data;
                 console.log(res);

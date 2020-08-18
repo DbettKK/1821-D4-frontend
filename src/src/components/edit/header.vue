@@ -7,12 +7,17 @@
                 <el-breadcrumb separator="/" >
                     <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
                     <el-breadcrumb-item :to="{ path: '/myproduction' }">工作台</el-breadcrumb-item>
-                    <el-breadcrumb-item>文档编辑</el-breadcrumb-item>
-                    <el-breadcrumb-item><div @click="showcomment" class="font_comment"><b>文档评论</b></div></el-breadcrumb-item>
+                    <el-breadcrumb-item>{{title+'.docx'}}</el-breadcrumb-item>
+<!--                    <el-breadcrumb-item><div @click="showcomment" class="font_comment"><b>文档评论</b></div></el-breadcrumb-item>-->
                 </el-breadcrumb>
             </div>
         </el-col>
-        <el-col :span="7"></el-col>
+        <el-col :span="6"></el-col>
+        <el-col :span="1">
+            <el-tooltip class="item" effect="light" content="用户评论" placement="bottom-end">
+                <el-button type="primary" icon="el-icon-edit" @click="showcomment"></el-button>
+            </el-tooltip>
+        </el-col>
         <el-col :span="1">
              <el-tooltip class="item" effect="light" content="用户收藏" placement="bottom">
               <el-button class="share-button" icon="el-icon-star-on" type="primary" v-if="show_collect" @click="Collect"></el-button>
@@ -31,17 +36,17 @@
         </el-col>
         <el-col :span="2"><el-button type="primary" @click="Submit">保存</el-button></el-col>
         <el-col :span="2"><div class="grid-content2 bg-purple">{{can_edit?'正在编辑':'浏览模式'}}</div></el-col>
-        <el-col :span="2">
-          <div class="grid-content bg-purple">
-          <el-dropdown>
-            <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="40"></el-avatar>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item><router-link to="/changeinfo" class="a">信息修改</router-link></el-dropdown-item>
-                <el-dropdown-item><div @click="exit">退出登录</div></el-dropdown-item>
-              </el-dropdown-menu>
-          </el-dropdown>
-          </div>
-        </el-col>
+<!--        <el-col :span="2">-->
+<!--          <div class="grid-content bg-purple">-->
+<!--          <el-dropdown>-->
+<!--            <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="40"></el-avatar>-->
+<!--              <el-dropdown-menu slot="dropdown">-->
+<!--                <el-dropdown-item><router-link to="/changeinfo" class="a">信息修改</router-link></el-dropdown-item>-->
+<!--                <el-dropdown-item><div @click="exit">退出登录</div></el-dropdown-item>-->
+<!--              </el-dropdown-menu>-->
+<!--          </el-dropdown>-->
+<!--          </div>-->
+<!--        </el-col>-->
         <el-dialog title="请选择想要上传的团队空间" :visible.sync="dialog_G" width="30%">
           <el-form>
             <el-form-item label="团队空间" required>
@@ -107,7 +112,7 @@
         },
         team_belong:{
           type:Boolean,
-        }
+        },
     },
     data() {
       return {
@@ -255,6 +260,7 @@
                     message: '您已成功提交修改！',
                     type: 'success'
                   });
+                    this.$router.push('/recently');
                 }).catch(res => {
                     console.log(res);
             });
@@ -305,7 +311,7 @@
     border-radius: 4px;
     }
   .bg-purple {
-    background: #e7eff8;
+    background: #F2F6FC;
   }
   .grid-content {
     border-radius: 4px;
@@ -328,7 +334,7 @@
   }
   .row-bg {
     padding: 10px 0;
-    background-color: #e7eff8;
+    background-color: #F2F6FC;
   }
   .a{
     text-decoration: none;
