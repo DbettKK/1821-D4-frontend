@@ -5,10 +5,10 @@
         <el-col :span="6">
             <div class="grid-content bg-purple">
                 <el-breadcrumb separator="/" >
-                    <el-breadcrumb-item @click.native="home">首页</el-breadcrumb-item>
-                    <el-breadcrumb-item @click.native="recently">工作台</el-breadcrumb-item>
+                    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                    <el-breadcrumb-item :to="{ path: '/myproduction' }">工作台</el-breadcrumb-item>
                     <el-breadcrumb-item>文档编辑</el-breadcrumb-item>
-                    <el-breadcrumb-item ><div @click="showcomment" >用户评论</div></el-breadcrumb-item>
+                    <el-breadcrumb-item><div @click="showcomment" class="font_comment"><b>文档评论</b></div></el-breadcrumb-item>
                 </el-breadcrumb>
             </div>
         </el-col>
@@ -151,14 +151,8 @@
           showClose: true
         });
     },
-      recently() {
-            this.$router.push('/recently')
-      },
       getdata(val){
         this.team_belong=val;
-      },
-      home(){
-        this.$router.push('/')
       },
       get_G(){
         this.$http.get('http://175.24.121.113:8000/myapp/team/all/get/',
@@ -340,4 +334,7 @@
     text-decoration: none;
     color:#333;
 }
+  .font_comment{
+    color: rgb(133, 133, 235);
+  }
 </style>
