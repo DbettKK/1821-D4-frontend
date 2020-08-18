@@ -80,7 +80,8 @@ export default {
   },
   methods: {
     jumpto(file_id) {
-        this.$router.push('/edit/'+file_id)
+        file_id = window.btoa('hello,world'+file_id+'s')
+        this.$router.push('/edit/' + file_id)
     },
     getmessagelist(type) {
       var that = this;
