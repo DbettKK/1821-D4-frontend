@@ -81,7 +81,7 @@
         <el-button type="primary" @click="add_comment">确 定</el-button>
       </div>
     </el-dialog>
-    //<Footer></Footer>
+<!--    <Footer></Footer>-->
   </div>
 </template>
 
@@ -258,11 +258,11 @@
         this.drawer=data;
       },
       GetContents(){
-        Vue.axios.get('http://175.24.121.113:8000/myapp/file/get/',
+        Vue.axios.get('http://175.24.121.113:8000/myapp/file/getedit/',
           {headers: {'token': window.sessionStorage.getItem('token')},
             params:{file_id:this.file_id}}
         ).then(res => {
-          if (res.data.data.is_edit_now){
+          if (res.data.is_edit){
             this.$message({
               message: '当前文档正在被修改 请稍等',
               type: 'warning'
@@ -275,8 +275,9 @@
           this.file_type=res.data.data.type;
           if(res.data.data.team_belong==null)
             this.team_belong=false;
-          //this.$refs.tran.getdata(this.params.team_belong);
-          this.getPri(res.data.data.type);
+          this.privilege=res.data.pri;
+          this.judgePri();
+          //this.getPri(res.data.data.type);
         });
       },
       $imgAdd(pos, $file){
@@ -296,9 +297,7 @@
                 {headers: {token: window.sessionStorage.getItem('token')},
                   params: {file_id: this.file_id}}
         ).then(function (res) {
-          console.log(res.data.data.pri);
           that.privilege=res.data.data.pri;
-          console.log(typeof that.privilege);
           that.judgePri();
         })
       },
@@ -310,10 +309,6 @@
           });
         }else if(this.privilege >= 2){
           this.can_edit=true;
-          this.$http.get('http://175.24.121.113:8000/myapp/file/edit/',
-                  {headers: {token: window.sessionStorage.getItem('token')},
-                    params: {file_id: this.file_id}});
-          console.log('quanxian'+this.privilege)
           if (this.privilege >= 3){
             this.can_comment=true;
             if (this.privilege >= 4){
@@ -334,12 +329,23 @@
         });
       },
     },
+    beforeRouteEnter (to, from, next) {
+      next(vm => {
+        console.log(from);
+        if(from.path==='/message_comments'){
+          vm.drawer=true;
+        }
+
+      })
+    },
     created(){
+      console.log(window.name)
       this.url=this.$route.path;
       let str = window.atob(this.$route.params.id).substr(11)
       this.file_id=str.substr(0, str.length-1);
       document.title=this.title;
-      if(window.name == ""){
+      if(window.name==''){
+        console.log("刚进来")
         window.name = "isReload";
         if(window.sessionStorage.getItem('token')){
           this.GetContents();
@@ -355,6 +361,7 @@
           this.$router.push('/');
         }
       }else if(window.name == "isReload"){
+        console.log("刷新")
         this.$http.get('http://175.24.121.113:8000/myapp/file/edit/save/',
                 {headers: {token: window.sessionStorage.getItem('token')},
                   params: {file_id: this.file_id}}
@@ -377,10 +384,12 @@
 
     },
     destroyed(){
+      window.name="";
       this.$http.get('http://175.24.121.113:8000/myapp/file/edit/save/',
       {headers: {token: window.sessionStorage.getItem('token')},
         params: {file_id: this.file_id}}
       );
+
     }
   }
 </script>

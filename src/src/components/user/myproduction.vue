@@ -524,8 +524,6 @@ export default {
       ).then(function (res) {
         console.log(res.data);
         that.file_id = '';
-        that.getDoclist();
-        that.reload();
       }).catch(function (error) {
         console.log(error.response);
       });
@@ -568,7 +566,6 @@ export default {
       this.file_id = file_id;
       this.addrecent();
       file_id = window.btoa('hello,world' + file_id + 's');
-      console.log(file_id);
       this.$router.push('/edit/' + file_id)
 
     },
