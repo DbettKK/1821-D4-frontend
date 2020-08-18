@@ -44,7 +44,7 @@
                     <p v-else>性别:  <el-link @click.native="dialog1 = true" type="primary" icon="el-icon-edit" style="margin-bottom: 2.8px">马上填写</el-link>您的性别，让更多的人了解你</p>
                     <p v-if="userdata.age !== null">年龄:  {{userdata.age}} <el-link @click.native="dialog2 = true" type="primary" icon="el-icon-edit" style="margin-bottom: 2.8px"></el-link></p>
                     <p v-else>年龄:  <el-link @click.native="dialog2 = true" type="primary" icon="el-icon-edit" style="margin-bottom: 2.8px">马上填写</el-link>您的年龄，让更多的人了解你</p>
-                    <p>电话:  {{userdata.phone_num}}</p>
+                    <p>电话:  {{userdata.phone_num}} <el-link @click.native="dialog5 = true" type="primary" icon="el-icon-edit" style="margin-bottom: 2.8px"></el-link></p>
                     <p v-if="userdata.qq !== null">QQ:  {{userdata.qq}} <el-link @click.native="dialog3 = true" type="primary" icon="el-icon-edit" style="margin-bottom: 2.8px"></el-link></p>
                     <p v-else>QQ:  <el-link @click.native="dialog3 = true" type="primary" icon="el-icon-edit" style="margin-bottom: 2.8px">马上填写</el-link>您的QQ，让更多的人了解你</p>
                     <p>邮箱:  {{userdata.email}}</p>
@@ -117,6 +117,20 @@
                 <el-button type="primary" @click.native="address()">确 定</el-button>
             </span>
         </el-dialog>
+        <el-dialog title="提示" :visible.sync="dialog5" width="30%">
+            <div style="margin-bottom: 20px">
+                <span>您的电话:</span>
+            </div>
+            <el-form ref="phoneFormRef" :model="phoneForm" label-width="0px" class="phone_form">
+                <el-form-item prop="phone">
+                    <el-input placeholder="phone_num:" v-model="phoneForm.phone"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialog5 = false">取 消</el-button>
+                <el-button type="primary" @click.native="phonenum()">确 定</el-button>
+            </span>
+        </el-dialog>
     </el-container>
 </template>
 
@@ -136,6 +150,7 @@ export default {
             dialog2: false,
             dialog3: false,
             dialog4: false,
+            dialog5: false,
             genderForm: {
                 gender: ''
             },
@@ -147,6 +162,9 @@ export default {
             },
             addressForm: {
                 address: ''
+            },
+            phoneForm: {
+                phone: ''
             }
         }
     },
@@ -237,6 +255,22 @@ export default {
                 that.$message.error(error.response.data.info);
             });
             that.dialog4 = false;
+        },
+        phonenum() {
+            var that = this;
+            this.$http.post('http://175.24.121.113:8000/myapp/user/info/finish/', this.$qs.stringify({
+                    phone_num: that.phoneForm.phone
+                }), {headers: {token: window.sessionStorage.getItem("token")}}
+            ).then(() => {
+                that.$message({
+                    message: '电话提交成功',
+                    type: 'success'
+                });
+                that.reload();
+            }).catch(function (error) {
+                that.$message.error(error.response.data.info);
+            });
+            that.dialog5 = false;
         },
         torecently() {
             this.$router.push('/recently')
