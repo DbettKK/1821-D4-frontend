@@ -566,6 +566,8 @@ export default {
     edit(file_id) {
       this.file_id = file_id;
       this.addrecent();
+      file_id = window.btoa('hello,world'+file_id);
+      console.log(file_id);
       this.$router.push('/edit/' + file_id)
 
     },
