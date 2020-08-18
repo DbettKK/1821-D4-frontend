@@ -127,7 +127,7 @@ export default {
       Vue.axios.get(
         'http://175.24.121.113:8000/myapp/set/type/read/all/',
         {headers: {token: window.sessionStorage.getItem("token")},
-        params: {msg_types: 'comment'}}
+        params: {msg_types: 'share'}}
       ).then(function(res){
         console.log(res);
         that.reload();
@@ -180,7 +180,7 @@ export default {
       Vue.axios.get(
         'http://175.24.121.113:8000/myapp/msg/delete/all/',
         {headers: {token: window.sessionStorage.getItem("token")},
-        params: {msg_type: 'comment'}}
+        params: {msg_type: 'share'}}
       ).then(function(res){
         console.log(res);
         that.reload();
