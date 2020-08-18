@@ -132,7 +132,7 @@ export default {
   background-color: #fff;
   border-radius: 3px;
   margin-left: 330px;
-  opacity: 85%;
+  opacity: 0.85;
   transform: translate(-50%, -50%);
 
   .avatar_box {
@@ -144,7 +144,7 @@ export default {
     box-shadow: 0 0 10px #ddd;
     position: absolute;
     left: 50%;
-    opacity: 90%;
+    opacity: 0.9;
     transform: translate(-50%, -50%);
     background-color: #fff;
     img {
@@ -156,7 +156,7 @@ export default {
   }
 
   .login_form {
-    opacity: 90%;
+    opacity: 0.9;
     padding-top:10%;
     width: 90%;
     padding-left: 30px;
@@ -164,7 +164,7 @@ export default {
   }
 
   .btns {
-    opacity: 90%;
+    opacity: 0.9;
     padding-top: 10%;
     display:flex;
     justify-content:center;
@@ -180,7 +180,7 @@ export default {
     height: 420px;
     text-align: center;
     line-height: 190px;
-    opacity: 90%;
+    opacity: 0.9;
   }
   .main2{
     text-decoration: none;
@@ -188,7 +188,7 @@ export default {
     justify-content:center;
     align-items:center;
     vertical-align: top;
-    opacity: 90%;
+    opacity: 0.9;
   }
   .el-aside{
     text-decoration: none;
@@ -196,7 +196,7 @@ export default {
     justify-content:center;
     align-items:center;
     vertical-align: top;
-    opacity: 90%;
+    opacity: 0.9;
   }
   .In{
     vertical-align: bottom;
