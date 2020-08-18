@@ -256,7 +256,7 @@ export default {
 <style lang="less" scoped>
 .top {
     position: relative;
-    width: 1140px;
+    width: 1160px;
     height: 180px;
     .topcard_1 {
         display: flex; 
@@ -269,7 +269,7 @@ export default {
 
 .middle {
     position: relative;
-    width: 1140px;
+    width: 1160px;
     height: 40px;
     color: #999;
     display: flex;
@@ -293,8 +293,8 @@ export default {
 
 .main {
     position: relative;
-    width: 790px;
-    height: 400px;
+    width: 810px;
+    height: 390px;
     margin-top: 20px;
     color: #999;
     .bigpic {
@@ -317,11 +317,11 @@ export default {
 .side {
     position: relative;
     width: 350px;
-    height: 199px;
+    height: 194px;
     margin-top: 20px;
     color: #999;
-    left: 792px;
-    top: -422px;
+    left: 812px;
+    top: -412px;
     .createcenter {
         position: absolute;
         left: 105px;
@@ -337,11 +337,11 @@ export default {
 .side_base {
     position: relative;
     width: 350px;
-    height: 199px;
+    height: 194px;
     margin-top: 20px;
     color: #999;
-    left: 792px;
-    top: -442px
+    left: 812px;
+    top: -432px
 }
     
 </style>
