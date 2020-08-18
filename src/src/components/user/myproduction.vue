@@ -233,7 +233,7 @@ export default {
   methods: {
     sendInnerMessage() {
       var that = this
-      this.$http.post('http://127.0.0.1:8000/myapp/msg/sendInnerMessage/', this.$qs.stringify({
+      this.$http.post('http://175.24.121.113:8000/myapp/msg/sendInnerMessage/', this.$qs.stringify({
                 shareMessageTo: this.shareMessageTo,
                 file_id: this.file_id_tmp
               }), {headers: {token: window.sessionStorage.getItem("token")}}
