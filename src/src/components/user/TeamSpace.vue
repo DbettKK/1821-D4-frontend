@@ -275,7 +275,6 @@ export default {
   },
   created() {
     this.getDoclist();
-    this.team_id=this.$route.params.id.toString();
      this.getUserInfo();
      this.getTeamInfo();
   },
@@ -294,11 +293,13 @@ export default {
     },
   methods: {
     getDoclist() {
+        let str = window.atob(this.$route.params.id).substr(11);
+        this.team_id=str.substr(0,str.length-2);
       var that = this;
       Vue.axios.get(
           'http://175.24.121.113:8000/myapp/file/team/get/', {
               headers: {'token': window.sessionStorage.getItem('token')},
-              params:{team_id: that.$route.params.id.toString()}}
+              params:{team_id: that.team_id}}
       ).then(function(res){
         console.log(res);
         that.doclist=res.data.data;
@@ -408,7 +409,8 @@ export default {
 
     submit(){//创建默认文档
       var that = this;
-      this.$http.get('http://175.24.121.113:8000/myapp/file/create/team/', {headers: {token: window.sessionStorage.getItem("token")}, params: {team_id: that.team_id}}
+      this.$http.get('http://175.24.121.113:8000/myapp/file/create/team/',
+          {headers: {token: window.sessionStorage.getItem("token")}, params: {team_id: that.team_id}}
       ).then(function (res) {
         that.file_id=res.data.data.id;
         that.$message({
@@ -528,7 +530,7 @@ export default {
          this.$http.get(
                   'http://175.24.121.113:8000/myapp/team/get/', {
               headers: {'token': window.sessionStorage.getItem('token')},
-              params:{team_id: that.$route.params.id.toString()}}
+              params:{team_id: that.team_id}}
             ).then(res=>{
                 this.teaminfo.team_id=res.data.data.id;
                 this.teaminfo.name=res.data.data.name;

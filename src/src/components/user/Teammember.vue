@@ -174,8 +174,9 @@
       }
     },
     created() {
-                var that=this;
-    this.team_id=this.$route.params.id.toString();
+      var that=this;
+      let str=window.atob(this.$route.params.id).substr(11);
+    this.team_id=str.substr(0,str.length-2);
      this.getUserInfo();
      this.getTeamInfo();
         this.getmembers();
@@ -294,7 +295,7 @@
          this.$http.get(
                   'http://175.24.121.113:8000/myapp/team/get/', {
               headers: {'token': window.sessionStorage.getItem('token')},
-              params:{team_id: that.$route.params.id.toString()}}
+              params:{team_id: that.team_id}}
             ).then(res=>{
                 this.teaminfo=res.data.data;
                 console.log(res);

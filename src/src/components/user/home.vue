@@ -268,7 +268,7 @@ export default {
 
         },
         toTeam(team_id){
-            this.$router.push("/TeamSpace/"+team_id);
+            this.$router.push("/TeamSpace/"+window.btoa('hello,world'+team_id+'!!'));
         }
     }
 }
