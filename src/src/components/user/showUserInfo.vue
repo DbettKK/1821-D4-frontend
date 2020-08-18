@@ -35,15 +35,15 @@
                 <div class="message">
                     <p>ID:  {{userdata.id}}</p>
                     <p>用户名:  {{userdata.username}}</p>
-                    <p v-if="userdata.gender !== null">性别:  {{userdata.gender == 0 ? '男' : '女'}}</p>
+                    <p v-if="userdata.gender !== null">性别:  {{userdata.gender == 0 ? '男' : '女'}} <el-link @click.native="dialog1 = true" type="primary" icon="el-icon-edit" style="margin-bottom: 2.8px"></el-link></p>
                     <p v-else>性别:  <el-link @click.native="dialog1 = true" type="primary" icon="el-icon-edit" style="margin-bottom: 2.8px">马上填写</el-link>您的性别，让更多的人了解你</p>
-                    <p v-if="userdata.age !== null">年龄:  {{userdata.age}}</p>
+                    <p v-if="userdata.age !== null">年龄:  {{userdata.age}} <el-link @click.native="dialog2 = true" type="primary" icon="el-icon-edit" style="margin-bottom: 2.8px"></el-link></p>
                     <p v-else>年龄:  <el-link @click.native="dialog2 = true" type="primary" icon="el-icon-edit" style="margin-bottom: 2.8px">马上填写</el-link>您的年龄，让更多的人了解你</p>
                     <p>电话:  {{userdata.phone_num}}</p>
-                    <p v-if="userdata.qq !== null">QQ:  {{userdata.qq}}</p>
+                    <p v-if="userdata.qq !== null">QQ:  {{userdata.qq}} <el-link @click.native="dialog3 = true" type="primary" icon="el-icon-edit" style="margin-bottom: 2.8px"></el-link></p>
                     <p v-else>QQ:  <el-link @click.native="dialog3 = true" type="primary" icon="el-icon-edit" style="margin-bottom: 2.8px">马上填写</el-link>您的QQ，让更多的人了解你</p>
                     <p>邮箱:  {{userdata.email}}</p>
-                    <p v-if="userdata.address !== null">地址:  {{userdata.address}}</p>
+                    <p v-if="userdata.address !== null">地址:  {{userdata.address}} <el-link @click.native="dialog4 = true" type="primary" icon="el-icon-edit" style="margin-bottom: 2.8px"></el-link></p>
                     <p v-else>地址:  <el-link @click.native="dialog4 = true" type="primary" icon="el-icon-edit" style="margin-bottom: 2.8px">马上填写</el-link>您的地址，让更多的人了解你</p>
                 </div>
             </el-card>
