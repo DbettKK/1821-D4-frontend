@@ -37,7 +37,7 @@
                     <el-dropdown trigger="hover" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item icon="el-icon-share" v-if="item.file_privi>=4" @click.native="file_id_tmp = item.id; dialogVisible = true; shareURL = baseURL+item.id">分享</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-share" v-if="item.file_privi>=4" @click.native="shareUrl(item.file)">分享</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-star-on" @click.native="addFavorite(item.file)">收藏</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-delete-solid" @click.native="remove(item.file)">从列表中删除</el-dropdown-item>
 <!--                        <el-dropdown-item icon="el-icon-delete-solid" v-if="item.person">移到回收站</el-dropdown-item>-->
@@ -129,7 +129,7 @@
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click=";dialogVisible=false;submit()" >确定</el-button>
+            <el-button type="primary" @click="submit" >确定</el-button>
           </div>
         </el-dialog>
     </el-container>
@@ -321,6 +321,7 @@ export default {
 
     },
     submit() {
+      this.dialogVisible=false;
       var that = this
       this.$http.post('http://175.24.121.113:8000/myapp/file/privi/pri/', this.$qs.stringify({
                 privilege: this.privilege,
@@ -446,6 +447,11 @@ export default {
       this.file_id = file_id;
       this.addrecent();
       this.$router.push('/edit/' + file_id)
+    },
+    shareUrl(file_id){
+      this.file_id_tmp = file_id;
+      this.dialogVisible = true;
+      this.shareURL = this.baseURL + file_id;
     }
   },
   computed: {

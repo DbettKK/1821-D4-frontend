@@ -31,7 +31,7 @@
                     <el-dropdown trigger="hover" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item icon="el-icon-share" @click.native="file_id_tmp = item.id; dialogVisible = true; shareURL = baseURL+item.id">分享</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-share" @click.native="shareUrl(item.id)">分享</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-star-on" @click.native="addFavorite(item.id)">收藏</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-edit" @click.native="renameClick(item.id)">重命名</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-s-custom" @click.native="selectPrivi(item.id)">设置文档权限</el-dropdown-item>
@@ -170,7 +170,7 @@
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click=";dialogVisible=false;submit()" >确定</el-button>
+            <el-button type="primary" @click="submit" >确定</el-button>
           </div>
         </el-dialog>
     </el-container>
@@ -335,6 +335,7 @@ export default {
 
     },
     submit() {
+      this.dialogVisible = false;
       var that = this
       this.$http.post('http://175.24.121.113:8000/myapp/file/privi/pri/', this.$qs.stringify({
                 privilege: this.privilege,
@@ -351,7 +352,7 @@ export default {
         console.log(res.data);
       }).catch(function (error) {
         that.$message({
-          message: error.resopnse.data.info,//+res.data.file_id,
+          message: error.response.data.info,//+res.data.file_id,
           type: "error",
           customClass: "c-msg",
           duration: 3000,
@@ -588,6 +589,11 @@ export default {
       });
 
     },
+    shareUrl(file_id){
+      this.file_id_tmp = file_id;
+      this.dialogVisible = true;
+      this.shareURL = this.baseURL + file_id
+    }
   },
   computed: {
     pages () {
