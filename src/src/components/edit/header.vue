@@ -167,7 +167,7 @@
         judgeShare(){
           if(this.can_share){
               this.dialogVisible = true
-              this.shareURL = this.baseURL + this.file_id
+              this.shareURL = this.baseURL + window.btoa('hello,world'+this.file_id+'s');
           }else{
               this.$message({message: '您没有这个权限哦', type: 'warning'})
           }
