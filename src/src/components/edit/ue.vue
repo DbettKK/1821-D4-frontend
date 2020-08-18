@@ -300,8 +300,8 @@
       //this.fullscreenLoading = true;
       if(window.sessionStorage.getItem('token')){
         this.url=this.$route.path;
-        let str = window.atob(this.$route.params.id)
-        this.file_id=str.substr(11).substr(0, str.length-1);
+        let str = window.atob(this.$route.params.id).substr(11)
+        this.file_id=str.substr(0, str.length-1);
         document.title=this.title;
         //this.enterEdit();
         this.GetContents();
