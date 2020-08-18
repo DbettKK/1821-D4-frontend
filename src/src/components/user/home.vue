@@ -206,7 +206,7 @@ export default {
             this.$router.push('/trashbin')
         },
         changeInfo(){
-            this.$router.push('/changeInfo')
+            this.$router.push('/checkpassword')
         },
         message(){
             this.$router.push('/message_favorite')

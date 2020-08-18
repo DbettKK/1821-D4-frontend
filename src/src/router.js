@@ -20,6 +20,9 @@ import message_comments from './components/user/message_comments.vue'
 import message_team from './components/user/message_team.vue'
 import message_share from './components/user/message_share.vue'
 import N404 from './components/NotFoundComponent.vue'
+import checkpassword from './components/user/chgpw_fir.vue'
+import newpassword from './components/user/chgpw_sec.vue'
+import changepassword from './components/user/chgpw_thr.vue'
 
 Vue.use(Router)
 /*
@@ -75,6 +78,9 @@ const router = new Router({
         { path:'/TeamSpace/:id', component:TeamSpace, name:'Teamspace',meta:{title:'团队空间'} },
         { path:'/Teammember/:id',component:Teammember,name:'Teammember',meta:{title:'团队成员'}},
         {path: '/changeInfo', component: ChangeUserInfo, name:'ChangeInfo',meta:{title:'金刚石文档编辑器:个人信息'}},
+        {path: '/checkpassword', component: checkpassword, name:'checkpassword', meta:{title:'金刚石文档编辑器:验证密码'}},
+        {path: '/newpassword', component: newpassword, name:'newpassword', meta:{title:'金刚石文档编辑器:新密码'}},
+        {path: '/changepassword', component: changepassword, name:'changepassword', meta:{title:'金刚石文档编辑器:修改密码'}},
         {path: '/showUserInfo', component: ShowUserInfo, name:'ShowUserInfo',meta:{title:'金刚石文档编辑器:个人信息'}},
         //{ path:'/TeamSpace', component:TeamSpace,  name:'Teamspace',meta:{title:'团队空间'} }
         {path: '/message_favorite', component: message_favorite, name:'message_favorite', meta:{title:'收藏消息'}},
