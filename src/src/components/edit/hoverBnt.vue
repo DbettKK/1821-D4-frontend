@@ -82,7 +82,6 @@ export default {
 }
 </script>
 
-//这里使用了stylus的语法
 <style scoped>
 .float{
     position: absolute;
@@ -95,6 +94,7 @@ export default {
     width: 48px;
     height: 48px;
     border-radius: 24px;
+    border-width: 0;
     border-color: #F2F6FC;
     outline-color: #F2F6FC;
     line-height: 10px;

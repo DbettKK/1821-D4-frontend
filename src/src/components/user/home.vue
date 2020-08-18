@@ -98,11 +98,16 @@
                 <router-view></router-view>
             </el-main>
         </el-container>
+    <Footer></Footer>
     </el-container>
 </template>
 
 <script>
+import Footer from './footer.vue'
 export default {
+    components:{
+        Footer
+    },
     inject: ['reload'],
     data() {
         return {
