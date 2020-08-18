@@ -38,6 +38,7 @@ export default {
                 email: '',
                 password: ''
             },
+            email: ''
         }
     },
     created: function(){
@@ -57,7 +58,8 @@ export default {
             })
         },
         ChangeInfo(){
-            window.sessionStorage.setItem("email", this.Form.email !== null ? this.Form.email : this.userdata.email);
+            this.email=(this.Form.email ? this.Form.email : this.userdata.email);
+            window.sessionStorage.setItem("email", this.email);
             window.sessionStorage.setItem("password", this.Form.password);
             this.thrstep();
         },
