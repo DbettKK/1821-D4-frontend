@@ -119,6 +119,7 @@
 //import QS from "qs";
 export default {
     name: "Userinfo",
+    inject: ['reload'],
     data(){
         return {
             userdata: {},
@@ -256,7 +257,7 @@ export default {
 <style lang="less" scoped>
 .top {
     position: relative;
-    width: 1160px;
+    width: 1210px;
     height: 180px;
     .topcard_1 {
         display: flex; 
@@ -269,7 +270,7 @@ export default {
 
 .middle {
     position: relative;
-    width: 1160px;
+    width: 1210px;
     height: 40px;
     color: #999;
     display: flex;
@@ -293,35 +294,35 @@ export default {
 
 .main {
     position: relative;
-    width: 810px;
-    height: 390px;
+    width: 860px;
+    height: 350px;
     margin-top: 20px;
     color: #999;
     .bigpic {
         position:absolute;
         left: 100px;
-        top: 60px
+        top: 50px
     }
     .changepic {
         position:absolute;
         left: 142px;
-        top: 280px
+        top: 270px
     }
     .message {
         position:absolute;
         left: 420px;
-        top: 30px;
+        top: 15px;
     }
 }
 
 .side {
     position: relative;
     width: 350px;
-    height: 194px;
+    height: 174px;
     margin-top: 20px;
     color: #999;
-    left: 812px;
-    top: -412px;
+    left: 861px;
+    top: -372px;
     .createcenter {
         position: absolute;
         left: 105px;
@@ -337,11 +338,11 @@ export default {
 .side_base {
     position: relative;
     width: 350px;
-    height: 194px;
+    height: 174px;
     margin-top: 20px;
     color: #999;
-    left: 812px;
-    top: -432px
+    left: 861px;
+    top: -392px
 }
     
 </style>
