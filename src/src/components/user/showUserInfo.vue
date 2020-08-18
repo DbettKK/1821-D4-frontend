@@ -52,7 +52,7 @@
                 <p class="createtips">进入工作台 创造您的专属文档</p>
             </el-card>
             <el-card class="side_base">
-                <p style="margin-left: 135px; font-size: 20px; color: rgb(100, 100, 100)">每日一句</p>
+                <p style="margin-left: 115px; font-size: 20px; color: rgb(100, 100, 100)">每日一句</p>
                 <p style="position: absolute; left: 50%; transform: translate(-50%, 0);">只要我们能梦想的，我们就能实现。</p>
             </el-card>
         </el-header>
@@ -256,20 +256,20 @@ export default {
 <style lang="less" scoped>
 .top {
     position: relative;
-    width: 1340px;
-    height: 200px;
+    width: 1140px;
+    height: 180px;
     .topcard_1 {
         display: flex; 
         justify-content: start;
         position: relative;
-        top: 140px;
+        top: 120px;
         left: 30px;
     }
 }
 
 .middle {
     position: relative;
-    width: 1340px;
+    width: 1140px;
     height: 40px;
     color: #999;
     display: flex;
@@ -293,7 +293,7 @@ export default {
 
 .main {
     position: relative;
-    width: 940px;
+    width: 790px;
     height: 400px;
     margin-top: 20px;
     color: #999;
@@ -316,31 +316,31 @@ export default {
 
 .side {
     position: relative;
-    width: 400px;
+    width: 350px;
     height: 199px;
     margin-top: 20px;
     color: #999;
-    left: 942px;
+    left: 792px;
     top: -422px;
     .createcenter {
         position: absolute;
-        left: 125px;
+        left: 105px;
         top: 60px
     }
     .createtips {
         position: absolute;
-        left: 92px;
+        left: 72px;
         top: 90px
     }
 }
 
 .side_base {
     position: relative;
-    width: 400px;
+    width: 350px;
     height: 199px;
     margin-top: 20px;
     color: #999;
-    left: 942px;
+    left: 792px;
     top: -442px
 }
     
