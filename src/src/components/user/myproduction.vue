@@ -31,7 +31,7 @@
                     <el-dropdown trigger="hover" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item icon="el-icon-share" @click.native="shareUrl(item.id)">分享</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-share" @click.native="shareUrl(item.id,item.permission)">分享</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-star-on" @click.native="addFavorite(item.id)">收藏</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-edit" @click.native="renameClick(item.id)">重命名</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-s-custom" @click.native="selectPrivi(item.id)">设置文档权限</el-dropdown-item>
@@ -153,14 +153,12 @@
           <el-form>
             <el-form-item label="分享链接">
               {{shareURL}}
-            </el-form-item>
-            <el-form-item label="点击复制">
               <el-button 
                 v-clipboard:copy="shareURL"
                 v-clipboard:success="onCopy"
-                v-clipboard:error="onError">复制链接</el-button>
+                v-clipboard:error="onError" size="small">复制链接</el-button>
             </el-form-item>
-            <el-form-item label="权限" required>
+            <el-form-item label="文档的权限为" required>
               <el-select v-model="privilege" placeholder="请选择">
                 <el-option label="仅查看" value="1"></el-option>
                 <el-option label="可编辑" value="2"></el-option>
@@ -168,9 +166,22 @@
                 <el-option label="可分享" value="4"></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="同时发送站内消息">
+              <el-switch
+                v-model="innerMessage"
+                active-color="#13ce66"
+                inactive-color="#909399">
+              </el-switch>
+            </el-form-item>
+            <el-form-item v-if="innerMessage" label="分享对象的用户名或邮箱">
+              <el-input
+                v-model="shareMessageTo"
+                >
+              </el-input>
+            </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="submit" >确定</el-button>
+            <el-button type="primary" @click="submit(); sendInnerMessage()" >确定</el-button>
           </div>
         </el-dialog>
     </el-container>
@@ -182,7 +193,9 @@ export default {
   inject: ['reload'],
   data() {
     return {
-      baseURL: 'http://localhost:8080/edit/',
+      innerMessage: false,
+      shareMessageTo:'',
+      baseURL: 'http://175.24.121.113/edit/',
       shareURL: '',
       dialogVisible: false,
       file_name: '',
@@ -218,6 +231,34 @@ export default {
     this.getDoclist()
   },
   methods: {
+    sendInnerMessage() {
+      var that = this
+      this.$http.post('http://175.24.121.113:8000/myapp/msg/sendInnerMessage/', this.$qs.stringify({
+                shareMessageTo: this.shareMessageTo,
+                file_id: this.file_id_tmp
+              }), {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(function (res) {
+        that.$message({
+          message: "站内分享成功",//+res.data.file_id,
+          type: "success",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
+        console.log(res.data);
+      }).catch(function (error) {
+        that.$message({
+          message: error.response.data.info,//+res.data.file_id,
+          type: "error",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
+        console.log(error.response);
+      });
+      this.dialog=false;
+      this.reload();
+    },
     onCopy: function () {
       this.$message({
           message: "已经复制到剪贴版",//+res.data.file_id,
@@ -589,10 +630,11 @@ export default {
       });
 
     },
-    shareUrl(file_id){
+    shareUrl(file_id,file_pri){
       this.file_id_tmp = file_id;
       this.dialogVisible = true;
       this.shareURL = this.baseURL + file_id
+      this.privilege = String(file_pri)
     }
   },
   computed: {

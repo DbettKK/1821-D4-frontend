@@ -1,6 +1,7 @@
 <template>
   <div class="background" >
     <Header :can_edit="can_edit" :can_share="can_share" :url="url" :title="title" :file_id="parseInt(file_id)" :content="content" :collect="collect" v-bind:team_belong="team_belong" @event1="change($event)" ></Header>
+    <Bnt @click1="drawer=true"></Bnt>
     <el-card style="height: 780px;">
       <el-container>
         <el-header style="height: 50px">
@@ -15,7 +16,7 @@
             :boxShadow="true"
             :subfield="can_edit"
             defaultOpen="preview"
-            style="z-index:1;border: 1px solid #d9d9d9;height:85vh"
+            style="z-index:1;border: 1px solid #d9d9d9;height:90vh"
             v-model="content"
             :toolbarsFlag="can_edit"
             :toolbars="toolbars"/>
@@ -75,11 +76,13 @@
 <script>
   import Header from './header.vue' 
   import Footer from './footer.vue'
+  import Bnt from './hoverBnt.vue'
   import '@/assets/iconfont/iconfont.css'
   import Vue from 'vue'
   export default {
     name: 'FuncFormsEdit',
     components: {
+      Bnt,
       Header,
       Footer
     },
@@ -135,11 +138,14 @@
           subfield: true, // 单双栏模式
           preview: true // 预览
         },
-          team_belong:true,
+        team_belong:true,
         
       }
     },
     methods:{
+      ShowDrawer(){
+
+      },
       L_comment(){
         if(this.can_comment==true)
           this.CommentdialogFormVisible=true;
@@ -201,6 +207,7 @@
                 message: '您已成功提交！',
                 type: 'success'
               });
+              this.comment='';
               this.get_comment();
           }).catch(res => {
               console.log(res);
@@ -320,7 +327,7 @@
 <style scoped>
   .el-card{
     padding-top: 5px;
-    width: 65%;
+    width: 75%;
     margin:0 auto;
     box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
     border-radius: 2px;
@@ -370,5 +377,18 @@
   }
   .clearfix:after {
     clear: both
+  }
+  .float{
+    position: absolute;
+    right: 40px;
+    top: 30%;
+    touch-action: none ;
+    text-align: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
+    line-height: 48px;
+    background: rgba(95, 95, 105, 0.88);
+    color: white;
   }
 </style>
