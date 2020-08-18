@@ -142,7 +142,7 @@
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="submit(); sendInnerMessage()" >确定</el-button>
+            <el-button type="primary" @click="submit" >确定</el-button>
           </div>
         </el-dialog>
     </el-container>
@@ -218,7 +218,7 @@ export default {
     shareUrl(file_id,file_pri){
       this.file_id_tmp = file_id;
       this.dialogVisible = true;
-      this.shareURL = this.baseURL + file_id
+      this.shareURL = this.baseURL + window.btoa('hello,world'+file_id+'s')
       this.privilege = String(file_pri)
     },
     onCopy: function () {
@@ -397,6 +397,7 @@ export default {
       });
       this.dialog = false;
       this.reload();
+      this.sendInnerMessage();
     },
     Default() {
       var that = this;
@@ -494,7 +495,7 @@ export default {
     },
     edit(file_id){
       this.file_id = file_id;
-      file_id = window.btoa('hello,world'+file_id)
+      file_id = window.btoa('hello,world'+file_id+'s')
       this.addrecent();
       this.$router.push('/edit/' + file_id)
     },
