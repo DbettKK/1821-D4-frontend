@@ -1,24 +1,13 @@
 <template>
   <div class="background" >
     <Header :can_edit="can_edit" :can_share="can_share" :url="url" :title="title" :file_id="parseInt(file_id)" :content="content" :collect="collect" v-bind:team_belong="team_belong" @event1="change($event)" ></Header>
-    <Bnt @click1="drawer=true"></Bnt>
-    <el-timeline v-if="this.privilege!='1'" style="float:right; margin-right:3%; margin-top:15%">
-        <el-timeline-item
-          v-for="(activity, index) in activities"
-          :key="index"
-          icon='el-icon-more'
-          color='#0bbd87'
-          :type="primary"
-          :timestamp="activity.time">
-          {{activity.user_username}} 修改于
-        </el-timeline-item>
-    </el-timeline>
-    <el-card style="height: 780px;">
+<!--    <Bnt @click1="drawer=true"></Bnt>-->
+<!--    <el-card style="height: 780px;">-->
       <el-container>
-        <el-header style="height: 50px">
-          <div class="font_type">{{title}}</div>
-        </el-header>
-        <el-main>
+<!--        <el-header style="height: 50px">-->
+<!--          <div class="font_type">{{title}}</div>-->
+<!--        </el-header>-->
+<!--        <el-main>-->
           <mavon-editor
             ref="md"
             :editable="can_edit"
@@ -27,16 +16,28 @@
             :boxShadow="true"
             :subfield="can_edit"
             defaultOpen="preview"
-            style="z-index:1;border: 1px solid #d9d9d9;height:90vh"
+            style="z-index:1;border: 1px solid #d9d9d9;height:90vh;width:100%;"
             v-model="content"
             :toolbarsFlag="can_edit"
             :toolbars="toolbars"/>
-        </el-main>
+
+        <el-timeline v-if="this.privilege!='1'" class="timeline">
+          <el-timeline-item
+                  v-for="(activity, index) in activities"
+                  :key="index"
+                  icon='el-icon-more'
+                  color='#0bbd87'
+                  :type="primary"
+                  :timestamp="activity.time.substr(0,19).replace('T', ' ')">
+            {{activity.user_username}} 修改于
+          </el-timeline-item>
+        </el-timeline>
+<!--        </el-main>-->
         <!-- el-footer>
           <el-button type="primary" round @click="Submit">确认提交</el-button>
         </el-footer-->
       </el-container>
-    </el-card>
+<!--    </el-card>-->
     <el-drawer
       title="用户评论"
       :visible.sync="drawer"
@@ -80,22 +81,22 @@
         <el-button type="primary" @click="add_comment">确 定</el-button>
       </div>
     </el-dialog>
-    <Footer></Footer>
+    //<Footer></Footer>
   </div>
 </template>
 
 <script>
   import Header from './header.vue' 
-  import Footer from './footer.vue'
-  import Bnt from './hoverBnt.vue'
+  //import Footer from './footer.vue'
+  //import Bnt from './hoverBnt.vue'
   import '@/assets/iconfont/iconfont.css'
   import Vue from 'vue'
   export default {
     name: 'FuncFormsEdit',
     components: {
-      Bnt,
+      //Bnt,
       Header,
-      Footer
+      //Footer
     },
     data() {
       return {
@@ -107,7 +108,7 @@
         direction: 'ltr',
         url:'12',
         title:'Title',
-        file_id:10,
+        file_id: '',
         file_type: '',
         privilege: '',
         can_edit: false,
@@ -164,7 +165,8 @@
               file_id:file_id
             }
           }).then((res)=>  {
-            this.activities=res.data.data
+
+            this.activities=res.data.data;
           }).catch(res => {
             this.$message.error(res.response.data.info);
               console.log(res);
@@ -265,7 +267,7 @@
               message: '当前文档正在被修改 请稍等',
               type: 'warning'
             });
-            this.$router.push('/');
+            this.$router.push('/recently');
           }
           this.title=res.data.data.file_title;
           this.content=res.data.data.file_content;
@@ -320,6 +322,18 @@
           }
         }
       },
+      addrecent(file_id) {
+        //var that = this;
+        this.$http.get('http://175.24.121.113:8000/myapp/file/browse/', {
+                  headers: {token: window.sessionStorage.getItem("token")},
+                  params:{file_id: file_id}
+                }
+        ).then(function (res) {
+          console.log(res.data);
+        }).catch(function (error) {
+          console.log(error.response);
+        });
+      },
     },
     watch:{
     },
@@ -333,6 +347,7 @@
         //this.enterEdit();
         this.GetContents();
         this.get_comment();
+        this.addrecent(this.file_id);
         this.getTimeLine(this.file_id);
       }
       else{
@@ -357,7 +372,7 @@
   .el-card{
     padding-top: 5px;
     width: 70%;
-    margin-left:10%;
+    margin-left: 14%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
     border-radius: 2px;
   }
@@ -383,7 +398,7 @@
     font-size: 50px;
   }
   .background{
-    background-color: #F2F6FC;
+    background-color: white;
   }
   .el-main{
     height: 85%;
@@ -419,5 +434,11 @@
     line-height: 48px;
     background: rgba(95, 95, 105, 0.88);
     color: white;
+  }
+  .timeline{
+    float: right;
+    margin-right:3%;
+    width:200px;
+    margin-top:3%;
   }
 </style>
