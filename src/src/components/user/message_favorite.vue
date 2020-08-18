@@ -42,6 +42,7 @@
                   </div>
                   <div class="middle">
                       <span style="font-size: 13px; margin-right: 15px;">{{item.msg_content}}</span>
+                      <el-button @click="jumpto(item.msg_type_from, item.id)" style="float:right">查看</el-button>
                   </div>
                   <div class="bottom clearfix">
                     <time class="time" style="margin-right: 20px;">{{item.msg_time}}</time>
@@ -78,6 +79,19 @@ export default {
     this.getmessagelist('favor');
   },
   methods: {
+      jumpto(file_id, msg_id) {
+          var that=this;
+          this.$http.get('http://175.24.121.113:8000/myapp/msg/judge/file/',
+              {headers:{token:window.sessionStorage.getItem('token')},
+                  params:{file_id:file_id, msg_id: msg_id}}
+          ).then(()=>{
+              file_id = window.btoa('hello,world'+file_id+'s')
+              that.$router.push('/edit/' + file_id)
+          }).catch(()=>{
+              that.$message.error('该文件已不存在，这条消息将会被自动删除');
+              that.reload();
+          });
+      },
     getmessagelist(type) {
         var that=this;
       Vue.axios.get(

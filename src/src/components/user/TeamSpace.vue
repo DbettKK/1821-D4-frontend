@@ -274,8 +274,6 @@ export default {
 
   },
   created() {
-        let str = window.atob(this.$route.params.id).substr(11)
-        this.team_id=str.substr(0, str.length-1);
     this.getDoclist();
      this.getUserInfo();
      this.getTeamInfo();
@@ -295,10 +293,9 @@ export default {
     },
   methods: {
     getDoclist() {
-
+        let str = window.atob(this.$route.params.id).substr(11);
+        this.team_id=str.substr(0,str.length-2);
       var that = this;
-      let str = window.atob(this.$route.params.id).substr(11)
-     that.team_id=str.substr(0, str.length-1);
       Vue.axios.get(
           'http://175.24.121.113:8000/myapp/file/team/get/', {
               headers: {'token': window.sessionStorage.getItem('token')},
@@ -312,22 +309,17 @@ export default {
       })
     },
     toTeam(){
-          let str = window.atob(this.$route.params.id).substr(11)
-        this.team_id=str.substr(0, str.length-1);
-   //   this.team_id = this.$route.params.id;
+      this.team_id = this.$route.params.id;
       this.$router.push("/TeamSpace/"+this.team_id);
     },
     Teammessage(){
-          let str = window.atob(this.$route.params.id).substr(11)
-        this.team_id=str.substr(0, str.length-1);
-   //   this.team_id = this.$route.params.id;
+      this.team_id = this.$route.params.id;
       this.$router.push("/Teammessage/"+this.team_id);
     },
     manage_member()
     {
-      //  this.team_id=this.$route.params.id;
-        var team_id = window.btoa('hello,world'+this.team_id+'s')
-        this.$router.push('/Teammember/'+team_id)
+        this.team_id=this.$route.params.id;
+        this.$router.push('/Teammember/'+this.team_id)
     },
     time(a) {
          this.doctime = a.toString().substr(0, 10)
@@ -535,8 +527,6 @@ export default {
     getTeamInfo()
     {
         var that=this;
-            let str = window.atob(this.$route.params.id).substr(11)
-        this.team_id=str.substr(0, str.length-1);
          this.$http.get(
                   'http://175.24.121.113:8000/myapp/team/get/', {
               headers: {'token': window.sessionStorage.getItem('token')},

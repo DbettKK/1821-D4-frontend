@@ -306,7 +306,7 @@ export default {
     }
     .topcard_1 {
         display: flex; 
-        justify-content: start;
+        justify-content: flex-start;
         z-index:1;
         position: relative;
         top: 120px;
@@ -320,7 +320,7 @@ export default {
     height: 40px;
     color: #999;
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     .tips1 {
         position: absolute;
         left: 30px;

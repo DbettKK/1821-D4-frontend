@@ -156,27 +156,27 @@
         },
         is_creator:false,
         inviteForm: {
-//        id: '',
-//        name:'',
-//        email:''
+        id: '',
+        name:'',
+        email:''
       },
       invite_dialogVisible: false,
       invite_mod:'2',
       //1 使用id  2使用昵称  3 使用邮箱
       found_user_format:[
-//        {
-//          username:'',
-//          email:'',
-//          create_time:''
-//        }
+        {
+          username:'',
+          email:'',
+          create_time:''
+        }
       ]
 
       }
     },
     created() {
-                var that=this;
-       let str = window.atob(this.$route.params.id).substr(11)
-        this.team_id=str.substr(0, str.length-1);
+      var that=this;
+      let str=window.atob(this.$route.params.id).substr(11);
+    this.team_id=str.substr(0,str.length-2);
      this.getUserInfo();
      this.getTeamInfo();
         this.getmembers();
@@ -215,8 +215,8 @@
     },
     methods:{
       toTeam(){
-        var team_id = window.btoa('hello,world'+this.team_id+'s')
-          this.$router.push("/TeamSpace/"+team_id);
+          this.team_id = this.$route.params.id;
+          this.$router.push("/TeamSpace/"+this.team_id);
       },
     getmembers()
     {
@@ -225,7 +225,7 @@
             'http://175.24.121.113:8000/myapp/team/members/get/',
             {
               headers: {'token': window.sessionStorage.getItem('token')},
-              params:{team_id: that.team_id.toString()}}
+              params:{team_id: that.team_id}}
         ).
         then(function (res) {
             that.members=res.data.data
@@ -306,8 +306,8 @@
     },
     manage_member()
     {
-        var team_id = window.btoa('hello,world'+this.team_id+'s')
-        this.$router.push('/Teammember/'+team_id)
+        this.team_id=this.$route.params.id;
+        this.$router.push('/Teammember/'+this.team_id)
     },
        exitTeam(){
         this.$confirm('确定退出团队吗', '退出团队', {
@@ -371,7 +371,7 @@
                 message: '邀请信息发送成功',
                 type: 'success'
             });
-         //   that.reload();
+            //that.reload();
         }).catch(function (error) {
             that.$message.error(error.response.data.info);
         });
@@ -386,7 +386,7 @@
                 message: '邀请信息发送成功',
                 type: 'success'
             });
-        //    that.reload();
+            //that.reload();
         }).catch(function (error) {
             that.$message.error(error.response.data.info);
         });
@@ -401,7 +401,7 @@
                 message: '邀请信息发送成功',
                 type: 'success'
             });
-        //    that.reload();
+            that.reload();
         }).catch(function (error) {
             that.$message.error(error.response.data.info);
         });
@@ -451,7 +451,7 @@
                 message: '邀请信息发送成功',
                 type: 'success'
             });
-        //    that.reload();
+            //that.reload();
         }).catch(function (error) {
             that.$message.error(error.response.data.info);
         });

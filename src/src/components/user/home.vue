@@ -268,8 +268,7 @@ export default {
 
         },
         toTeam(team_id){
-             team_id = window.btoa('hello,world'+team_id+'s')
-            this.$router.push("/TeamSpace/"+team_id);
+            this.$router.push("/TeamSpace/"+window.btoa('hello,world'+team_id+'!!'));
         }
     }
 }

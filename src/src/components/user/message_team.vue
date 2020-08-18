@@ -168,7 +168,7 @@ export default {
         this.$router.push('/message_share')
     },
     accept(msg_id) {
-      var that = this
+      var that = this;
       Vue.axios.get(
         'http://175.24.121.113:8000/myapp/team/accept/',
         {headers: {token: window.sessionStorage.getItem("token")},
@@ -177,7 +177,8 @@ export default {
         console.log(res);
         that.reload();
       }).catch(function(error){
-        console.log(error,Response);
+          that.$message.error(error.response.data.info);
+        that.reload();
       })
     },
     refuse(msg_id) {
@@ -190,7 +191,8 @@ export default {
         console.log(res);
         that.reload();
       }).catch(function(error){
-        console.log(error,Response);
+          that.$message.error(error.response.data.info)
+          that.reload();
       })
     },
     delmsg(msg_id) {
