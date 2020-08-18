@@ -2,6 +2,17 @@
   <div class="background" >
     <Header :can_edit="can_edit" :can_share="can_share" :url="url" :title="title" :file_id="parseInt(file_id)" :content="content" :collect="collect" v-bind:team_belong="team_belong" @event1="change($event)" ></Header>
     <Bnt @click1="drawer=true"></Bnt>
+    <el-timeline v-if="this.privilege!='1'" style="float:right; margin-right:3%; margin-top:15%">
+        <el-timeline-item
+          v-for="(activity, index) in activities"
+          :key="index"
+          icon='el-icon-more'
+          color='#0bbd87'
+          :type="primary"
+          :timestamp="activity.time">
+          {{activity.user_username}} 修改于
+        </el-timeline-item>
+    </el-timeline>
     <el-card style="height: 780px;">
       <el-container>
         <el-header style="height: 50px">
@@ -88,6 +99,7 @@
     },
     data() {
       return {
+        activities: [],
         collect:false,
         drawer: false,
         CommentdialogFormVisible:false,
@@ -143,6 +155,21 @@
       }
     },
     methods:{
+      getTimeLine(file_id){
+        Vue.axios.get(
+          "http://175.24.121.113:8000/myapp/file/timeline/get/",
+          {
+            headers: {token: window.sessionStorage.getItem('token')},   
+            params:{
+              file_id:file_id
+            }
+          }).then((res)=>  {
+            this.activities=res.data.data
+          }).catch(res => {
+            this.$message.error(res.response.data.info);
+              console.log(res);
+        });
+      },
       ShowDrawer(){
 
       },
@@ -300,12 +327,13 @@
       //this.fullscreenLoading = true;
       if(window.sessionStorage.getItem('token')){
         this.url=this.$route.path;
-        let str = window.atob(this.$route.params.id)
-        this.file_id=str.substr(11).substr(0, str.length-1);
+        let str = window.atob(this.$route.params.id).substr(11)
+        this.file_id=str.substr(0, str.length-1);
         document.title=this.title;
         //this.enterEdit();
         this.GetContents();
         this.get_comment();
+        this.getTimeLine(this.file_id);
       }
       else{
         this.$message({
@@ -328,8 +356,8 @@
 <style scoped>
   .el-card{
     padding-top: 5px;
-    width: 75%;
-    margin:0 auto;
+    width: 70%;
+    margin-left:10%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
     border-radius: 2px;
   }

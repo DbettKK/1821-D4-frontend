@@ -86,10 +86,8 @@
       <el-main>
         <el-card class="info" :body-style="{ padding: '0px' }">
           <div>
-            <div class="avatar_box">
-              <img src="../../assets/logo.png" alt="">
-            </div>
-            <el-button class="changeteampic" type="info" plain>
+            <el-avatar class="teampic" :size="180" :src="teaminfo.avatar" style="margin-right: 20px"></el-avatar>
+            <el-button class="changeteampic" type="info" plain @click.native="changepic()">
               <i class="el-icon-edit"></i><span>修改头像</span>
             </el-button>
           </div>
@@ -456,7 +454,21 @@
         }).catch(function (error) {
             that.$message.error(error.response.data.info);
         });
-    }
+    },
+    changepic() {
+            var that = this;
+            this.$http.get('http://175.24.121.113:8000/myapp/team/avatar/change/',
+                {headers: {token: window.sessionStorage.getItem("token")}, params: {team_id: that.team_id}}
+            ).then(()=>{
+                that.$message({
+                    message: '修改成功',
+                    type: 'success'
+                });
+                that.reload();
+            }).catch(function(error){
+                console.log(error);
+            })
+        }
 
     }
   }
@@ -464,43 +476,33 @@
 
 <style lang="less" scoped>
 .info {
-  height: 350px;
+  height: 320px;
   width: 100%;
   position: relative;
-  .avatar_box { 
-    border: 1px solid #eee;
-    border-radius: 50%;
-    padding: 10px;
-    box-shadow: 0 0 10px #ddd;
+
+  .teampic {
     position: absolute;
-    left: 5%;
-    top: 10%;
-    opacity: 90%;
-    background-color: #fff;
-    img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background-color: #eee;
-    }
+    left: 6.8%;
+    top: 45px
   }
+  
 
   .changeteampic {
     position: absolute;
-    left: 8.7%;
-    top: 80%;
+    left: 9%;
+    top: 250px;
   }
 
   .invite {
     position: absolute;
     left: 85%;
-    top: 15%
+    top: 48px
   }
 
   .message {
     position:absolute;
     left: 28%;
-    top: 12%;
+    top: 54px;
     color: rgb(100, 100, 100);
   }
 }
