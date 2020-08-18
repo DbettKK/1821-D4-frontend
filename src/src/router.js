@@ -18,6 +18,7 @@ import Preview from './components/edit/preview.vue'
 import message_favorite from './components/user/message_favorite.vue'
 import message_comments from './components/user/message_comments.vue'
 import message_team from './components/user/message_team.vue'
+import message_share from './components/user/message_share.vue'
 import N404 from './components/NotFoundComponent.vue'
 
 Vue.use(Router)
@@ -79,6 +80,7 @@ const router = new Router({
         {path: '/message_favorite', component: message_favorite, name:'message_favorite', meta:{title:'收藏消息'}},
         {path: '/message_comments', component: message_comments, name:'message_comments', meta:{title:'评论消息'}},
         {path: '/message_team', component: message_team, name:'message_team', meta:{title:'团队消息'}},
+        {path: '/message_share', component: message_share, name:'message_share', meta:{title:'分享消息'}},
       ]
     },
     /*{

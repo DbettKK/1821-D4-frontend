@@ -5,6 +5,7 @@
                 <el-menu-item index="1" @click="msgfavorite">收藏消息</el-menu-item>
                 <el-menu-item index="2" @click="msgcomments">评论消息</el-menu-item>
                 <el-menu-item index="3" @click="msgteam">团队消息</el-menu-item>
+                <el-menu-item index="4" @click="msgshare">分享消息</el-menu-item>
             </el-menu>
             <div>
               <el-button class="createfile" type="info" @click.native="setallread()">
@@ -162,6 +163,9 @@ export default {
     },
     msgteam() {
         this.$router.push('/message_team')
+    },
+    msgshare() {
+        this.$router.push('/message_share')
     },
     accept(msg_id) {
       var that = this
