@@ -31,7 +31,7 @@
                     <el-dropdown trigger="hover" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item icon="el-icon-share" @click.native="shareUrl(item.id,item.permission)">分享</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-share" @click.native="shareUrl(item.id, item.permission)">分享</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-star-on" @click.native="addFavorite(item.id)">收藏</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-edit" @click.native="renameClick(item.id)">重命名</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-s-custom" @click.native="selectPrivi(item.id)">设置文档权限</el-dropdown-item>
@@ -181,7 +181,7 @@
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="submit(); sendInnerMessage()" >确定</el-button>
+            <el-button type="primary" @click="submit" >确定</el-button>
           </div>
         </el-dialog>
     </el-container>
@@ -403,6 +403,7 @@ export default {
       });
       this.dialog = false;
       this.reload();
+      this.sendInnerMessage();
     },
     createFile(type) {
       if(type==='default'){
@@ -566,6 +567,8 @@ export default {
     edit(file_id) {
       this.file_id = file_id;
       this.addrecent();
+      file_id = window.btoa('hello,world' + file_id + 's');
+      console.log(file_id);
       this.$router.push('/edit/' + file_id)
 
     },
@@ -633,7 +636,7 @@ export default {
     shareUrl(file_id,file_pri){
       this.file_id_tmp = file_id;
       this.dialogVisible = true;
-      this.shareURL = this.baseURL + file_id
+      this.shareURL = this.baseURL + window.btoa('hello,world' + file_id + 's');
       this.privilege = String(file_pri)
     }
   },

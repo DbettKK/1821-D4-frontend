@@ -59,7 +59,7 @@
                          <el-dropdown-item icon="el-icon-share" @click.native="share_function" v-if="item.team_permission>3">分享</el-dropdown-item>
                          -->
                          <!--当文件拥有可分享权限或用户为创建者是可以看到团队空间的下拉栏中的分享-->
-                          <el-dropdown-item icon="el-icon-share" v-if="item.team_permission>=4||pri_visible(item.creator)" @click.native="file_id_tmp = item.id; sharedialogVisible = true; shareURL = baseURL+item.id">分享</el-dropdown-item>
+                          <el-dropdown-item icon="el-icon-share" v-if="item.team_permission>=4||pri_visible(item.creator)" @click.native="shareUrl(item.id)">分享</el-dropdown-item>
 
                          <!--限制了只有拥有足够的权限才能够更改团队文档的权限-->
                          <el-dropdown-item icon="el-icon-setting" @click.native="click_set_pri(item.id)" v-if="pri_visible(item.creator)">设置文档权限</el-dropdown-item>
@@ -209,7 +209,7 @@
             -->
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="sharedialogVisible=false;" >确定</el-button>
+            <el-button type="primary" @click="sharedialogVisible=false" >确定</el-button>
           </div>
         </el-dialog>
     </el-container>
@@ -341,6 +341,7 @@ export default {
     },
     edit(file_id){
       this.file_id = file_id;
+      file_id = window.btoa('hello,world' + file_id + 's')
       this.addrecent();
       this.$router.push('/edit/' + file_id)
     },
@@ -664,6 +665,11 @@ export default {
           showClose: true
         });
     },
+      shareUrl(file_id){
+          this.file_id_tmp = file_id;
+          this.sharedialogVisible = true;
+          this.shareURL = this.baseURL+window.btoa('hello, world' + file_id + 's');
+      }
   },
   computed: {
     pages () {
