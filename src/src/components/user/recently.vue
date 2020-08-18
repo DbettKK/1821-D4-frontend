@@ -37,7 +37,7 @@
                     <el-dropdown trigger="hover" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item icon="el-icon-share" v-if="item.file_privi>=4" @click.native="shareUrl(item.file)">分享</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-share" v-if="item.file_privi>=4" @click.native="shareUrl(item.file,item.file_privi)">分享</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-star-on" @click.native="addFavorite(item.file)">收藏</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-delete-solid" @click.native="remove(item.file)">从列表中删除</el-dropdown-item>
 <!--                        <el-dropdown-item icon="el-icon-delete-solid" v-if="item.person">移到回收站</el-dropdown-item>-->
@@ -119,7 +119,7 @@
                 v-clipboard:error="onError">复制链接</el-button>
             </el-form-item>
             
-            <el-form-item label="权限" required>
+            <el-form-item label="文档的权限为" required>
               <el-select v-model="privilege" placeholder="请选择">
                 <el-option label="仅查看" value="1"></el-option>
                 <el-option label="可编辑" value="2"></el-option>
@@ -127,9 +127,22 @@
                 <el-option label="可分享" value="4"></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="同时发送站内消息">
+              <el-switch
+                v-model="innerMessage"
+                active-color="#13ce66"
+                inactive-color="#909399">
+              </el-switch>
+            </el-form-item>
+            <el-form-item v-if="innerMessage" label="分享对象的用户名或邮箱">
+              <el-input
+                v-model="shareMessageTo"
+                >
+              </el-input>
+            </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="submit" >确定</el-button>
+            <el-button type="primary" @click="submit(); sendInnerMessage()" >确定</el-button>
           </div>
         </el-dialog>
     </el-container>
@@ -142,7 +155,9 @@ export default {
   data() {
     return {
     //  <!--这里写死会出问题-->
-      baseURL: 'http://localhost:8080/edit/',
+      innerMessage: false,
+      shareMessageTo:'',
+      baseURL: 'http://175.24.121.113/edit/',
       shareURL: '',
       dialogVisible: false,
       file_id_tmp: null,
@@ -172,6 +187,40 @@ export default {
     this.getDoclist()
   },
   methods: {
+    sendInnerMessage() {
+      var that = this
+      this.$http.post('http://127.0.0.1:8000/myapp/msg/sendInnerMessage/', this.$qs.stringify({
+                shareMessageTo: this.shareMessageTo,
+                file_id: this.file_id_tmp
+              }), {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(function (res) {
+        that.$message({
+          message: "站内分享成功",//+res.data.file_id,
+          type: "success",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
+        console.log(res.data);
+      }).catch(function (error) {
+        that.$message({
+          message: error.response.data.info,//+res.data.file_id,
+          type: "error",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
+        console.log(error.response);
+      });
+      this.dialog=false;
+      this.reload();
+    },
+    shareUrl(file_id,file_pri){
+      this.file_id_tmp = file_id;
+      this.dialogVisible = true;
+      this.shareURL = this.baseURL + file_id
+      this.privilege = String(file_pri)
+    },
     onCopy: function () {
       this.$message({
           message: "已经复制到剪贴版",//+res.data.file_id,
@@ -448,11 +497,6 @@ export default {
       this.addrecent();
       this.$router.push('/edit/' + file_id)
     },
-    shareUrl(file_id){
-      this.file_id_tmp = file_id;
-      this.dialogVisible = true;
-      this.shareURL = this.baseURL + file_id;
-    }
   },
   computed: {
     pages () {
