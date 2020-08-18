@@ -27,7 +27,7 @@
                   :key="index"
                   icon='el-icon-more'
                   color='#0bbd87'
-                  :type="primary"
+                  type="primary"
                   :timestamp="activity.time.substr(0,19).replace('T', ' ')">
             {{activity.user_username}} 修改于
           </el-timeline-item>
@@ -67,7 +67,7 @@
         </el-row>
       </el-main>
       <el-footer>
-        <el-button type="primary" round @click="L_comment">编写评论</el-button>
+        <el-button type="primary" @click="L_comment" round >编写评论</el-button>
       </el-footer>
     </el-drawer>
     <el-dialog title="添加用户评论" :visible.sync="CommentdialogFormVisible" width="30%">
@@ -322,11 +322,10 @@
           }
         }
       },
-      addrecent(file_id) {
-        //var that = this;
-        this.$http.get('http://175.24.121.113:8000/myapp/file/browse/', {
-                  headers: {token: window.sessionStorage.getItem("token")},
-                  params:{file_id: file_id}
+      addrecent() {
+        Vue.axios.get('http://175.24.121.113:8000/myapp/file/browse/', {
+                params: {'file_id': this.file_id},
+                  headers: {'token': window.sessionStorage.getItem("token")}
                 }
         ).then(function (res) {
           console.log(res.data);
@@ -335,29 +334,47 @@
         });
       },
     },
-    watch:{
-    },
     created(){
-      //this.fullscreenLoading = true;
-      if(window.sessionStorage.getItem('token')){
-        this.url=this.$route.path;
-        let str = window.atob(this.$route.params.id).substr(11)
-        this.file_id=str.substr(0, str.length-1);
-        document.title=this.title;
-        //this.enterEdit();
-        this.GetContents();
-        this.get_comment();
-        this.addrecent(this.file_id);
-        this.getTimeLine(this.file_id);
-      }
-      else{
-        this.$message({
-          message: '想查看文档 请先登录哦',
-          type: 'warning'
+      this.url=this.$route.path;
+      let str = window.atob(this.$route.params.id).substr(11)
+      this.file_id=str.substr(0, str.length-1);
+      document.title=this.title;
+      if(window.name == ""){
+        window.name = "isReload";
+        if(window.sessionStorage.getItem('token')){
+          this.GetContents();
+          this.get_comment();
+          this.addrecent();
+          this.getTimeLine(this.file_id);
+        }
+        else{
+          this.$message({
+            message: '想查看文档 请先登录哦',
+            type: 'warning'
+          });
+          this.$router.push('/');
+        }
+      }else if(window.name == "isReload"){
+        this.$http.get('http://175.24.121.113:8000/myapp/file/edit/save/',
+                {headers: {token: window.sessionStorage.getItem('token')},
+                  params: {file_id: this.file_id}}
+        ).then(()=>{
+          if(window.sessionStorage.getItem('token')){
+            this.GetContents();
+            this.get_comment();
+            this.addrecent();
+            this.getTimeLine(this.file_id);
+          }
+          else{
+            this.$message({
+              message: '想查看文档 请先登录哦',
+              type: 'warning'
+            });
+            this.$router.push('/');
+          }
         });
-        this.$router.push('/');
       }
-      //this.fullscreenLoading = false;
+
     },
     destroyed(){
       this.$http.get('http://175.24.121.113:8000/myapp/file/edit/save/',
