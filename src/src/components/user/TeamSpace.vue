@@ -274,8 +274,12 @@ export default {
 
   },
   created() {
+        let str = window.atob(this.$route.params.id).substr(11)
+        this.team_id=str.substr(0, str.length-1);
     this.getDoclist();
-    this.team_id=this.$route.params.id.toString();
+  
+        console.log(this.team_id)
+  //  this.team_id=this.$route.params.id.toString();
      this.getUserInfo();
      this.getTeamInfo();
   },
@@ -295,10 +299,12 @@ export default {
   methods: {
     getDoclist() {
       var that = this;
+      let str = window.atob(this.$route.params.id).substr(11)
+     that.team_id=str.substr(0, str.length-1);
       Vue.axios.get(
           'http://175.24.121.113:8000/myapp/file/team/get/', {
               headers: {'token': window.sessionStorage.getItem('token')},
-              params:{team_id: that.$route.params.id.toString()}}
+              params:{team_id: that.team_id}}
       ).then(function(res){
         console.log(res);
         that.doclist=res.data.data;
@@ -308,17 +314,22 @@ export default {
       })
     },
     toTeam(){
-      this.team_id = this.$route.params.id;
+          let str = window.atob(this.$route.params.id).substr(11)
+        this.team_id=str.substr(0, str.length-1);
+   //   this.team_id = this.$route.params.id;
       this.$router.push("/TeamSpace/"+this.team_id);
     },
     Teammessage(){
-      this.team_id = this.$route.params.id;
+          let str = window.atob(this.$route.params.id).substr(11)
+        this.team_id=str.substr(0, str.length-1);
+   //   this.team_id = this.$route.params.id;
       this.$router.push("/Teammessage/"+this.team_id);
     },
     manage_member()
     {
-        this.team_id=this.$route.params.id;
-        this.$router.push('/Teammember/'+this.team_id)
+      //  this.team_id=this.$route.params.id;
+        var team_id = window.btoa('hello,world'+this.team_id+'s')
+        this.$router.push('/Teammember/'+team_id)
     },
     time(a) {
          this.doctime = a.toString().substr(0, 10)
@@ -525,10 +536,12 @@ export default {
     getTeamInfo()
     {
         var that=this;
+            let str = window.atob(this.$route.params.id).substr(11)
+        this.team_id=str.substr(0, str.length-1);
          this.$http.get(
                   'http://175.24.121.113:8000/myapp/team/get/', {
               headers: {'token': window.sessionStorage.getItem('token')},
-              params:{team_id: that.$route.params.id.toString()}}
+              params:{team_id: that.team_id}}
             ).then(res=>{
                 this.teaminfo.team_id=res.data.data.id;
                 this.teaminfo.name=res.data.data.name;

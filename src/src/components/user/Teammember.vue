@@ -175,7 +175,8 @@
     },
     created() {
                 var that=this;
-    this.team_id=this.$route.params.id.toString();
+       let str = window.atob(this.$route.params.id).substr(11)
+        this.team_id=str.substr(0, str.length-1);
      this.getUserInfo();
      this.getTeamInfo();
         this.getmembers();
@@ -214,8 +215,8 @@
     },
     methods:{
       toTeam(){
-          this.team_id = this.$route.params.id;
-          this.$router.push("/TeamSpace/"+this.team_id);
+        var team_id = window.btoa('hello,world'+this.team_id+'s')
+          this.$router.push("/TeamSpace/"+team_id);
       },
     getmembers()
     {
@@ -224,7 +225,7 @@
             'http://175.24.121.113:8000/myapp/team/members/get/',
             {
               headers: {'token': window.sessionStorage.getItem('token')},
-              params:{team_id: that.$route.params.id.toString()}}
+              params:{team_id: that.team_id.toString()}}
         ).
         then(function (res) {
             that.members=res.data.data
@@ -294,7 +295,7 @@
          this.$http.get(
                   'http://175.24.121.113:8000/myapp/team/get/', {
               headers: {'token': window.sessionStorage.getItem('token')},
-              params:{team_id: that.$route.params.id.toString()}}
+              params:{team_id: that.team_id.toString()}}
             ).then(res=>{
                 this.teaminfo=res.data.data;
                 console.log(res);
@@ -305,8 +306,8 @@
     },
     manage_member()
     {
-        this.team_id=this.$route.params.id;
-        this.$router.push('/Teammember/'+this.team_id)
+        var team_id = window.btoa('hello,world'+this.team_id+'s')
+        this.$router.push('/Teammember/'+team_id)
     },
        exitTeam(){
         this.$confirm('确定退出团队吗', '退出团队', {
