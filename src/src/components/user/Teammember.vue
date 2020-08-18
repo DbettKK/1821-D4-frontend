@@ -16,20 +16,71 @@
         </el-button>
       </el-header>
       <el-dialog
-        title="提示"
+        title="邀请用户"
         :visible.sync="invite_dialogVisible"
-        width="30%">
-        <div style="margin-bottom: 20px">
-          <span>被邀请人的ID:</span>
-        </div>
+        width="40%">
+        <div style="margin-bottom:20px">
+          <!--
+          <el-radio v-model="invite_mod" label="1">使用id邀请</el-radio>
+          -->
+          <el-radio v-model="invite_mod" label="2">使用用户名邀请</el-radio>
+          <el-radio v-model="invite_mod" label="3" style="margin-left:5%">使用邮箱邀请</el-radio>
+         </div>
+        <div v-if="invite_mod=='1'">
+          <div style="margin-bottom: 20px">
+           <span>被邀请人的ID:</span>
+          </div>
         <el-form ref="inviteFormRef" :model="inviteForm" label-width="0px" class="invite_form">
           <el-form-item prop="id">
-            <el-input placeholder="ID:" v-model="inviteForm.id"></el-input>
+            <el-input placeholder="ID:" v-model="inviteForm.id" style='width:300px'></el-input>
+            <el-button style='margin-left:30px'>查找</el-button>
           </el-form-item>
         </el-form>
+        </div>
+        <div v-if="invite_mod=='2'">
+          <div style="margin-bottom: 20px">
+           <span>被邀请人的用户名:</span>
+          </div>
+          <el-form ref="inviteFormRef" :model="inviteForm" label-width="0px" class="invite_form">
+            <el-form-item prop="name">
+              <el-input placeholder="用户名:" v-model="inviteForm.name" style='width:75%' @blur="getUserformat"></el-input>
+                <el-button style='margin-left:3%' @click.native='getUserformat'>查找</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+        <div v-if="invite_mod=='3'">
+          <div style="margin-bottom: 20px">
+           <span>被邀请人的邮箱:</span>
+          </div>
+          <el-form ref="inviteFormRef" :model="inviteForm" label-width="0px" class="invite_form">
+            <el-form-item prop="email">
+              <el-input placeholder="邮箱:" v-model="inviteForm.email" style='width:75%' @blur="getUserformat"></el-input>
+                 <el-button style='margin-left:3%' @click.native='getUserformat'>查找</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+          <el-table :data="found_user_format" height=200px style="width: 100%" :default-sort = "{prop: 'name', order: 'descending'}" :row-style="{height: '25px'}">
+            <el-table-column prop="username" label="用户名" @contextmenu.prevent=""></el-table-column>
+            <el-table-column prop="email" label="邮箱" width="200px"></el-table-column>
+            <el-table-column prop="create_time" :formatter="dateFormat" label="创建日期" width="140px"></el-table-column>
+            <el-table-column  fixed="right" width="50px" label="邀请">
+              <template slot-scope="scope">
+                <el-tooltip class="item" effect="dark" content="邀请" placement="bottom-end">
+                  <el-button @click.native="add_click(scope.row.id)" type="text" style="color: #999" size="mini">
+                    <i class="el-icon-circle-plus"></i>
+                  </el-button>
+                </el-tooltip>
+              </template>
+            </el-table-column>
+        </el-table>
+
+
         <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button @click.native="invite_dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click.native="invite_dialogVisible=false">确定</el-button>
+          <!--
           <el-button type="primary" @click.native="invite()">确 定</el-button>
+          -->
         </span>
       </el-dialog>
       <el-main>
@@ -107,9 +158,21 @@
         },
         is_creator:false,
         inviteForm: {
-        id: ''
+        id: '',
+        name:'',
+        email:''
       },
-      invite_dialogVisible: false
+      invite_dialogVisible: false,
+      invite_mod:'2',
+      //1 使用id  2使用昵称  3 使用邮箱
+      found_user_format:[
+        {
+          username:'',
+          email:'',
+          create_time:''
+        }
+      ]
+
       }
     },
     created() {
@@ -299,6 +362,8 @@
     },
        invite() {
         var that = this;
+        if(this.invite_mod=='1')
+        {
         this.$http.post('http://175.24.121.113:8000/myapp/team/invite/', this.$qs.stringify({
                 team_id: that.team_id, member_id: that.inviteForm.id
               }), {headers: {token: window.sessionStorage.getItem("token")}}
@@ -311,8 +376,88 @@
         }).catch(function (error) {
             that.$message.error(error.response.data.info);
         });
+        }
+        else if(this.invite_mod=='2')
+        {
+             this.$http.post('http://175.24.121.113:8000/myapp/team/invite/', this.$qs.stringify({
+                team_id: that.team_id,member_name:that.inviteForm.name
+              }), {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(() => {
+            that.$message({
+                message: '邀请信息发送成功',
+                type: 'success'
+            });
+            that.reload();
+        }).catch(function (error) {
+            that.$message.error(error.response.data.info);
+        });
+        }
+        else if(this.invite_mod=='3')
+        {
+          this.$http.post('http://175.24.121.113:8000/myapp/team/invite/', this.$qs.stringify({
+                team_id: that.team_id, member_email:that.inviteForm.email
+              }), {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(() => {
+            that.$message({
+                message: '邀请信息发送成功',
+                type: 'success'
+            });
+            that.reload();
+        }).catch(function (error) {
+            that.$message.error(error.response.data.info);
+        });
+
+        }
         that.dialogVisible = false;
+    },
+    getUserformat()
+    {
+      var that=this;
+       if(this.invite_mod=='2')
+        {
+             this.$http.post('http://175.24.121.113:8000/myapp/team/find/invite/', this.$qs.stringify({
+                username:that.inviteForm.name
+              }), {headers: {token: window.sessionStorage.getItem("token")}}        
+      ).then(function(res) {
+           that.found_user_format=res.data.data;
+       //     that.reload();
+        }).catch(function (error) {
+            that.$message.error(error.response.data.info);
+        });
+        }
+        else if(this.invite_mod=='3')
+        {
+          this.$http.post('http://175.24.121.113:8000/myapp/team/find/invite/', this.$qs.stringify({
+                email:that.inviteForm.email
+              }), {headers: {token: window.sessionStorage.getItem("token")}}
+        ).then(function(res) {
+           that.found_user_format=res.data.data;
+         //   that.reload();
+        }).catch(function (error) {
+            that.$message.error(error.response.data.info);
+        });
+
+        }
+      
+
+    },
+    add_click(uid)
+    { 
+      var that=this;
+      this.$http.post('http://175.24.121.113:8000/myapp/team/invite/', this.$qs.stringify({
+                team_id: that.team_id, member_id:uid
+              }), {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(() => {
+            that.$message({
+                message: '邀请信息发送成功',
+                type: 'success'
+            });
+            that.reload();
+        }).catch(function (error) {
+            that.$message.error(error.response.data.info);
+        });
     }
+
     }
   }
 </script>
