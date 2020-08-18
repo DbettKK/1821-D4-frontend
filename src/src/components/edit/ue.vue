@@ -1,6 +1,7 @@
 <template>
   <div class="background" >
     <Header :can_edit="can_edit" :can_share="can_share" :url="url" :title="title" :file_id="parseInt(file_id)" :content="content" :collect="collect" v-bind:team_belong="team_belong" @event1="change($event)" ></Header>
+    <Bnt @click1="drawer=true"></Bnt>
     <el-card style="height: 780px;">
       <el-container>
         <el-header style="height: 50px">
@@ -75,11 +76,13 @@
 <script>
   import Header from './header.vue' 
   import Footer from './footer.vue'
+  import Bnt from './hoverBnt.vue'
   import '@/assets/iconfont/iconfont.css'
   import Vue from 'vue'
   export default {
     name: 'FuncFormsEdit',
     components: {
+      Bnt,
       Header,
       Footer
     },
@@ -140,6 +143,9 @@
       }
     },
     methods:{
+      ShowDrawer(){
+
+      },
       L_comment(){
         if(this.can_comment==true)
           this.CommentdialogFormVisible=true;
