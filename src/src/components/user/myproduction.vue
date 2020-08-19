@@ -262,6 +262,7 @@ export default {
           showClose: true
         });
         console.log(res.data);
+        that.reload();
       }).catch(function (error) {
         that.$message({
           message: error.response.data.info,//+res.data.file_id,
@@ -272,8 +273,7 @@ export default {
         });
         console.log(error.response);
       });
-      this.dialog=false;
-      this.reload();
+
     },
     onCopy: function () {
       this.$message({
@@ -358,8 +358,8 @@ export default {
         console.log(error.response.data);
         console.log(window.sessionStorage.getItem("token"))
       });
-      this.getDoclist();
-      this.reload();
+      // this.getDoclist();
+      // this.reload();
     },
     toTrash(file_id) {
       var that = this
@@ -377,13 +377,13 @@ export default {
           showClose: true
         });
         console.log(res.data);
-
+        //that.getDoclist();
+        that.reload();
       }).catch(function (error) {
         console.log(error.response.data);
         console.log(window.sessionStorage.getItem("token"))
       });
-      this.getDoclist();
-      this.reload();
+
       //location.reload();
     },
     selectPrivi(file_id) {
@@ -406,6 +406,8 @@ export default {
           showClose: true
         });
         console.log(res.data);
+        //that.dialog = false;
+        that.reload();
       }).catch(function (error) {
         that.$message({
           message: error.response.data.info,//+res.data.file_id,
@@ -416,8 +418,7 @@ export default {
         });
         console.log(error.response);
       });
-      this.dialog = false;
-      this.reload();
+
     },
     createFile(type) {
       if(type==='default'){
@@ -557,7 +558,7 @@ export default {
           showClose: true
         });
         that.dialog2 = false;
-        that.getDoclist();
+        //that.getDoclist();
         that.reload();
         console.log(res.data);
       }).catch(function (error) {
@@ -617,7 +618,7 @@ export default {
           message: "成功修改为私人文档",//+res.data.file_id,
           type: "success",
         });
-        that.getDoclist();
+        //that.getDoclist();
         that.reload();
       }).catch(function (error) {
         that.$message.error(error.response.data.info);
@@ -637,7 +638,7 @@ export default {
           type: "success",
         });
         that.dialog3 = false;
-        that.getDoclist();
+        //that.getDoclist();
         that.reload();
       }).catch(function (error) {
         that.$message.error(error.response.data.info);

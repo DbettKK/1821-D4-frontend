@@ -311,6 +311,7 @@ export default {
           showClose: true
         });
         console.log(res.data);
+          that.reload();
       }).catch(function (error) {
         that.$message({
           message: error.response.data.info,//+res.data.file_id,
@@ -321,8 +322,7 @@ export default {
         });
         console.log(error.response);
       });
-      this.dialog=false;
-      this.reload();
+
     },
     getDoclist() {
         let str = window.atob(this.$route.params.id).substr(11);
@@ -369,8 +369,6 @@ export default {
             console.log(error.response);
         });
         this.file_id='';
-        this.getDoclist();
-        this.reload();
     },
     edit(file_id){
       this.file_id = file_id;
@@ -404,8 +402,6 @@ export default {
         //      console.log(error.response.data);
        //       console.log(window.sessionStorage.getItem("token"))
           });
-          this.getDoclist();
-          this.reload();
     },
     delfile(file_id) {
    //   this.del = file_id;
@@ -430,7 +426,10 @@ export default {
             that.$message({
           message: '删除成功',
           type: 'success'
-        })
+        });
+              //that.getDoclist();
+              that.reload();
+              that.dialog1 = false;
             //  console.log(res.data);
           }).catch(function (error) {
             that.$message({
@@ -440,9 +439,7 @@ export default {
            //   console.log(error.response.data);
           //    console.log(window.sessionStorage.getItem("token"))
           });
-          this.getDoclist();
-          this.reload();
-          this.dialog1 = false;
+
     },
 /*
     createFile(){
@@ -467,12 +464,13 @@ export default {
           type: 'success'
         })
         that.addrecent();
+          //this.getDoclist();
+          that.reload();
       }).catch(function (error) {
         that.$message.error(error.response.data.info);
       });
       //this.dialog=false;
-      this.getDoclist();
-      this.reload();
+
     },
     permission_transfer(team_permission)//用于显示团队权限
     {
@@ -510,7 +508,7 @@ export default {
           showClose: true
         });
         that.dialog2 = false;
-        that.getDoclist();
+        //that.getDoclist();
         that.reload();
         console.log(res.data);
       }).catch(function (error) {
@@ -540,6 +538,7 @@ export default {
           showClose: true
         });
         console.log(res.data);
+          that.reload();
       }).catch(function (error) {
         that.$message({
           message: error.resopnse.data.info,//+res.data.file_id,
@@ -550,8 +549,8 @@ export default {
         });
         console.log(error.response);
       });
-      this.dialog = false;
-      this.reload();
+      //this.dialog = false;
+
     },
     click_set_pri(file_id)
     {

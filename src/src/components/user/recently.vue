@@ -142,7 +142,7 @@
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="submit" >确定</el-button>
+            <el-button type="primary" @click="shareurl" >确定</el-button>
           </div>
         </el-dialog>
     </el-container>
@@ -202,6 +202,7 @@ export default {
           showClose: true
         });
         console.log(res.data);
+        that.reload();
       }).catch(function (error) {
         that.$message({
           message: error.response.data.info,//+res.data.file_id,
@@ -212,8 +213,7 @@ export default {
         });
         console.log(error.response);
       });
-      this.dialog=false;
-      this.reload();
+
     },
     shareUrl(file_id,file_pri){
       this.file_id_tmp = file_id;
@@ -291,8 +291,8 @@ export default {
       }).catch(function (error) {
         that.$message.error(error.response.data.info);
       });
-      this.getDoclist();
-      this.reload();
+      // this.getDoclist();
+      // this.reload();
     },
     toTrash(file_id){
       var that=this
@@ -304,11 +304,11 @@ export default {
           message: "成功移到回收站",//+res.data.file_id,
           type: "success",
         });
+        that.reload();
       }).catch(function (error) {
         that.$message.error(error.response.data.info);
       });
-      this.getDoclist();
-      this.reload();
+
     },
     remove(file_id) {
       var that =this
@@ -326,7 +326,7 @@ export default {
                   showClose: true
                 });
         console.log(res.data);
-        that.getDoclist();
+        //that.getDoclist();
         that.reload();
       }).catch(function (error) {
         that.$message({
@@ -369,6 +369,10 @@ export default {
       }
 
     },
+    shareurl(){
+      this.submit();
+      this.sendInnerMessage();
+    },
     submit() {
       this.dialogVisible=false;
       var that = this
@@ -385,6 +389,8 @@ export default {
           showClose: true
         });
         console.log(res.data);
+        //that.dialog = false;
+        that.reload();
       }).catch(function (error) {
         that.$message({
           message: error.resopnse.data.info,//+res.data.file_id,
@@ -395,9 +401,6 @@ export default {
         });
         console.log(error.response);
       });
-      this.dialog = false;
-      this.reload();
-      this.sendInnerMessage();
     },
     Default() {
       var that = this;
@@ -487,7 +490,7 @@ export default {
       }
       ).then(function (res) {
         console.log(res.data);
-        that.getDoclist();
+        //that.getDoclist();
         that.reload();
       }).catch(function (error) {
         console.log(error.response);

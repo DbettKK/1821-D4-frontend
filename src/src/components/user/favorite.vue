@@ -199,6 +199,7 @@ export default {
           showClose: true
         });
         console.log(res.data);
+        that.reload();
       }).catch(function (error) {
         that.$message({
           message: error.response.data.info,//+res.data.file_id,
@@ -209,8 +210,7 @@ export default {
         });
         console.log(error.response);
       });
-      this.dialog=false;
-      this.reload();
+
     },
     shareUrl(file_id,file_pri){
       this.file_id_tmp = file_id;
@@ -264,6 +264,10 @@ export default {
       this.doctime = a.toString().substr(0, 10)
          return this.doctime
     },
+    shareurl(){
+      this.submit()
+      this.sendInnerMessage();
+    },
     submit() {
       this.dialogVisible=false;
       var that = this
@@ -280,6 +284,8 @@ export default {
           showClose: true
         });
         console.log(res.data);
+        that.dialog = false;
+        that.reload();
       }).catch(function (error) {
         that.$message({
           message: error.resopnse.data.info,//+res.data.file_id,
@@ -290,9 +296,6 @@ export default {
         });
         console.log(error.response);
       });
-      this.dialog = false;
-      this.reload();
-      this.sendInnerMessage();
     },
     toTrash(file_id){
       var that=this
@@ -304,11 +307,12 @@ export default {
           message: "成功移到回收站",//+res.data.file_id,
           type: "success",
         });
+        //that.getDoclist();
+        that.reload();
       }).catch(function (error) {
         that.$message.error(error.response.data.info);
       });
-      this.getDoclist();
-      this.reload();
+
       //location.reload();
     },
     cancelFavor(file_id){
@@ -330,12 +334,13 @@ export default {
                   duration:3000,
                   showClose: true
                 });
+        //that.getDoclist();
+        that.reload();
       }).catch(function (error) {
         console.log(error.response.data);
         console.log(window.sessionStorage.getItem("token"))
       })
-      this.getDoclist();
-      this.reload();
+
     },
     createFile(type) {
       if(type==='default'){
@@ -452,8 +457,6 @@ export default {
         console.log(error.response);
       });
       this.file_id='';
-      this.getDoclist();
-      this.reload();
     },
     edit(file_id){
       this.file_id = file_id;
