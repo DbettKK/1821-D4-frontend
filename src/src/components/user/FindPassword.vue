@@ -222,7 +222,7 @@ export default {
 
 
 .login_box {
-  opacity: 90%;
+  opacity: 0.9;
   width: 450px;
   height: 450px;
   background-color: #fff;

@@ -53,99 +53,99 @@
                   </div>
                 </div>
               </el-card>
-              <el-dialog :inline="true" title="基于模板的文档创建" :visible.sync="dialogModel" width="30%">
-                <el-form ref="modelFile" :model="modelFile" label-width="80px">
-                  <el-form-item label="文件名字" required>
-                    <el-input v-model="modelFile.file_name"></el-input>
-                  </el-form-item>
-                  <el-form-item label="文件模板" required>
-                    <el-select v-model="modelFile.file_mod" placeholder="请选择">
-                      <el-option label="API接口模板" value="1"></el-option>
-                      <el-option label="计划书模板" value="2"></el-option>
-                      <el-option label="服务器操作模板" value="3"></el-option>
-                      <el-option label="算法题整理模板" value="4"></el-option>
-                    </el-select>
-                    <el-button type="primary" style="margin-left: 20px;" @click="preview(modelFile.file_mod)">模板预览</el-button>
-                  </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                  <el-button @click="dialogModel=false">取 消</el-button>
-                  <el-button type="primary" @click="Model" >确 定</el-button>
-                </div>
-              </el-dialog>
-              <el-dialog title="自定义文档创建" :visible.sync="dialogCustom" width="30%">
-                <el-form ref="CustomFile" :model="CustomFile" label-width="80px">
-                  <el-form-item label="文件名字" required>
-                    <el-input v-model="CustomFile.file_name"></el-input>
-                  </el-form-item>
-                  <el-form-item label="文件类型" required>
-                    <el-radio-group v-model="CustomFile.file_type">
-                      <el-radio label="私人文档"></el-radio>
-                      <el-radio label="团队文档"></el-radio>
-                    </el-radio-group>
-                  </el-form-item>
-                  <el-form-item label="文件权限" required>
-                    <el-select v-model="CustomFile.file_privilege" placeholder="请选择">
-                      <el-option label="仅查看" value="1"></el-option>
-                      <el-option label="可编辑" value="2"></el-option>
-                      <el-option label="可评论" value="3"></el-option>
-                      <el-option label="可分享" value="4"></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                  <el-button @click="dialogCustom=false">取 消</el-button>
-                  <el-button type="primary" @click="Customize" >确 定</el-button>
-                </div>
-              </el-dialog>
-              <el-dialog title="请选择想要上传的团队空间" :visible.sync="dialog3" width="30%">
-                <el-form>
-                  <el-form-item label="团队空间" required>
-                    <el-select v-model="teamspace" placeholder="请选择">
-                      <el-option v-for="ts in teamspaces" :key="ts.id" :label="ts.name" :value="ts.id">
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                  <el-button @click="dialog3=false">取 消</el-button>
-                  <el-button type="primary" @click="submitTypeTeam" >确 定</el-button>
-                </div>
-              </el-dialog>
-              <el-dialog
-                      title="请设置其他人对该文档的权限"
-                      :visible.sync="dialog"
-                      width="30%"
-              >
-                  <el-form>
-                    <el-form-item label="权限" required>
-                      <el-select v-model="privilege" placeholder="请选择">
-                        <el-option label="仅查看" value="1"></el-option>
-                        <el-option label="可编辑" value="2"></el-option>
-                        <el-option label="可评论" value="3"></el-option>
-                        <el-option label="可分享" value="4"></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-form>
-                  <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialog=false">取 消</el-button>
-                    <el-button type="primary" @click="submit()" >确定</el-button>
-                  </div>
-              </el-dialog>
-              <el-dialog title="重命名文档" :visible.sync="dialog2" width="30%">
-                <el-form>
-                  <el-form-item label="文档名" required>
-                    <el-input v-model="file_name" placeholder="请输入文档名字"></el-input>
-                  </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                  <el-button @click="dialog2=false">取消</el-button>
-                  <el-button type="primary" @click="renameFile" >确定</el-button>
-                </div>
-              </el-dialog>
             </el-col>
           </el-row>
         </el-main>
+      <el-dialog :inline="true" title="基于模板的文档创建" :visible.sync="dialogModel" width="30%">
+        <el-form ref="modelFile" :model="modelFile" label-width="80px">
+          <el-form-item label="文件名字" required>
+            <el-input v-model="modelFile.file_name"></el-input>
+          </el-form-item>
+          <el-form-item label="文件模板" required>
+            <el-select v-model="modelFile.file_mod" placeholder="请选择">
+              <el-option label="API接口模板" value="1"></el-option>
+              <el-option label="计划书模板" value="2"></el-option>
+              <el-option label="服务器操作模板" value="3"></el-option>
+              <el-option label="算法题整理模板" value="4"></el-option>
+            </el-select>
+            <el-button type="primary" style="margin-left: 20px;" @click="preview(modelFile.file_mod)">模板预览</el-button>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogModel=false">取 消</el-button>
+          <el-button type="primary" @click="Model" >确 定</el-button>
+        </div>
+      </el-dialog>
+      <el-dialog title="自定义文档创建" :visible.sync="dialogCustom" width="30%">
+        <el-form ref="CustomFile" :model="CustomFile" label-width="80px">
+          <el-form-item label="文件名字" required>
+            <el-input v-model="CustomFile.file_name"></el-input>
+          </el-form-item>
+          <el-form-item label="文件类型" required>
+            <el-radio-group v-model="CustomFile.file_type">
+              <el-radio label="私人文档"></el-radio>
+              <el-radio label="团队文档"></el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="文件权限" required>
+            <el-select v-model="CustomFile.file_privilege" placeholder="请选择">
+              <el-option label="仅查看" value="1"></el-option>
+              <el-option label="可编辑" value="2"></el-option>
+              <el-option label="可评论" value="3"></el-option>
+              <el-option label="可分享" value="4"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogCustom=false">取 消</el-button>
+          <el-button type="primary" @click="Customize" >确 定</el-button>
+        </div>
+      </el-dialog>
+      <el-dialog title="请选择想要上传的团队空间" :visible.sync="dialog3" width="30%">
+        <el-form>
+          <el-form-item label="团队空间" required>
+            <el-select v-model="teamspace" placeholder="请选择">
+              <el-option v-for="ts in teamspaces" :key="ts.id" :label="ts.name" :value="ts.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialog3=false">取 消</el-button>
+          <el-button type="primary" @click="submitTypeTeam" >确 定</el-button>
+        </div>
+      </el-dialog>
+      <el-dialog
+              title="请设置其他人对该文档的权限"
+              :visible.sync="dialog"
+              width="30%"
+      >
+        <el-form>
+          <el-form-item label="权限" required>
+            <el-select v-model="privilege" placeholder="请选择">
+              <el-option label="仅查看" value="1"></el-option>
+              <el-option label="可编辑" value="2"></el-option>
+              <el-option label="可评论" value="3"></el-option>
+              <el-option label="可分享" value="4"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialog=false">取 消</el-button>
+          <el-button type="primary" @click="submit()" >确定</el-button>
+        </div>
+      </el-dialog>
+      <el-dialog title="重命名文档" :visible.sync="dialog2" width="30%">
+        <el-form>
+          <el-form-item label="文档名" required>
+            <el-input v-model="file_name" placeholder="请输入文档名字"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialog2=false">取消</el-button>
+          <el-button type="primary" @click="renameFile" >确定</el-button>
+        </div>
+      </el-dialog>
         <el-dialog
           title="获得链接的人都可以查看"
           :visible.sync="dialogVisible"

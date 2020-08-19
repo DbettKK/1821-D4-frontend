@@ -270,7 +270,7 @@ top:55px;
 font-size:26px;//调整字体大小
 }
 .login_box {
-  opacity: 90%;
+  opacity: 0.9;
   width: 450px;
   height: 550px;
   background-color: #fff;
