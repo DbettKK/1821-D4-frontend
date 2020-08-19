@@ -22,6 +22,7 @@ import N404 from './components/NotFoundComponent.vue'
 import checkpassword from './components/user/chgpw_fir.vue'
 import newpassword from './components/user/chgpw_sec.vue'
 import changepassword from './components/user/chgpw_thr.vue'
+import OtherInfo from './components/user/otherInfo.vue'
 
 Vue.use(Router)
 /*
@@ -80,6 +81,7 @@ const router = new Router({
         {path: '/newpassword', component: newpassword, name:'newpassword', meta:{title:'金刚石文档编辑器:新密码'}},
         {path: '/changepassword', component: changepassword, name:'changepassword', meta:{title:'金刚石文档编辑器:修改密码'}},
         {path: '/showUserInfo', component: ShowUserInfo, name:'ShowUserInfo',meta:{title:'金刚石文档编辑器:个人信息'}},
+        {path: '/otherInfo/:id', component: OtherInfo, name:'OtherInfo',meta:{title:'金刚石文档编辑器:他人主页'}},
         //{ path:'/TeamSpace', component:TeamSpace,  name:'Teamspace',meta:{title:'团队空间'} }
         {path: '/message_favorite', component: message_favorite, name:'message_favorite', meta:{title:'收藏消息'}},
         {path: '/message_comments', component: message_comments, name:'message_comments', meta:{title:'评论消息'}},

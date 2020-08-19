@@ -76,8 +76,8 @@
 
 
         <span slot="footer" class="dialog-footer">
-          <el-button @click.native="invite_dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click.native="invite_dialogVisible=false">确定</el-button>
+          <el-button @click.native="clearout">取 消</el-button>
+          <el-button type="primary" @click.native="clearout">确定</el-button>
           <!--
           <el-button type="primary" @click.native="invite()">确 定</el-button>
           -->
@@ -161,7 +161,7 @@
         email:''
       },
       invite_dialogVisible: false,
-      invite_mod:'2',
+      invite_mod: 0,
       //1 使用id  2使用昵称  3 使用邮箱
       found_user_format:[
         {
@@ -214,6 +214,11 @@
         }
     },
     methods:{
+      clearout(){
+        this.invite_dialogVisible=false;
+        this.found_user_format = [];
+        this.inviteForm = {};
+      },
       toTeam(){
           this.team_id = this.$route.params.id;
           this.$router.push("/TeamSpace/"+this.team_id);
