@@ -233,7 +233,19 @@ export default {
   methods: {
     sharesubmit(){
       this.submit();
+      if(!this.innerMessage)
+             this.$message({
+          message: "分享成功",//+res.data.file_id,
+          type: "success",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
+      if(this.innerMessage)
+      {
       this.sendInnerMessage();
+      }
+
     },
     sendInnerMessage() {
       var that = this
