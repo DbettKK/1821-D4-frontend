@@ -105,8 +105,8 @@
                 <el-table-column  fixed="right" width="50px" label="访问">
                     <template slot-scope="scope">
                         <el-tooltip class="item" effect="dark" content="访问" placement="bottom-end">
-                            <el-button @click.native="toOther(scope.row.id)" type="text" style="color: #999" size="mini">
-                                <i class="el-icon-circle-plus"></i>
+                            <el-button @click.native="toOther(scope.row.id)" type="text" style="color: #999" size="mini" v-if="heihei">
+                                <i class="el-icon-right"></i>
                             </el-button>
                         </el-tooltip>
                     </template>
@@ -133,6 +133,7 @@ export default {
     inject: ['reload'],
     data(){
         return {
+            heihei: false,
             invite_dialogVisible: false,
             invite_mod: 0,
             inviteForm: {
@@ -197,6 +198,7 @@ export default {
                     }), {headers: {token: window.sessionStorage.getItem("token")}}
                 ).then(function(res) {
                     that.found_user_format=res.data.data;
+                    that.heihei=true;
                 }).catch(function (error) {
                     that.$message.error(error.response.data.info);
                 });

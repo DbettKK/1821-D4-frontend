@@ -66,7 +66,7 @@
             <el-table-column  fixed="right" width="50px" label="邀请">
               <template slot-scope="scope">
                 <el-tooltip class="item" effect="dark" content="邀请" placement="bottom-end">
-                  <el-button @click.native="add_click(scope.row.id)" type="text" style="color: #999" size="mini">
+                  <el-button @click.native="add_click(scope.row.id)" type="text" style="color: #999" size="mini" v-if="heihei">
                     <i class="el-icon-circle-plus"></i>
                   </el-button>
                 </el-tooltip>
@@ -111,7 +111,7 @@
             <el-table-column fixed="right" width="50" v-if = "this.is_creator == true">
               <template slot-scope="scope">
                 <el-tooltip class="item" effect="dark" content="移除用户" placement="bottom-end">
-                  <el-button @click.native="DelMember(scope.row.member,scope.row.team)" type="text" style="color: #999" size="mini">
+                  <el-button @click.native="DelMember(scope.row.member,scope.row.team)" type="text" style="color: #999" size="mini" >
                     <i class="el-icon-delete-solid"></i>
                   </el-button>
                 </el-tooltip>
@@ -130,6 +130,7 @@
     inject: ['reload'],
     data() {
       return {
+        heihei: false,
         activeIndex:'2',
         tableData: [],
         id: '1',
@@ -424,6 +425,7 @@
               }), {headers: {token: window.sessionStorage.getItem("token")}}        
       ).then(function(res) {
            that.found_user_format=res.data.data;
+           that.heihei=true;
        //     that.reload();
         }).catch(function (error) {
             that.$message.error(error.response.data.info);
