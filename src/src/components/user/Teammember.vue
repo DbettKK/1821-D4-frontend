@@ -87,7 +87,7 @@
         <el-card class="info" :body-style="{ padding: '0px' }">
           <div>
             <el-avatar class="teampic" :size="180" :src="teaminfo.avatar" style="margin-right: 20px"></el-avatar>
-            <el-button class="changeteampic" type="info" plain @click.native="changepic()">
+            <el-button class="changeteampic" type="info" plain @click.native="changepic()" v-if="is_creator == true">
               <i class="el-icon-edit"></i><span>修改头像</span>
             </el-button>
           </div>
@@ -527,14 +527,14 @@
   .teampic {
     position: absolute;
     left: 6.8%;
-    top: 45px
+    top: 70px
   }
   
 
   .changeteampic {
     position: absolute;
     left: 9%;
-    top: 250px;
+    top: 260px;
   }
 
   .invite {
