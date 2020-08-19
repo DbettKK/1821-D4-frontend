@@ -212,7 +212,8 @@
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="sendInnerMessage" >确定</el-button>
+            <el-button type="primary" @click="sendInnerMessage" v-if="innerMessage" >确定</el-button>
+            <el-button type="primary" @click=" sharedialogVisible=false" v-else>确定</el-button>
           </div>
         </el-dialog>
     </el-container>
