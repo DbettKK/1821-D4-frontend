@@ -70,10 +70,10 @@
                     </el-dropdown>
                   </div>
                   <div class="bottom clearfix">
-                    <time class="time" style="margin-right: 20px;">{{time(item.last_modified)}} 最后一次修改</time>
-                    <span style="font-size: 13px; color: #999;">该文档创建者：</span>
+                    <time class="time" style="margin-right: 20px;">{{time(item.last_modified)}} 上一次修改</time>
+                    <span style="font-size: 13px; color: #999;">创建者：</span>
                     <span style="font-size: 13px; color: #999;margin-right: 20px;">{{item.creator_name}}</span>
-                    <span style="font-size: 13px; color: #999;">成员权限：</span>
+                    <span style="font-size: 13px; color: #999;">权限：</span>
                     <span style="font-size: 13px; color: #999;">{{permission_transfer(item.team_permission)}}</span>
                   </div>
                 </div>
@@ -430,7 +430,7 @@ export default {
         if(team_permission==1)
         return "仅查看";
         else if(team_permission==2)
-        return "可修改";
+        return "可编辑";
           else if(team_permission==3)
           return "可评论";
             else if(team_permission==4)
