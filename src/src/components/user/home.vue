@@ -13,7 +13,7 @@
                         <i class="el-icon-user-solid el-icon--right icon-user"></i>
                         <!--  <span style="font-size: 27px;margin-right: 20px;">欢迎您，{{userinfo.username}}</span>-->
                     </span>
-                <el-dropdown-menu slot="dropdown" v-if="disabled">
+                <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item v-if="isLogin && userinfo.username">你好，{{userinfo.username}}</el-dropdown-item>
                     <el-dropdown-item v-else @click.native="logout">请登录</el-dropdown-item>
                     <el-dropdown-item @click.native="changeInfo" v-if="isLogin && userinfo.username">
@@ -23,7 +23,7 @@
 
                 </el-dropdown-menu>
             </el-dropdown>
-            <el-dropdown trigger="hover"  v-if="disabled">
+            <el-dropdown trigger="hover">
                 <span class="el-dropdown-link">
                     <i class="el-icon-s-tools el-icon--right icon-setting"></i>
                     <!--   <span style="font-size: 27px;margin-right: 20px;">欢迎您，{{userinfo.username}}</span>-->
