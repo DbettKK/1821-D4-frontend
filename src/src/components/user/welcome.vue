@@ -82,7 +82,7 @@
                 </div>
                 <el-form ref="inviteFormRef" :model="inviteForm" label-width="0px" class="invite_form">
                     <el-form-item prop="name">
-                        <el-input placeholder="用户名:" v-model="inviteForm.name" style='width:75%' @blur="getUserformat"></el-input>
+                        <el-input placeholder="用户名:" v-model="inviteForm.name" style='width:75%' ></el-input>
                         <el-button style='margin-left:3%' @click.native='getUserformat'>查找</el-button>
                     </el-form-item>
                 </el-form>
@@ -93,7 +93,7 @@
                 </div>
                 <el-form ref="inviteFormRef" :model="inviteForm" label-width="0px" class="invite_form">
                     <el-form-item prop="email">
-                        <el-input placeholder="邮箱:" v-model="inviteForm.email" style='width:75%' @blur="getUserformat"></el-input>
+                        <el-input placeholder="邮箱:" v-model="inviteForm.email" style='width:75%' ></el-input>
                         <el-button style='margin-left:3%' @click.native='getUserformat'>查找</el-button>
                     </el-form-item>
                 </el-form>
@@ -209,6 +209,7 @@ export default {
                     }), {headers: {token: window.sessionStorage.getItem("token")}}
                 ).then(function(res) {
                     that.found_user_format=res.data.data;
+                    that.heihei=true;
                 }).catch(function (error) {
                     that.$message.error(error.response.data.info);
                 });

@@ -21,7 +21,7 @@
                     <el-dropdown-item @click.native="changeInfo" v-if="isLogin && userinfo.username">
                         修改密码及绑定邮箱
                     </el-dropdown-item>
-                    <el-dropdown-item v-if="isLogin && userinfo.username" @click.native="dialog=true">加入团队</el-dropdown-item>
+<!--                    <el-dropdown-item v-if="isLogin && userinfo.username" @click.native="dialog=true">加入团队</el-dropdown-item>-->
 
                 </el-dropdown-menu>
             </el-dropdown>

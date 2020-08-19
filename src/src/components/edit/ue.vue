@@ -54,7 +54,7 @@
                   </div>
                 </div>
                 <div class="bottom clearfix">
-                  <span style="font-size: 13px; color: #999;margin-right: 20px;" @click="toOther(item.person)">
+                  <span style="font-size: 13px; color: #999;margin-right: 20px;cursor: pointer" @click="toOther(item.person)">
                     评论用户：{{item.username}}
                   </span>
                   <span style="font-size: 13px; color: #999;margin-right: 25px;">评论时间：{{time(item.create_time)}}</span>
@@ -78,7 +78,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="CommentdialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="add_comment">确 定</el-button>
+        <el-button type="primary" style="margin-left: 20px" @click="add_comment">确 定</el-button>
       </div>
     </el-dialog>
 <!--    <Footer></Footer>-->
