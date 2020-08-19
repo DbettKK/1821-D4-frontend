@@ -54,7 +54,7 @@
                   </div>
                 </div>
                 <div class="bottom clearfix">
-                  <span style="font-size: 13px; color: #999;margin-right: 20px;">
+                  <span style="font-size: 13px; color: #999;margin-right: 20px;" @click="toOther(item.person)">
                     评论用户：{{item.username}}
                   </span>
                   <span style="font-size: 13px; color: #999;margin-right: 25px;">评论时间：{{time(item.create_time)}}</span>
@@ -174,6 +174,9 @@
       },
       ShowDrawer(){
 
+      },
+      toOther(uid) {
+        this.$router.push('/otherInfo/' + window.btoa('hello,world'+uid+'nihao'));
       },
       L_comment(){
         if(this.can_comment==true)
@@ -332,7 +335,7 @@
     beforeRouteEnter (to, from, next) {
       next(vm => {
         console.log(from);
-        if(from.path==='/message_comments'){
+        if(from.path==='/message_comments' || from.name === 'OtherInfo'){
           vm.drawer=true;
         }
 
