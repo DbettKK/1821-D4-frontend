@@ -92,7 +92,7 @@
             </el-button>
           </div>
           <div class="message">
-            <p>团队名称：{{this.teaminfo.name}}</p>
+            <p>团队名称：{{this.teaminfo.name}} <el-link @click.native="dialog1 = true" type="primary" icon="el-icon-edit" style="margin-bottom: 2.8px" v-if="is_creator == true"></el-link></p>
             <p>创建者：{{this.teaminfo.creator_name}}</p>
             <p>创建日期：{{time(this.teaminfo.create_time)}}</p>
             <p>成员人数：{{this.teaminfo.members.length}}</p>
@@ -120,6 +120,20 @@
         </el-table>
         </el-card>
       </el-main>
+      <el-dialog title="提示" :visible.sync="dialog1" width="30%">
+            <div style="margin-bottom: 20px">
+                <span>团队名称修改为:</span>
+            </div>
+            <el-form ref="teamFormRef" :model="teamForm" label-width="0px" class="team_form">
+                <el-form-item prop="name">
+                    <el-input placeholder="name:" v-model="teamForm.name"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialog1 = false">取 消</el-button>
+                <el-button type="primary" @click.native="changename()">确 定</el-button>
+            </span>
+        </el-dialog>
     </el-container>
 </template>
 
@@ -131,10 +145,14 @@
     data() {
       return {
         heihei: false,
+        dialog1: false,
         activeIndex:'2',
         tableData: [],
         id: '1',
         uid_todel:'',
+        teamForm: {
+          name: ''
+        },
         members:
         [
             {
@@ -215,6 +233,23 @@
         }
     },
     methods:{
+      changename() {
+            var that = this;
+            this.$http.post('http://175.24.121.113:8000/myapp/team/change/name/', this.$qs.stringify({
+                    team_id: this.teaminfo.id,
+                    name: this.teamForm.name
+                }), {headers: {token: window.sessionStorage.getItem("token")}}
+            ).then(() => {
+                that.$message({
+                    message: '团队名称修改成功',
+                    type: 'success'
+                });
+                that.reload();
+            }).catch(function (error) {
+                that.$message.error(error.response.data.info);
+            });
+            that.dialog2 = false;
+        },
       clearout(){
         this.invite_dialogVisible=false;
         this.found_user_format = [];
