@@ -181,7 +181,7 @@
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="submit" >确定</el-button>
+            <el-button type="primary" @click="sharesubmit" >确定</el-button>
           </div>
         </el-dialog>
     </el-container>
@@ -231,6 +231,10 @@ export default {
     this.getDoclist()
   },
   methods: {
+    sharesubmit(){
+      this.submit();
+      this.sendInnerMessage();
+    },
     sendInnerMessage() {
       var that = this
       this.$http.post('http://175.24.121.113:8000/myapp/msg/sendInnerMessage/', this.$qs.stringify({
@@ -373,7 +377,6 @@ export default {
     selectPrivi(file_id) {
       this.dialog = true;
       this.file_id_tmp = file_id
-
     },
     submit() {
       this.dialogVisible = false;
@@ -403,7 +406,6 @@ export default {
       });
       this.dialog = false;
       this.reload();
-      this.sendInnerMessage();
     },
     createFile(type) {
       if(type==='default'){
