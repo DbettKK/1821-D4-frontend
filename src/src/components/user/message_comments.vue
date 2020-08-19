@@ -35,7 +35,7 @@
                     <el-dropdown trigger="hover" style="font-size: 1px; color: #999;" placement="bottom-start">
                       <span class="el-dropdown-link">···</span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item icon="el-icon-view" @click.native="setunread(item.id)">设为未读</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-view" @click.native="setunread(item.id)" v-if="item.msg_is_read == false">设为未读</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-delete" @click.native="delmsg(item.id)">删除消息</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
