@@ -1,7 +1,8 @@
 <template>
-    <el-container style="height: 100%; border: 1px solid #eee">
+    <el-container style="height: 100%;">
         <el-header style="text-align: right; font-size: 12px">
             <div class="name_place">
+                <el-avatar class="headpic" :size="40" src="https://i.loli.net/2020/08/19/pukN8zfm5DxsKjt.png"></el-avatar>
                 <span class="name">金刚石文档</span>
             </div>
 <!--            <div class="ue">-->
@@ -39,8 +40,7 @@
         
         <el-container>
             <el-aside :width="isCollapse ? '64px' : '250px'" style="background-color: #EDEEEF;">
-                <div class="toggle-button" @click="toggleCollapse">|||</div>
-                <el-menu :unique-opened="true" :collapse="isCollapse" :collapse-transition="false" style="background-color: #EDEEEF;" :disabled="disabled">
+                <el-menu :unique-opened="true" :collapse="isCollapse" :collapse-transition="false" style="background-color: #f5f8fa;" :disabled="disabled">
                     <el-menu-item index="1" @click="welcome" :disabled="disabled"><i class="el-icon-s-home"></i><span>主页</span></el-menu-item>
                     <el-menu-item index="2" @click="recently" :disabled="disabled"><i class="el-icon-menu"></i><span>工作站</span></el-menu-item>
                     <el-menu-item index="3" @click="trashbin" :disabled="disabled"><i class="el-icon-delete-solid"></i><span>回收站</span></el-menu-item>
@@ -295,25 +295,36 @@ export default {
 
 <style lang="less" scoped>
 .el-header {
-    background-color: #F2F6FC;
-    color: #333;
+    background-color: #242a2f;
+    color: #fcfcfc;
     line-height: 60px;
     display: flex;
     justify-content: space-between;
 }
 
 .name_place {
+    background-color: aqua;
     span {
         margin-left: 15px;
     }
+    .headpic {
+        position: absolute;
+        background-color: #242a2f;
+        left: 20px;
+        top: 10px
+    }
+    .name {
+        color: #c0c1c3;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        position: absolute;
+        left: 70px;
+        top: 0px
+    }
 }
 
-.name {
-    color: #333;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-}
+
 .user{
     color: #333;
     font-size: 20px;
@@ -321,25 +332,17 @@ export default {
 .el-aside {
     color: #333;
 }
-
-.toggle-button {
-    background-color: #EDEEEF;
-    font-size: 10px;
-    line-height: 24px;
-    color: #333;
-    text-align: center;
-    letter-spacing: 0.2em;
-    cursor: pointer;
-}
 .el-menu-item {
     background-color: #EDEEEF
 }
 .icon-user{
+    color: #626669;
     font-size:30px;
     margin-top: 15px;
     margin-right: 10px;
  }
 .icon-setting{
+    color: #626669;
     font-size:30px;
     margin-top: 15px;
     margin-right: 20px;
