@@ -432,7 +432,7 @@ export default {
         else if(team_permission==2)
         return "可修改";
           else if(team_permission==3)
-          return "可修改";
+          return "可评论";
             else if(team_permission==4)
             return"可分享";
             else return "wrong"
