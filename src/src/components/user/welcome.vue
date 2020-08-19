@@ -48,7 +48,7 @@
                 <div class="block">
                     <el-carousel trigger="click" height="350px">
                         <el-carousel-item v-for="(item, index) of piclist" :key="index">
-                            <el-image style="width: 909px; height: 350px" :fit="fit" :src="item.src"></el-image>
+                            <el-image style="width: 909px; height: 350px" :fit="fits" :src="item.src"></el-image>
                         </el-carousel-item>
                     </el-carousel>
                 </div>
@@ -146,7 +146,7 @@ export default {
                 email:'',
                 create_time:''
             }],
-            fits: ['fill', 'contain', 'cover', 'none', 'scale-down'],
+            fits: 'fill',
             piclist: [
                 {src: 'https://i.loli.net/2020/08/19/iVMEWwe8gQO1psB.jpg'},
                 {src: 'https://i.loli.net/2020/08/19/7QrMj2dKXzvP8sm.jpg'},
