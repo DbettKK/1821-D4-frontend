@@ -58,52 +58,52 @@
               </el-card>
             </el-col>
           </el-row>
-          <el-dialog :inline="true" title="基于模板的文档创建" :visible.sync="dialogModel" width="30%">
-            <el-form ref="modelFile" :model="modelFile" label-width="80px">
-              <el-form-item label="文件名字" required>
-                <el-input v-model="modelFile.file_name"></el-input>
-              </el-form-item>
-              <el-form-item label="文件模板" required>
-                <el-select v-model="modelFile.file_mod" placeholder="请选择">
-                  <el-option label="API接口模板" value="1"></el-option>
-                  <el-option label="计划书模板" value="2"></el-option>
-                  <el-option label="服务器操作模板" value="3"></el-option>
-                  <el-option label="算法题整理模板" value="4"></el-option>
-                </el-select>
-                <el-button type="primary" style="margin-left: 20px;" @click="preview(modelFile.file_mod)">模板预览</el-button>
-              </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-              <el-button @click="dialogModel=false">取 消</el-button>
-              <el-button type="primary" @click="Model" >确 定</el-button>
-            </div>
-          </el-dialog>
-          <el-dialog title="自定义文档创建" :visible.sync="dialogCustom" width="30%">
-            <el-form ref="CustomFile" :model="CustomFile" label-width="80px">
-              <el-form-item label="文件名字" required>
-                <el-input v-model="CustomFile.file_name"></el-input>
-              </el-form-item>
-              <el-form-item label="文件类型" required>
-                <el-radio-group v-model="CustomFile.file_type">
-                  <el-radio label="私人文档"></el-radio>
-                  <el-radio label="团队文档"></el-radio>
-                </el-radio-group>
-              </el-form-item>
-              <el-form-item label="文件权限" required>
-                <el-select v-model="CustomFile.file_privilege" placeholder="请选择">
-                  <el-option label="仅查看" value="1"></el-option>
-                  <el-option label="可编辑" value="2"></el-option>
-                  <el-option label="可评论" value="3"></el-option>
-                  <el-option label="可分享" value="4"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-              <el-button @click="dialogCustom=false">取 消</el-button>
-              <el-button type="primary" @click="Customize" >确 定</el-button>
-            </div>
-          </el-dialog>
         </el-main>
+      <el-dialog :inline="true" title="基于模板的文档创建" :visible.sync="dialogModel" width="30%">
+        <el-form ref="modelFile" :model="modelFile" label-width="80px">
+          <el-form-item label="文件名字" required>
+            <el-input v-model="modelFile.file_name"></el-input>
+          </el-form-item>
+          <el-form-item label="文件模板" required>
+            <el-select v-model="modelFile.file_mod" placeholder="请选择">
+              <el-option label="API接口模板" value="1"></el-option>
+              <el-option label="计划书模板" value="2"></el-option>
+              <el-option label="服务器操作模板" value="3"></el-option>
+              <el-option label="算法题整理模板" value="4"></el-option>
+            </el-select>
+            <el-button type="primary" style="margin-left: 20px;" @click="preview(modelFile.file_mod)">模板预览</el-button>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogModel=false">取 消</el-button>
+          <el-button type="primary" @click="Model" >确 定</el-button>
+        </div>
+      </el-dialog>
+      <el-dialog title="自定义文档创建" :visible.sync="dialogCustom" width="30%">
+        <el-form ref="CustomFile" :model="CustomFile" label-width="80px">
+          <el-form-item label="文件名字" required>
+            <el-input v-model="CustomFile.file_name"></el-input>
+          </el-form-item>
+          <el-form-item label="文件类型" required>
+            <el-radio-group v-model="CustomFile.file_type">
+              <el-radio label="私人文档"></el-radio>
+              <el-radio label="团队文档"></el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="文件权限" required>
+            <el-select v-model="CustomFile.file_privilege" placeholder="请选择">
+              <el-option label="仅查看" value="1"></el-option>
+              <el-option label="可编辑" value="2"></el-option>
+              <el-option label="可评论" value="3"></el-option>
+              <el-option label="可分享" value="4"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogCustom=false">取 消</el-button>
+          <el-button type="primary" @click="Customize" >确 定</el-button>
+        </div>
+      </el-dialog>
         <el-dialog
           title="获得链接的人都可以查看"
           :visible.sync="dialogVisible"
@@ -142,7 +142,7 @@
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="submit" >确定</el-button>
+            <el-button type="primary" @click="shareurl" >确定</el-button>
           </div>
         </el-dialog>
     </el-container>
@@ -202,6 +202,7 @@ export default {
           showClose: true
         });
         console.log(res.data);
+        that.reload();
       }).catch(function (error) {
         that.$message({
           message: error.response.data.info,//+res.data.file_id,
@@ -212,8 +213,7 @@ export default {
         });
         console.log(error.response);
       });
-      this.dialog=false;
-      this.reload();
+
     },
     shareUrl(file_id,file_pri){
       this.file_id_tmp = file_id;
@@ -291,8 +291,8 @@ export default {
       }).catch(function (error) {
         that.$message.error(error.response.data.info);
       });
-      this.getDoclist();
-      this.reload();
+      // this.getDoclist();
+      // this.reload();
     },
     toTrash(file_id){
       var that=this
@@ -304,11 +304,11 @@ export default {
           message: "成功移到回收站",//+res.data.file_id,
           type: "success",
         });
+        that.reload();
       }).catch(function (error) {
         that.$message.error(error.response.data.info);
       });
-      this.getDoclist();
-      this.reload();
+
     },
     remove(file_id) {
       var that =this
@@ -326,7 +326,7 @@ export default {
                   showClose: true
                 });
         console.log(res.data);
-        that.getDoclist();
+        //that.getDoclist();
         that.reload();
       }).catch(function (error) {
         that.$message({
@@ -369,6 +369,10 @@ export default {
       }
 
     },
+    shareurl(){
+      this.submit();
+      this.sendInnerMessage();
+    },
     submit() {
       this.dialogVisible=false;
       var that = this
@@ -385,6 +389,8 @@ export default {
           showClose: true
         });
         console.log(res.data);
+        //that.dialog = false;
+        that.reload();
       }).catch(function (error) {
         that.$message({
           message: error.resopnse.data.info,//+res.data.file_id,
@@ -395,9 +401,6 @@ export default {
         });
         console.log(error.response);
       });
-      this.dialog = false;
-      this.reload();
-      this.sendInnerMessage();
     },
     Default() {
       var that = this;
@@ -487,7 +490,7 @@ export default {
       }
       ).then(function (res) {
         console.log(res.data);
-        that.getDoclist();
+        //that.getDoclist();
         that.reload();
       }).catch(function (error) {
         console.log(error.response);

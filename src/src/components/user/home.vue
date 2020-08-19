@@ -9,6 +9,7 @@
 <!--                <el-button type="primary" icon="el-icon-circle-plus" @click="ue"><strong>新建</strong></el-button>-->
 <!--            </div>-->
             <div>
+                <span class="userinfo" v-if="isLogin && userinfo.username">你好，{{userinfo.username}}!</span>
                 <el-dropdown trigger="hover" >
                     <span class="el-dropdown-link">
                         <i class="el-icon-user-solid el-icon--right icon-user"></i>
@@ -192,7 +193,7 @@ export default {
                 {headers: {token: window.sessionStorage.getItem("token")}}
             ).then(res=>{
                 if(res.data.code===200){
-              //      that.$message({message:  '你的新团队:'+res.data.data.name+ '  id:'+res.data.data.id+'已成功创建',
+                    //      that.$message({message:  '你的新团队:'+res.data.data.name+ '  id:'+res.data.data.id+'已成功创建',
                that.$message({message:  '你的新团队:'+res.data.data.name+ '  已成功创建',
                     type: 'success',duration:7000,showClose:true})
                     that.reload();
@@ -325,6 +326,12 @@ export default {
     }
 }
 
+.userinfo {
+    color: #c0c1c3;
+    font-size: 18px;
+    position: absolute;
+    left: 82%;
+}
 
 .user{
     color: #333;

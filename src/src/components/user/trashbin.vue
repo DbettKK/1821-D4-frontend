@@ -139,12 +139,13 @@
               message: "恢复成功",//+res.data.file_id,
               type: "success"
           });
+          that.getTabledata();
+          that.reload();
       }).catch(function (error) {
         that.$message.error(error.response.data.info);
       });
       //this.dialog=false;
-      this.getTabledata();
-      this.reload();
+
     },
     delFile(file_id){
         this.$confirm('确定此文件彻底删除?', '文档彻底删除', {
@@ -167,12 +168,13 @@
               message: "成功彻底删除",//+res.data.file_id,
               type: "success",
           });
+          that.getTabledata();
+          that.reload();
       }).catch(function (error) {
         that.$message.error(error.response.data.info);
       });
       //this.dialog2=false;
-      this.getTabledata();
-      this.reload();
+
     },
     createFile(){
         this.$confirm('确定新建一个私人文档吗?', '文档创建', {
@@ -194,12 +196,11 @@
               type: 'success'
           })
         that.addrecent();
+          that.getTabledata();
+          that.reload();
       }).catch(function (error) {
           that.$message.error(error.response.data.info);
       });
-      //this.dialog=false;
-      this.getTabledata();
-      this.reload();
     },
     emptyTrash(){
         this.$confirm('确定清空回收站所有文件?', '清空回收站', {
@@ -220,12 +221,13 @@
             message: '已经成功清空回收站',
             type: 'success'
         });
+          that.getTabledata();
+          that.reload();
       }).catch(function (error) {
         that.$messgae.error(error.response.data.info);
       });
       //this.dialog3=false;
-      this.getTabledata();
-      this.reload();
+
     },
     addrecent() {
       var that = this;
@@ -235,12 +237,13 @@
       }
       ).then(function (res) {
         console.log(res.data);
+          that.file_id='';
+          that.getTabledata();
+          that.reload();
       }).catch(function (error) {
         console.log(error.response);
       });
-      this.file_id='';
-      this.getTabledata();
-      this.reload();
+
     },
     }
   }
