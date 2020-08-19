@@ -378,7 +378,7 @@ export default {
       this.$router.push('/edit/' + file_id)
     },
     addFavorite(file_id,file_pri){
-      console.log("pri");
+   //   console.log("pri");
       console.log(file_pri);
           var that = this;
           this.$http.get('http://175.24.121.113:8000/myapp/file/favorite/',
@@ -387,13 +387,21 @@ export default {
                   params:{file_id: file_id}
               }
           ).then(function (res) {
-              console.log(res.data);
+            that.$message({
+          message: '收藏成功',
+          type: 'success'
+               })
+        //      console.log(res.data);
               that.file_id=res.data.data.file;
-              console.log(that.file_id);
+        //      console.log(that.file_id);
               that.addrecent();
           }).catch(function (error) {
-              console.log(error.response.data);
-              console.log(window.sessionStorage.getItem("token"))
+            that.$message({
+          message: error.response.data.info,
+          type: 'error'
+        })
+        //      console.log(error.response.data);
+       //       console.log(window.sessionStorage.getItem("token"))
           });
           this.getDoclist();
           this.reload();
@@ -411,16 +419,25 @@ export default {
         });
     },
     deletefile(file_id){
+      var that=this
           this.$http.get('http://175.24.121.113:8000/myapp/file/realdelete/',
               {
                   headers: {token: window.sessionStorage.getItem("token")},
                   params:{file_id: file_id}
               }
-          ).then(function (res) {
-              console.log(res.data);
+          ).then(function () {
+            that.$message({
+          message: '删除成功',
+          type: 'success'
+        })
+            //  console.log(res.data);
           }).catch(function (error) {
-              console.log(error.response.data);
-              console.log(window.sessionStorage.getItem("token"))
+            that.$message({
+          message: error.response.data,
+          type: 'error'
+        })
+           //   console.log(error.response.data);
+          //    console.log(window.sessionStorage.getItem("token"))
           });
           this.getDoclist();
           this.reload();
