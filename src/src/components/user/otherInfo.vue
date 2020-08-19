@@ -10,7 +10,7 @@
                         <p class="email" style="margin-top: 0px; margin-bottom: 0px; font-size: 13px; color: rgb(60,60,60);">{{userdata.email}}</p>
                     </div>
                 </div>
-                <el-button style="float: left" type="info" plain>
+                <el-button style="float: left" type="info" plain @click="back">
                     <i class="el-icon-left"></i><span>返回</span>
                 </el-button>
             </div>
@@ -107,6 +107,13 @@ export default {
         this.GetInfo();
     },
     methods:{
+        back(){
+            this.$router.go(-1);
+            this.$message({
+                message: '欢迎回来',
+                type: 'success'
+            })
+        },
         GetInfo(){
             var that = this;
             this.$http.get('http://175.24.121.113:8000/myapp/user/other/info/',
@@ -118,6 +125,10 @@ export default {
                 that.myproduction=res.data.data.myfiles.length;
                 that.favorite=res.data.data.kept.length;
                 console.log(res.data.data);
+                that.$message({
+                    message: '欢迎来到'+res.data.data.username+'的主页',
+                    type: 'success'
+                });
             }).catch(function(error){
                 console.log(error);
             })
