@@ -59,7 +59,7 @@
                          <el-dropdown-item icon="el-icon-share" @click.native="share_function" v-if="item.team_permission>3">分享</el-dropdown-item>
                          -->
                          <!--当文件拥有可分享权限或用户为创建者是可以看到团队空间的下拉栏中的分享-->
-                          <el-dropdown-item icon="el-icon-share" v-if="item.team_permission>=4||pri_visible(item.creator)" @click.native="shareUrl(item.id)">分享</el-dropdown-item>
+                          <el-dropdown-item icon="el-icon-share" v-if="item.team_permission>=4||pri_visible(item.creator)" @click.native="shareUrl(item.id,item.file_privilege)">分享</el-dropdown-item>
 
                          <!--限制了只有拥有足够的权限才能够更改团队文档的权限-->
                          <el-dropdown-item icon="el-icon-setting" @click.native="click_set_pri(item.id)" v-if="pri_visible(item.creator)">设置文档权限</el-dropdown-item>
@@ -197,19 +197,22 @@
                 v-clipboard:success="onCopy"
                 v-clipboard:error="onError">复制链接</el-button>
             </el-form-item>
-            <!--
-            <el-form-item label="权限" required>
-              <el-select v-model="privilege" placeholder="请选择">
-                <el-option label="仅查看" value="1"></el-option>
-                <el-option label="可编辑" value="2"></el-option>
-                <el-option label="可评论" value="3"></el-option>
-                <el-option label="可分享" value="4"></el-option>
-              </el-select>
+            <el-form-item label="同时发送站内消息">
+              <el-switch
+                v-model="innerMessage"
+                active-color="#13ce66"
+                inactive-color="#909399">
+              </el-switch>
             </el-form-item>
-            -->
+            <el-form-item v-if="innerMessage" label="分享对象的用户名或邮箱">
+              <el-input
+                v-model="shareMessageTo"
+                >
+              </el-input>
+            </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="sharedialogVisible=false" >确定</el-button>
+            <el-button type="primary" @click="sendInnerMessage" >确定</el-button>
           </div>
         </el-dialog>
     </el-container>
@@ -221,6 +224,10 @@ export default {
     inject: ['reload'],
   data() {
     return {
+      innerMessage: false,
+      shareMessageTo:'',
+      baseURL: 'http://175.24.121.113/edit/',
+      shareURL: '',
        
         file_name:'',
       file_id: null,
@@ -266,10 +273,6 @@ export default {
         team_id:'',
       },
        sharedialogVisible:false,
-    //   file_id_tmp :'',
-       shareURL:'',
-       //这里会出问题，不过等部署再说
-       baseURL: 'http://localhost:8080/edit/',
           };
 
   },
@@ -292,6 +295,34 @@ export default {
         }
     },
   methods: {
+    sendInnerMessage() {
+      var that = this
+      this.$http.post('http://175.24.121.113:8000/myapp/msg/sendInnerMessage/', this.$qs.stringify({
+                shareMessageTo: this.shareMessageTo,
+                file_id: this.file_id_tmp
+              }), {headers: {token: window.sessionStorage.getItem("token")}}
+      ).then(function (res) {
+        that.$message({
+          message: "站内分享成功",//+res.data.file_id,
+          type: "success",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
+        console.log(res.data);
+      }).catch(function (error) {
+        that.$message({
+          message: error.response.data.info,//+res.data.file_id,
+          type: "error",
+          customClass: "c-msg",
+          duration: 3000,
+          showClose: true
+        });
+        console.log(error.response);
+      });
+      this.dialog=false;
+      this.reload();
+    },
     getDoclist() {
         let str = window.atob(this.$route.params.id).substr(11);
         this.team_id=str.substr(0,str.length-2);
