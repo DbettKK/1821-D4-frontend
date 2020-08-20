@@ -14,6 +14,7 @@ import ShowUserInfo from './components/user/showUserInfo.vue'
 import TeamSpace from './components/user/TeamSpace.vue'
 import Teammember from './components/user/Teammember.vue'
 import Preview from './components/edit/preview.vue'
+import Preview2 from './components/edit/preview2.vue'
 import message_favorite from './components/user/message_favorite.vue'
 import message_comments from './components/user/message_comments.vue'
 import message_team from './components/user/message_team.vue'
@@ -106,6 +107,12 @@ const router = new Router({
       component:Preview,
       name:'Preview',
       meta:{title:'模板预览'}
+    },
+    {
+      path:'/preview2/:id',
+      component:Preview2,
+      name:'Preview',
+      meta:{title:'游客预览'}
     },
     {
       path: '/404',
