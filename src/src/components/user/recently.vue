@@ -229,7 +229,7 @@ export default {
       this.file_id_tmp = file_id;
       this.dialogVisible = true;
       this.shareURL = this.baseURL + window.btoa('hello,world'+file_id+'s')
-      this.shareURLOther = 'http://175.24.121.113/preivew/' + window.btoa('hello,world'+file_id+'s')
+      this.shareURLOther = 'http://175.24.121.113/preivew2/' + window.btoa('hello,world'+file_id+'s')
       this.privilege = String(file_pri)
     },
     onCopy: function () {
