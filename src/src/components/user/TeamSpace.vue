@@ -41,7 +41,7 @@
         <el-main>
           <el-row v-for="(page, index) of pages" :key="index" style="margin-bottom: 40px;">
             <el-col :span="8" align="left" v-for="(item, innerindex) of page" :key="item.id" :offset="innerindex > 0 ? 2 : 0" style="margin-right: -60px;">
-              <el-card :body-style="{ padding: '0px' }" shadow="hover" @click.native="edit(item.id)">
+              <el-card :body-style="{ padding: '0px' }" shadow="hover" @dblclick.native="edit(item.id)">
                 <div style="padding: 14px;">
                   <div class="top">
                     <div style="display: flex; align-items: start;">
@@ -186,17 +186,26 @@
             <el-dialog
           title="获得链接的人都可以查看"
           :visible.sync="sharedialogVisible"
-          width="30%">
+          width="40%">
           <el-form>
-            <el-form-item label="分享链接">
-              {{shareURL}}
-            </el-form-item>
-            <el-form-item label="点击复制">
-              <el-button 
-                v-clipboard:copy="shareURL"
-                v-clipboard:success="onCopy"
-                v-clipboard:error="onError">复制链接</el-button>
-            </el-form-item>
+              <el-form-item label="站内分享链接">
+                  {{shareURL}}
+              </el-form-item>
+              <el-form-item label="游客分享链接">
+                  {{shareURLOther}}
+              </el-form-item>
+              <el-form-item label="点击复制站内链接">
+                  <el-button
+                          v-clipboard:copy="shareURL"
+                          v-clipboard:success="onCopy"
+                          v-clipboard:error="onError">复制链接</el-button>
+              </el-form-item>
+              <el-form-item label="点击复制游客链接">
+                  <el-button
+                          v-clipboard:copy="shareURLOther"
+                          v-clipboard:success="onCopy"
+                          v-clipboard:error="onError">复制链接</el-button>
+              </el-form-item>
             <el-form-item label="同时发送站内消息">
               <el-switch
                 v-model="innerMessage"
@@ -229,7 +238,7 @@ export default {
       shareMessageTo:'',
       baseURL: 'http://175.24.121.113/edit/',
       shareURL: '',
-       
+       shareURLOther: '',
         file_name:'',
       file_id: null,
       del: null,
@@ -719,6 +728,7 @@ export default {
           this.file_id_tmp = file_id;
           this.sharedialogVisible = true;
           this.shareURL = this.baseURL+window.btoa('hello, world' + file_id + 's');
+          this.shareURLOther = 'http://175.24.121.113/preview/'+window.btoa('hello, world' + file_id + 's');
       }
   },
   computed: {

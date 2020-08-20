@@ -51,7 +51,9 @@
                         <el-menu-item-group style="background-color: #EDEEEF">
                             <template slot="title">个人信息</template>
                             <el-menu-item index="2-1" @click.native="showUserInfo" >个人详情</el-menu-item>
-                            <el-menu-item index="2-2" @click.native="message">消息通知</el-menu-item>
+                            <el-menu-item index="2-2" @click.native="message">
+                                消息通知
+                            </el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
                     <el-submenu index="5" style="background-color: #EDEEEF" :disabled="disabled">

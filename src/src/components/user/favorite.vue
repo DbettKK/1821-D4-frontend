@@ -106,16 +106,25 @@
         <el-dialog
           title="获得链接的人都可以查看"
           :visible.sync="dialogVisible"
-          width="30%">
+          width="40%">
           <el-form>
-            <el-form-item label="分享链接">
+            <el-form-item label="站内分享链接">
               {{shareURL}}
             </el-form-item>
-            <el-form-item label="点击复制">
+            <el-form-item label="游客分享链接">
+              {{shareURLOther}}
+            </el-form-item>
+            <el-form-item label="点击复制站内链接">
               <el-button
-                v-clipboard:copy="shareURL"
-                v-clipboard:success="onCopy"
-                v-clipboard:error="onError">复制链接</el-button>
+                      v-clipboard:copy="shareURL"
+                      v-clipboard:success="onCopy"
+                      v-clipboard:error="onError">复制链接</el-button>
+            </el-form-item>
+            <el-form-item label="点击复制游客链接">
+              <el-button
+                      v-clipboard:copy="shareURLOther"
+                      v-clipboard:success="onCopy"
+                      v-clipboard:error="onError">复制链接</el-button>
             </el-form-item>
             <el-form-item label="文档的权限为" required>
               <el-select v-model="privilege" placeholder="请选择">
@@ -156,6 +165,7 @@ export default {
       shareMessageTo:'',
       baseURL: 'http://175.24.121.113/edit/',
       shareURL: '',
+      shareURLOther: '',
       dialogVisible: false,
       file_id_tmp: null,
       privilege: '',
@@ -216,6 +226,7 @@ export default {
       this.file_id_tmp = file_id;
       this.dialogVisible = true;
       this.shareURL = this.baseURL + window.btoa('hello,world' + file_id + 's');
+      this.shareURLOther = 'http://175.24.121.113/preview/' + window.btoa('hello,world' + file_id + 's');
       this.privilege = String(file_pri)
     },
     onCopy: function () {
