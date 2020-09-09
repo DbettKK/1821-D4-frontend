@@ -64,17 +64,26 @@
         <el-dialog
           title="获得链接的人都可以查看"
           :visible.sync="dialogVisible"
-          width="30%">
+          width="40%">
           <el-form>
-            <el-form-item label="分享链接">
-              {{shareURL}}
-            </el-form-item>
-            <el-form-item label="点击复制">
-              <el-button 
-                v-clipboard:copy="shareURL"
-                v-clipboard:success="onCopy"
-                v-clipboard:error="onError">复制链接</el-button>
-            </el-form-item>
+              <el-form-item label="站内分享链接">
+                  {{shareURL}}
+              </el-form-item>
+              <el-form-item label="游客分享链接">
+                  {{shareURLOther}}
+              </el-form-item>
+              <el-form-item label="点击复制站内链接">
+                  <el-button
+                          v-clipboard:copy="shareURL"
+                          v-clipboard:success="onCopy"
+                          v-clipboard:error="onError">复制链接</el-button>
+              </el-form-item>
+              <el-form-item label="点击复制游客链接">
+                  <el-button
+                          v-clipboard:copy="shareURLOther"
+                          v-clipboard:success="onCopy"
+                          v-clipboard:error="onError">复制链接</el-button>
+              </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button type="primary" @click="dialogVisible=false" >确定</el-button>
@@ -116,8 +125,9 @@
     },
     data() {
       return {
-        baseURL: 'http://localhost:8080/edit/',
+        baseURL: 'http://175.24.121.113/edit/',
         shareURL: '',
+          shareURLOther: '',
         show_collect:false,
         dialogVisible:false,
         dialog_G:false,
@@ -173,6 +183,7 @@
           if(this.can_share){
               this.dialogVisible = true
               this.shareURL = this.baseURL + window.btoa('hello,world'+this.file_id+'s');
+              this.shareURLOther = 'http://175.24.121.113/preview2/' + window.btoa('hello,world'+this.file_id+'s');
           }else{
               this.$message({message: '您没有这个权限哦', type: 'warning'})
           }
