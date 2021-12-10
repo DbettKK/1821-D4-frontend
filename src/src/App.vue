@@ -1,11 +1,16 @@
 <template>
   <div id="app">
     <router-view v-if="isRouterActive"></router-view>
+    <Footer/>
   </div>
 </template>
 
 <script>
+import Footer from './components/Footer.vue';
 export default {
+  components:{
+    Footer
+  },
   provide(){
     return{
       reload: this.reload
@@ -36,4 +41,5 @@ export default {
 </script>
 
 <style>
+
 </style>
