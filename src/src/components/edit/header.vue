@@ -170,7 +170,7 @@
         this.team_belong=val;
       },
       get_G(){
-        this.$http.get('http://175.24.121.113:8000/myapp/team/all/get/',
+        this.$http.get(this.$API + '/team/all/get/',
                 {headers: {token: window.sessionStorage.getItem("token")}}
         ).then(res => {
           this.teamspaces = res.data.data;
@@ -228,7 +228,7 @@
       },
       Choose_G(){
         this.dialog_G=false;
-        Vue.axios.get('http://175.24.121.113:8000/myapp/file/privi/change/team/',
+        Vue.axios.get(this.$API + '/file/privi/change/team/',
               {
                 headers: {token: window.sessionStorage.getItem("token")},
                 params: {file_id: this.file_id, team_id: this.teamspace}
@@ -251,7 +251,7 @@
       },
       Submit(){
         Vue.axios.post(
-                'http://175.24.121.113:8000/myapp/mdSave/',
+                this.$API + '/mdSave/',
                 this.$qs.stringify({
                     title:this.title,
                     content:this.content
@@ -278,7 +278,7 @@
       },
       C_file(){
             Vue.axios.get(
-                'http://175.24.121.113:8000/myapp/file/favorite',
+                this.$API + '/file/favorite',
                 {
                 headers:{
                     token: window.sessionStorage.getItem('token')
@@ -295,7 +295,7 @@
       },
       Q_file(){
         Vue.axios.get(
-                'http://175.24.121.113:8000/myapp/file/cancelfavor',
+                this.$API + '/file/cancelfavor',
                 {
                 headers:{
                     token: window.sessionStorage.getItem('token')

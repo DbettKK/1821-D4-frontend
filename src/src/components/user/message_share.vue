@@ -81,7 +81,7 @@ export default {
   methods: {
       jumpto(file_id, msg_id) {
           var that=this;
-          this.$http.get('http://175.24.121.113:8000/myapp/msg/judge/file/',
+          this.$http.get(this.$API + '/msg/judge/file/',
               {headers:{token:window.sessionStorage.getItem('token')},
                   params:{file_id:file_id, msg_id: msg_id}}
           ).then(()=>{
@@ -96,7 +96,7 @@ export default {
     getmessagelist(type) {
       var that = this;
       Vue.axios.get(
-        'http://175.24.121.113:8000/myapp/getmsg/',
+        this.$API + '/getmsg/',
         {headers: {token: window.sessionStorage.getItem("token")},
         params: {msg_types: type}}
       ).then(function(res){
@@ -110,7 +110,7 @@ export default {
     setread(id) {
       var that = this;
       Vue.axios.get(
-        'http://175.24.121.113:8000/myapp/set/read/',
+        this.$API + '/set/read/',
         {headers: {token: window.sessionStorage.getItem("token")},
         params: {msg_id: id}}
       ).then(function(res){
@@ -123,7 +123,7 @@ export default {
     setunread(id) {
       var that=this;
       Vue.axios.get(
-        'http://175.24.121.113:8000/myapp/set/unread/',
+        this.$API + '/set/unread/',
         {headers: {token: window.sessionStorage.getItem("token")},
         params: {msg_id: id}}
       ).then(function(res){
@@ -136,7 +136,7 @@ export default {
     setallread() {
       var that=this;
       Vue.axios.get(
-        'http://175.24.121.113:8000/myapp/set/type/read/all/',
+        this.$API + '/set/type/read/all/',
         {headers: {token: window.sessionStorage.getItem("token")},
         params: {msg_types: 'share'}}
       ).then(function(res){
@@ -176,7 +176,7 @@ export default {
     delmsg(msg_id) {
       var that = this
       Vue.axios.get(
-        'http://175.24.121.113:8000/myapp/msg/delete/',
+        this.$API + '/msg/delete/',
         {headers: {token: window.sessionStorage.getItem("token")},
         params: {msg_id: msg_id}}
       ).then(function(res){
@@ -189,7 +189,7 @@ export default {
     delmsgall() {
       var that = this
       Vue.axios.get(
-        'http://175.24.121.113:8000/myapp/msg/delete/all/',
+        this.$API + '/msg/delete/all/',
         {headers: {token: window.sessionStorage.getItem("token")},
         params: {msg_type: 'share'}}
       ).then(function(res){

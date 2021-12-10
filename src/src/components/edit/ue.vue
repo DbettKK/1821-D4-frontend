@@ -247,7 +247,7 @@
       },
       get_comment(){
         Vue.axios.get(
-            'http://175.24.121.113:8000/myapp/file/comment/get/',
+            this.$API + '/file/comment/get/',
             {headers: {token: window.sessionStorage.getItem('token')},
               params: {file_id: this.file_id}}
         ).then(res=>{
@@ -261,7 +261,7 @@
         this.drawer=data;
       },
       GetContents(){
-        Vue.axios.get('http://175.24.121.113:8000/myapp/file/getedit/',
+        Vue.axios.get(this.$API + '/file/getedit/',
           {headers: {'token': window.sessionStorage.getItem('token')},
             params:{file_id:this.file_id}}
         ).then(res => {
@@ -288,15 +288,15 @@
         console.log($file)
         formdata.append('image', $file);
         Vue.axios.post(
-        'http://175.24.121.113:8000/myapp/picSave/',formdata,
+        this.$API + '/picSave/',formdata,
         {headers: { 'Content-Type': 'multipart/form-data' }},
         ).then((response)=>{
-        this.$refs.md.$img2Url(pos, 'http://175.24.121.113:8000/myapp/media/' + response.data.url);
+        this.$refs.md.$img2Url(pos, this.$API + '/media/' + response.data.url);
         })
       },
       getPri(type){
         var that = this;
-        this.$http.get('http://175.24.121.113:8000/myapp/'+type+'/privi/judge/',
+        this.$http.get(this.$API + '/'+type+'/privi/judge/',
                 {headers: {token: window.sessionStorage.getItem('token')},
                   params: {file_id: this.file_id}}
         ).then(function (res) {
@@ -321,7 +321,7 @@
         }
       },
       addrecent() {
-        Vue.axios.get('http://175.24.121.113:8000/myapp/file/browse/', {
+        Vue.axios.get(this.$API + '/file/browse/', {
                 params: {'file_id': this.file_id},
                   headers: {'token': window.sessionStorage.getItem("token")}
                 }
@@ -365,7 +365,7 @@
         }
       }else if(window.name == "isReload"){
         console.log("刷新")
-        this.$http.get('http://175.24.121.113:8000/myapp/file/edit/save/',
+        this.$http.get(this.$API + '/file/edit/save/',
                 {headers: {token: window.sessionStorage.getItem('token')},
                   params: {file_id: this.file_id}}
         ).then(()=>{
@@ -388,7 +388,7 @@
     },
     destroyed(){
       window.name="";
-      this.$http.get('http://175.24.121.113:8000/myapp/file/edit/save/',
+      this.$http.get(this.$API + '/file/edit/save/',
       {headers: {token: window.sessionStorage.getItem('token')},
         params: {file_id: this.file_id}}
       );

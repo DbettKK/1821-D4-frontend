@@ -199,7 +199,7 @@
      this.getUserInfo();
      this.getTeamInfo();
         this.getmembers();
-    this.$http.get('http://175.24.121.113:8000/myapp/team/check/creator/',
+    this.$http.get(this.$API + '/team/check/creator/',
         {headers: {token: window.sessionStorage.getItem('token')},
         params: {team_id: that.team_id}}
     ).then(()=>{
@@ -217,7 +217,7 @@
                 this.getDoclist();
                 this.getUserInfo();
                  this.getTeamInfo();
-                  this.$http.get('http://175.24.121.113:8000/myapp/team/check/creator/',
+                  this.$http.get(this.$API + '/team/check/creator/',
             {headers: {token: window.sessionStorage.getItem('token')},
             params: {team_id: that.team_id}}
         ).then(()=>{
@@ -235,7 +235,7 @@
     methods:{
       changename() {
             var that = this;
-            this.$http.post('http://175.24.121.113:8000/myapp/team/change/name/', this.$qs.stringify({
+            this.$http.post(this.$API + '/team/change/name/', this.$qs.stringify({
                     team_id: this.teaminfo.id,
                     name: this.teamForm.name
                 }), {headers: {token: window.sessionStorage.getItem("token")}}
@@ -263,7 +263,7 @@
     {
         var that=this;
         Vue.axios.get(
-            'http://175.24.121.113:8000/myapp/team/members/get/',
+            this.$API + '/team/members/get/',
             {
               headers: {'token': window.sessionStorage.getItem('token')},
               params:{team_id: that.team_id}}
@@ -288,7 +288,7 @@
     submitdelMember(uid,tid)
     {
         var that=this;
-        this.$http.post('http://175.24.121.113:8000/myapp/team/kickoff/', this.$qs.stringify({
+        this.$http.post(this.$API + '/team/kickoff/', this.$qs.stringify({
                    team_id: tid,//that.$route.params.id.toString(),
                    member_id:uid
               }), {headers: {token: window.sessionStorage.getItem("token")}}
@@ -318,7 +318,7 @@
     },
     getUserInfo() {
             this.$http.get(
-                'http://175.24.121.113:8000/myapp/user/info/',
+                this.$API + '/user/info/',
                 {headers: {token: window.sessionStorage.getItem("token")}}
             ).then(res=>{
                 this.userinfo.username=res.data.data.username;
@@ -334,7 +334,7 @@
     {
         var that=this;
          this.$http.get(
-                  'http://175.24.121.113:8000/myapp/team/get/', {
+                  this.$API + '/team/get/', {
               headers: {'token': window.sessionStorage.getItem('token')},
               params:{team_id: that.team_id}}
             ).then(res=>{
@@ -370,7 +370,7 @@
       },
       submitDismiss() {
           var that = this;
-          this.$http.get('http://175.24.121.113:8000/myapp/team/dismiss/',
+          this.$http.get(this.$API + '/team/dismiss/',
               {headers: {token: window.sessionStorage.getItem("token")}, params: {team_id: that.team_id}}
           ).then(() => {
               that.$message({
@@ -386,7 +386,7 @@
       },
     submitexit(){
       var that = this;
-      this.$http.get('http://175.24.121.113:8000/myapp/team/exit/',
+      this.$http.get(this.$API + '/team/exit/',
           {headers: {token: window.sessionStorage.getItem("token")}, params: {team_id: that.team_id}}
       ).then(() => {
           that.$message({
@@ -404,7 +404,7 @@
         var that = this;
         if(this.invite_mod=='1')
         {
-        this.$http.post('http://175.24.121.113:8000/myapp/team/invite/', this.$qs.stringify({
+        this.$http.post(this.$API + '/team/invite/', this.$qs.stringify({
                 team_id: that.team_id, member_id: that.inviteForm.id
               }), {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(() => {
@@ -419,7 +419,7 @@
         }
         else if(this.invite_mod=='2')
         {
-             this.$http.post('http://175.24.121.113:8000/myapp/team/invite/', this.$qs.stringify({
+             this.$http.post(this.$API + '/team/invite/', this.$qs.stringify({
                 team_id: that.team_id,member_name:that.inviteForm.name
               }), {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(() => {
@@ -434,7 +434,7 @@
         }
         else if(this.invite_mod=='3')
         {
-          this.$http.post('http://175.24.121.113:8000/myapp/team/invite/', this.$qs.stringify({
+          this.$http.post(this.$API + '/team/invite/', this.$qs.stringify({
                 team_id: that.team_id, member_email:that.inviteForm.email
               }), {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(() => {
@@ -455,7 +455,7 @@
       var that=this;
        if(this.invite_mod=='2')
         {
-             this.$http.post('http://175.24.121.113:8000/myapp/team/find/invite/', this.$qs.stringify({
+             this.$http.post(this.$API + '/team/find/invite/', this.$qs.stringify({
                 username:that.inviteForm.name
               }), {headers: {token: window.sessionStorage.getItem("token")}}        
       ).then(function(res) {
@@ -468,7 +468,7 @@
         }
         else if(this.invite_mod=='3')
         {
-          this.$http.post('http://175.24.121.113:8000/myapp/team/find/invite/', this.$qs.stringify({
+          this.$http.post(this.$API + '/team/find/invite/', this.$qs.stringify({
                 email:that.inviteForm.email
               }), {headers: {token: window.sessionStorage.getItem("token")}}
         ).then(function(res) {
@@ -486,7 +486,7 @@
     add_click(uid)
     { 
       var that=this;
-      this.$http.post('http://175.24.121.113:8000/myapp/team/invite/', this.$qs.stringify({
+      this.$http.post(this.$API + '/team/invite/', this.$qs.stringify({
                 team_id: that.team_id, member_id:uid
               }), {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(() => {
@@ -501,7 +501,7 @@
     },
     changepic() {
             var that = this;
-            this.$http.get('http://175.24.121.113:8000/myapp/team/avatar/change/',
+            this.$http.get(this.$API + '/team/avatar/change/',
                 {headers: {token: window.sessionStorage.getItem("token")}, params: {team_id: that.team_id}}
             ).then(()=>{
                 that.$message({

@@ -116,7 +116,7 @@ export default {
         },
         GetInfo(){
             var that = this;
-            this.$http.get('http://175.24.121.113:8000/myapp/user/other/info/',
+            this.$http.get(this.$API + '/user/other/info/',
                 {params:{id:this.user_id}}
             ).then(res=>{
                 that.userdata=res.data.data;
@@ -142,7 +142,7 @@ export default {
         },
         changepic() {
             var that = this;
-            this.$http.get('http://175.24.121.113:8000/myapp/user/avatar/change/',
+            this.$http.get(this.$API + '/user/avatar/change/',
                 {headers:{token:this.token}}
             ).then(()=>{
                 that.$message({

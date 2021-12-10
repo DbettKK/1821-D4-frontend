@@ -172,7 +172,7 @@ export default {
       ,
     sendEmail() {
       Vue.axios
-        .post('http://175.24.121.113:8000/myapp/email/', QS.stringify(this.loginForm))
+        .post(this.$API + '/email/', QS.stringify(this.loginForm))
         .then(response => {
               if (response.data.emailed) {
                 this.$message({
@@ -217,7 +217,7 @@ export default {
             return;
           }
           Vue.axios
-            .post('http://175.24.121.113:8000/myapp/register/', QS.stringify(this.loginForm))
+            .post(this.$API + '/register/', QS.stringify(this.loginForm))
             .then(response => {
               if (response.data.registered) {
                 // 注册成功

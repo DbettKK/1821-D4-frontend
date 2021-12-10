@@ -134,7 +134,7 @@ export default {
       ,
     sendEmail() {
       Vue.axios
-        .post('http://175.24.121.113:8000/myapp/email2/', QS.stringify(this.loginForm))
+        .post(this.$API + '/email2/', QS.stringify(this.loginForm))
         .then(response => {
               if (response.data.emailed) {
                 // 发送成功
@@ -172,7 +172,7 @@ export default {
         if (valid) {
           // 指定请求为正式提交表单
           Vue.axios
-            .post('http://175.24.121.113:8000/myapp/findpassword/', QS.stringify(this.loginForm))
+            .post(this.$API + '/findpassword/', QS.stringify(this.loginForm))
             .then(response => {
               if (response.data.code==200) {
                 // 成功找回

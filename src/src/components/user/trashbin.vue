@@ -91,7 +91,7 @@
       getTabledata() {
       var that = this;
       Vue.axios.get(
-        'http://175.24.121.113:8000/myapp/file/delete/get/',
+        this.$API + '/file/delete/get/',
         {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(function(res){
         that.tableData=res.data.data;
@@ -130,7 +130,7 @@
     },
     submitredo(){
       var that=this
-      this.$http.get('http://175.24.121.113:8000/myapp/file/isdelete/',{
+      this.$http.get(this.$API + '/file/isdelete/',{
                 headers: {token: window.sessionStorage.getItem("token")},
                 params:{file_id: this.id, is_delete: 'False'}
       }
@@ -159,7 +159,7 @@
     },
     submitdel(){
       var that=this
-      this.$http.get('http://175.24.121.113:8000/myapp/file/realdelete/',{
+      this.$http.get(this.$API + '/file/realdelete/',{
                 headers: {token: window.sessionStorage.getItem("token")},
                 params:{file_id: this.id}
       }
@@ -187,7 +187,7 @@
     }    ,
     submit(){
       var that = this;
-      this.$http.get('http://175.24.121.113:8000/myapp/file/create/pri/',
+      this.$http.get(this.$API + '/file/create/pri/',
               {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(function (res) {
         that.file_id=res.data.data.id;
@@ -213,7 +213,7 @@
     },
     Empty() {
           var that=this;
-      this.$http.get('http://175.24.121.113:8000/myapp/file/delete/all/',{
+      this.$http.get(this.$API + '/file/delete/all/',{
                 headers: {token: window.sessionStorage.getItem("token")}
       }
       ).then(function () {
@@ -231,7 +231,7 @@
     },
     addrecent() {
       var that = this;
-      this.$http.get('http://175.24.121.113:8000/myapp/file/browse/', {
+      this.$http.get(this.$API + '/file/browse/', {
         headers: {token: window.sessionStorage.getItem("token")},
         params:{file_id: that.file_id}
       }

@@ -165,7 +165,7 @@ export default {
         },
         getUserInfo() {
             this.$http.get(
-                'http://175.24.121.113:8000/myapp/user/info/',
+                this.$API + '/user/info/',
                 {headers: {token: window.sessionStorage.getItem("token")}}
             ).then(res=>{
                 this.userinfo.username=res.data.data.username;
@@ -188,7 +188,7 @@ export default {
             var that = this;
             this.createTeamVisible=false;
             this.$http.post(
-                "http://175.24.121.113:8000/myapp/team/create/",
+                this.$API + "/team/create/",
                 this.$qs.stringify({
                     team_name:this.createTeam_name
                 }),
@@ -238,7 +238,7 @@ export default {
         {
             var that = this;
             this.$http.get(
-                'http://175.24.121.113:8000/myapp/team/all/get/',
+                this.$API + '/team/all/get/',
                 {headers: {token: window.sessionStorage.getItem("token")}}
             ).then(res=>{
                 that.Teams=res.data.data;
@@ -265,7 +265,7 @@ export default {
             });
         },
         writeOff(){
-            this.$http.get('http://175.24.121.113:8000/myapp/user/writeoff/',
+            this.$http.get(this.$API + '/user/writeoff/',
                 {headers: {token: window.sessionStorage.getItem("token")}}
             ).then(function (res) {
                 console.log(res.data)
@@ -277,7 +277,7 @@ export default {
         },
         joinTeam(){
             var that=this;
-            this.$http.get('http://175.24.121.113:8000/myapp/team/join/'+this.join_team_id+'/',
+            this.$http.get(this.$API + '/team/join/'+this.join_team_id+'/',
                 {headers: {token: window.sessionStorage.getItem("token")}}
             ).then(() => {
                 that.$message({

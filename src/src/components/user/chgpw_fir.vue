@@ -44,7 +44,7 @@ export default {
     methods:{
         GetInfo(){
             var that = this;
-            this.$http.get('http://175.24.121.113:8000/myapp/user/info/',
+            this.$http.get(this.$API + '/user/info/',
                 {headers:{token:this.token}}
             ).then(res=>{
                 that.userdata=res.data.data;
@@ -55,7 +55,7 @@ export default {
         },
         CheckPwd(){
             Vue.axios.post(
-                'http://175.24.121.113:8000/myapp/user/modify/',
+                this.$API + '/user/modify/',
                 this.$qs.stringify({
                     old_password: this.loginForm.password
                 }),

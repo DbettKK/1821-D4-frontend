@@ -78,7 +78,7 @@ export default {
               if (!valid) return false;
               // 缺少请求路径login
               var that = this;
-              this.$http.post('http://175.24.121.113:8000/myapp/login/',
+              this.$http.post(this.$API + '/login/',
                   this.$qs.stringify(this.loginForm)
               ).then(function (res) {
                 console.log(res.data);

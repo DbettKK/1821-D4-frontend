@@ -175,7 +175,7 @@ export default {
     methods:{
         GetInfo(){
             var that = this;
-            this.$http.get('http://175.24.121.113:8000/myapp/user/info/',
+            this.$http.get(this.$API + '/user/info/',
                 {headers:{token:this.token}}
             ).then(res=>{
                 that.userdata=res.data.data;
@@ -194,7 +194,7 @@ export default {
         },
         gender() {
             var that = this;
-            this.$http.post('http://175.24.121.113:8000/myapp/user/info/finish/', this.$qs.stringify({
+            this.$http.post(this.$API + '/user/info/finish/', this.$qs.stringify({
                     gender: that.genderForm.gender == '男' ? 0:1
                 }), {headers: {token: window.sessionStorage.getItem("token")}}
             ).then(() => {
@@ -210,7 +210,7 @@ export default {
         },
         age() {
             var that = this;
-            this.$http.post('http://175.24.121.113:8000/myapp/user/info/finish/', this.$qs.stringify({
+            this.$http.post(this.$API + '/user/info/finish/', this.$qs.stringify({
                     age: that.ageForm.age
                 }), {headers: {token: window.sessionStorage.getItem("token")}}
             ).then(() => {
@@ -226,7 +226,7 @@ export default {
         },
         qq() {
             var that = this;
-            this.$http.post('http://175.24.121.113:8000/myapp/user/info/finish/', this.$qs.stringify({
+            this.$http.post(this.$API + '/user/info/finish/', this.$qs.stringify({
                     qq: that.qqForm.qq
                 }), {headers: {token: window.sessionStorage.getItem("token")}}
             ).then(() => {
@@ -242,7 +242,7 @@ export default {
         },
         address() {
             var that = this;
-            this.$http.post('http://175.24.121.113:8000/myapp/user/info/finish/', this.$qs.stringify({
+            this.$http.post(this.$API + '/user/info/finish/', this.$qs.stringify({
                     address: that.addressForm.address
                 }), {headers: {token: window.sessionStorage.getItem("token")}}
             ).then(() => {
@@ -258,7 +258,7 @@ export default {
         },
         phonenum() {
             var that = this;
-            this.$http.post('http://175.24.121.113:8000/myapp/user/info/finish/', this.$qs.stringify({
+            this.$http.post(this.$API + '/user/info/finish/', this.$qs.stringify({
                     phone_num: that.phoneForm.phone
                 }), {headers: {token: window.sessionStorage.getItem("token")}}
             ).then(() => {
@@ -277,7 +277,7 @@ export default {
         },
         changepic() {
             var that = this;
-            this.$http.get('http://175.24.121.113:8000/myapp/user/avatar/change/',
+            this.$http.get(this.$API + '/user/avatar/change/',
                 {headers:{token:this.token}}
             ).then(()=>{
                 that.$message({

@@ -199,7 +199,7 @@ export default {
   methods: {
     sendInnerMessage() {
       var that = this
-      this.$http.post('http://175.24.121.113:8000/myapp/msg/sendInnerMessage/', this.$qs.stringify({
+      this.$http.post(this.$API + '/msg/sendInnerMessage/', this.$qs.stringify({
                 shareMessageTo: this.shareMessageTo,
                 file_id: this.file_id_tmp
               }), {headers: {token: window.sessionStorage.getItem("token")}}
@@ -253,7 +253,7 @@ export default {
     getDoclist() {
       var that = this;
       Vue.axios.get(
-        'http://175.24.121.113:8000/myapp/file/browse/get/',
+        this.$API + '/file/browse/get/',
         {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(function(res){
         console.log(res);
@@ -287,7 +287,7 @@ export default {
     },
     addFavorite(file_id){
       var that = this;
-      this.$http.get('http://175.24.121.113:8000/myapp/file/favorite/',
+      this.$http.get(this.$API + '/file/favorite/',
               {headers: {token: window.sessionStorage.getItem("token")},
                 params:{file_id: file_id}}
       ).then(function (res) {
@@ -307,7 +307,7 @@ export default {
     },
     toTrash(file_id){
       var that=this
-      this.$http.get('http://175.24.121.113:8000/myapp/file/isdelete/',
+      this.$http.get(this.$API + '/file/isdelete/',
               {headers: {token: window.sessionStorage.getItem("token")},
                 params:{file_id: file_id}}
       ).then(function () {
@@ -323,7 +323,7 @@ export default {
     },
     remove(file_id) {
       var that =this
-      this.$http.get('http://175.24.121.113:8000/myapp/file/browse/delete/',
+      this.$http.get(this.$API + '/file/browse/delete/',
               {
                 headers: {token: window.sessionStorage.getItem("token")},
                 params:{file_id: file_id}
@@ -387,7 +387,7 @@ export default {
     submit() {
       this.dialogVisible=false;
       var that = this
-      this.$http.post('http://175.24.121.113:8000/myapp/file/privi/pri/', this.$qs.stringify({
+      this.$http.post(this.$API + '/file/privi/pri/', this.$qs.stringify({
                 privilege: this.privilege,
                 file_id: this.file_id_tmp
               }), {headers: {token: window.sessionStorage.getItem("token")}}
@@ -415,7 +415,7 @@ export default {
     },
     Default() {
       var that = this;
-      this.$http.get('http://175.24.121.113:8000/myapp/file/create/pri/',
+      this.$http.get(this.$API + '/file/create/pri/',
               {headers: {token: window.sessionStorage.getItem("token")}}
       ).then(function (res) {
         that.$message({message: '创建成功', type: 'success'});
@@ -430,7 +430,7 @@ export default {
       if(this.CustomFile.file_type==='团队文档') this.CustomFile.file_type='team';
       else this.CustomFile.file_type='private';
       var that=this;
-      this.$http.post('http://175.24.121.113:8000/myapp/file/create/customize/',
+      this.$http.post(this.$API + '/file/create/customize/',
               this.$qs.stringify({
                 file_name: that.CustomFile.file_name,
                 file_type: that.CustomFile.file_type,
@@ -462,7 +462,7 @@ export default {
       }
       else{
         this.$http
-          .post('http://175.24.121.113:8000/myapp/file/create/model/',
+          .post(this.$API + '/file/create/model/',
               this.$qs.stringify({
                 'file_name': that.modelFile.file_name,
                 'model': that.modelFile.file_mod,
@@ -495,7 +495,7 @@ export default {
     },
     addrecent(file_id) {
       var that = this;
-      this.$http.get('http://175.24.121.113:8000/myapp/file/browse/', {
+      this.$http.get(this.$API + '/file/browse/', {
         headers: {token: window.sessionStorage.getItem("token")},
         params:{file_id: file_id}
       }

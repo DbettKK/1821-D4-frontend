@@ -20,7 +20,7 @@ import qs from 'qs';
 //复制到粘贴板插件
 import VueClipboard from 'vue-clipboard2'
 
-axios.defaults.baseURL = 'http://175.24.121.113:8000/myapp/register'
+axios.defaults.baseURL = 'http://dbettkk.top:8000/myapp/register'
 //axios请求拦截
 axios.interceptors.request.use(config => {
   console.log (config)
@@ -29,6 +29,7 @@ axios.interceptors.request.use(config => {
 })
 Vue.prototype.$http = axios
 Vue.prototype.$qs = qs;
+Vue.prototype.$API = 'http://dbettkk.top:8000/myapp'
 
 Vue.use(ElementUI);
 Vue.use(VueAxios, axios)

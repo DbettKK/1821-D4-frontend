@@ -89,7 +89,7 @@
         this.drawer=data;
       },
       GetContents(){
-        Vue.axios.post('http://175.24.121.113:8000/myapp/file/create/preview/',
+        Vue.axios.post(this.$API + '/file/create/preview/',
         this.$qs.stringify({
           model:this.$route.params.mode,
         }),
@@ -102,7 +102,7 @@
         });
       },
       GetContent2(){
-        Vue.axios.get('http://175.24.121.113:8000/myapp/user/other/previewfile/',
+        Vue.axios.get(this.$API + '/user/other/previewfile/',
           {params:{
             file_id:this.file_id,
           },}

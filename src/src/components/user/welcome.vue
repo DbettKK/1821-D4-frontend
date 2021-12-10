@@ -193,7 +193,7 @@ export default {
         getUserformat() {
             var that=this;
             if(this.invite_mod=='2') {
-                this.$http.post('http://175.24.121.113:8000/myapp/team/find/invite/', this.$qs.stringify({
+                this.$http.post(this.$API + '/team/find/invite/', this.$qs.stringify({
                         username:that.inviteForm.name
                     }), {headers: {token: window.sessionStorage.getItem("token")}}
                 ).then(function(res) {
@@ -204,7 +204,7 @@ export default {
                 });
             }
             else if(this.invite_mod=='3') {
-                this.$http.post('http://175.24.121.113:8000/myapp/team/find/invite/', this.$qs.stringify({
+                this.$http.post(this.$API + '/team/find/invite/', this.$qs.stringify({
                         email:that.inviteForm.email
                     }), {headers: {token: window.sessionStorage.getItem("token")}}
                 ).then(function(res) {
@@ -223,7 +223,7 @@ export default {
         },
         GetInfo(){
             var that = this;
-            this.$http.get('http://175.24.121.113:8000/myapp/user/info/',
+            this.$http.get(this.$API + '/user/info/',
                 {headers:{token:this.token}}
             ).then(res=>{
                 that.userdata=res.data.data;
@@ -245,7 +245,7 @@ export default {
         },
         changepic() {
             var that = this;
-            this.$http.get('http://175.24.121.113:8000/myapp/user/avatar/change/',
+            this.$http.get(this.$API + '/user/avatar/change/',
                 {headers:{token:this.token}}
             ).then(()=>{
                 that.$message({
