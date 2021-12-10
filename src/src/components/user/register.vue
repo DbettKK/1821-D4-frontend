@@ -35,14 +35,14 @@
           </el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="email" >
-          <el-input v-model="loginForm.email" prefix-icon="el-icon-message" placeholder="邮箱将接收验证码"></el-input>
+          <el-input v-model="loginForm.email" prefix-icon="el-icon-message" placeholder="请输入邮箱"></el-input>
         </el-form-item>
         <el-form-item label="手机号" prop="phone_num">
           <el-input v-model="loginForm.phone_num" prefix-icon="el-icon-phone" placeholder="手机号应为11位数字"></el-input>
         </el-form-item>
         <el-form-item label="验证码" prop="code">
-          <el-input v-model="loginForm.code" prefix-icon="el-icon-document" style="width:55%" @keyup.enter.native="submitForm"></el-input>
-          <el-button style="float:right" type="success" @click="sendEmail">获取验证码</el-button>
+          <el-input v-model="loginForm.code" prefix-icon="el-icon-document" placeholder="请输入验证码" @keyup.enter.native="submitForm"></el-input>
+          <span style="margin-top: 20px;"><img :src="captcha.imageURL"></span>
         </el-form-item>
         <el-form-item class="btns">
           <el-button type="primary" @click="submitForm" style="width:300px">注册</el-button>
@@ -71,7 +71,12 @@ export default {
         password2: '',
         email: '',
         phone_num:'',
-        code: ''
+        code: '',
+        key: '',
+      },
+      captcha: {
+        key: '',
+        imageURL: '',
       },
       visible: true//控制密码可见与否,
       ,
@@ -153,19 +158,22 @@ export default {
             message: "格式不正确。",
             trigger: "blur"
           },
-        ],
-        code: [
-          {
-            len: 16,
-            message: "验证码必须是16个字符。",
-            trigger: "blur"
-          },
         ]
       }
     }
   },
-  
+  created() {
+    this.getCaptcha();
+  },
   methods: {
+    getCaptcha() {
+      this.$http.get(
+        this.$API + '/show/captcha'
+      ).then(res => {
+        this.captcha.key = res.data.data.key;
+        this.captcha.imageURL = this.$API + '/captcha/image/' + res.data.data.key;
+      }).catch();
+    },
     changePass() {
         this.visible = !(this.visible);
       }    //判断渲染，true:暗文显示，false:明文显示
@@ -216,6 +224,7 @@ export default {
             })
             return;
           }
+          this.loginForm.key = this.captcha.key;
           Vue.axios
             .post(this.$API + '/register/', QS.stringify(this.loginForm))
             .then(response => {
