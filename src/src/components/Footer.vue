@@ -4,17 +4,6 @@
     <p class="lh"><span class="text-color">©2021&nbsp;个人学习测试&nbsp;</span></p>
     <p class="lh"><span class="text-color">Powered By <a class="text-color" target=_blank href="https://github.com/vuejs/vue">Vue</a></span></p>
   </div>
-<!--  <footer id="footer" class="inner">-->
-<!--    -->
-<!--    &copy; 2021&nbsp;-&nbsp; 个人学习测试 &nbsp;-&nbsp;-->
-<!--    <a target="_blank" rel="nofollow noopener"-->
-<!--        href="http://www.miitbeian.gov.cn/"-->
-<!--        style="color: #666"-->
-<!--    >京ICP备2021037624号</a>-->
-<!--    <br> Powered by&nbsp;-->
-<!--    <a target=_blank href="https://github.com/vuejs/vue">Vue2</a>-->
-<!--  </footer>-->
-
 </template>
 
 <script>
