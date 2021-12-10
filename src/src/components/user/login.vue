@@ -66,9 +66,9 @@ export default {
   },
   //保存登录状态
   created() {
-    
+
   },
-  
+
   methods: {
     resetloginForm () {
       // console.log(this)
@@ -122,7 +122,7 @@ export default {
   padding-right: 400px;
   margin-right: 900px;
   //background-color:#e4ddd0;
-  
+
   //opacity: 20%;
   height:320px;
 }
@@ -176,7 +176,7 @@ export default {
         padding-left: 20px;
         color:#333;
     }
-    
+
   .main1 {
     height: 420px;
     text-align: center;

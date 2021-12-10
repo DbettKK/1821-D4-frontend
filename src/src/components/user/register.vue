@@ -5,7 +5,7 @@
       <div class="avatar_box">
         <img src="../../assets/logo_new.png" alt="">
       </div>
-              <div class="biaoti"> 
+              <div class="biaoti">
                <p style="color: grey">用户注册</p>
              </div>
       <el-container>
@@ -42,11 +42,13 @@
         </el-form-item>
         <el-form-item label="验证码" prop="code">
           <el-input v-model="loginForm.code" prefix-icon="el-icon-document" placeholder="请输入验证码" @keyup.enter.native="submitForm"></el-input>
-          <span style="margin-top: 20px;"><img :src="captcha.imageURL"></span>
         </el-form-item>
-        <el-form-item class="btns">
-          <el-button type="primary" @click="submitForm" style="width:300px">注册</el-button>
+        <el-form-item>
+          <img :src="captcha.imageURL">
+          <span style="margin-left: 100px"><a @click="getCaptcha" style="cursor: pointer">看不清？换一张</a></span>
         </el-form-item>
+
+        <div style="margin-bottom: 30px; text-align: center; margin-left: 45px"><el-button type="primary" @click="submitForm" style="width:300px">注册</el-button></div>
       </el-form>
       </el-main>
       </el-container>
@@ -188,7 +190,7 @@ export default {
                     type: "success",
                     customClass: "c-msg",
                     showClose: true
-                  }); 
+                  });
               } else {
                 // 发送失败
                 this.isSuccess = false;
@@ -197,7 +199,7 @@ export default {
                     type: "error",
                     customClass: "c-msg",
                     showClose: true
-                  }); 
+                  });
               }
           })
         .catch(error => {
@@ -236,7 +238,7 @@ export default {
                     type: "success",
                     customClass: "c-msg",
                     showClose: true
-                  }); 
+                  });
               } else {
                 // 注册失败
                   this.$message({
@@ -244,7 +246,7 @@ export default {
                     type: "error",
                     customClass: "c-msg",
                     showClose: true
-                  }); 
+                  });
               }
             })
             .catch(error => {
@@ -273,15 +275,15 @@ export default {
 }
 .biaoti
 {
-  position:relative; 
+  position:relative;
 text-align:center;//居中
 top:55px;
 font-size:26px;//调整字体大小
 }
 .login_box {
   opacity: 0.9;
-  width: 450px;
-  height: 550px;
+  width: 500px;
+  height: 630px;
   background-color: #fff;
   border-radius: 3px;
   position: absolute;
@@ -320,6 +322,7 @@ font-size:26px;//调整字体大小
     bottom: 0;
     width: 90%;
     box-sizing: border-box;
+    right: 10%;
   }
 
   .btns {
