@@ -44,7 +44,7 @@
           <el-input v-model="loginForm.code" prefix-icon="el-icon-document" placeholder="请输入验证码" @keyup.enter.native="submitForm"></el-input>
         </el-form-item>
         <el-form-item>
-          <img :src="captcha.imageURL">
+          <img :src="captcha.imageURL" style="vertical-align:middle;">
           <span style="margin-left: 100px"><a @click="getCaptcha" style="cursor: pointer">看不清？换一张</a></span>
         </el-form-item>
 
