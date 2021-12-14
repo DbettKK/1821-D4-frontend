@@ -163,7 +163,7 @@ export default {
     return {
       innerMessage: false,
       shareMessageTo:'',
-      baseURL: 'http://dbettkk.top/edit/',
+      baseURL: 'https://dbettkk.top/edit/',
       shareURL: '',
       shareURLOther: '',
       dialogVisible: false,
@@ -226,7 +226,7 @@ export default {
       this.file_id_tmp = file_id;
       this.dialogVisible = true;
       this.shareURL = this.baseURL + window.btoa('hello,world' + file_id + 's');
-      this.shareURLOther = 'http://dbettkk.top/preview2/' + window.btoa('hello,world' + file_id + 's');
+      this.shareURLOther = 'https://dbettkk.top/preview2/' + window.btoa('hello,world' + file_id + 's');
       this.privilege = String(file_pri)
     },
     onCopy: function () {
