@@ -21,8 +21,8 @@ export default {
 .footer {
   text-align: center;
   display: block;
-  background: #fff;
-  height: 39px;
+  background: #000;
+  height: 25px;
   width: 100%;
   position: fixed;
   bottom: 0;
