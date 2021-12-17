@@ -90,7 +90,7 @@
           </div>
         </el-dialog>
     </el-row>
-    
+
 </template>
 
 <script>
@@ -125,7 +125,7 @@
     },
     data() {
       return {
-        baseURL: 'http://175.24.121.113/edit/',
+        baseURL: 'https://dbettkk.top/edit/',
         shareURL: '',
           shareURLOther: '',
         show_collect:false,
@@ -143,7 +143,7 @@
       collect:function () {
         if(this.collect == true)
           this.show_collect=true;
-        else  
+        else
           this.show_collect=false;
       }
     },
@@ -183,7 +183,7 @@
           if(this.can_share){
               this.dialogVisible = true
               this.shareURL = this.baseURL + window.btoa('hello,world'+this.file_id+'s');
-              this.shareURLOther = 'http://175.24.121.113/preview2/' + window.btoa('hello,world'+this.file_id+'s');
+              this.shareURLOther = 'https://dbettkk.top/preview2/' + window.btoa('hello,world'+this.file_id+'s');
           }else{
               this.$message({message: '您没有这个权限哦', type: 'warning'})
           }
@@ -193,7 +193,7 @@
 
       },
       Collect() {
-        if(this.collect == true){
+        if (this.collect) {
           this.$message({
             message: '您已取消收藏',
             type: 'warning'
@@ -217,7 +217,7 @@
       },
       Add_G(){
         console.log("team:"+this.team_belong);
-        if(this.team_belong == false){
+        if (!this.team_belong) {
           this.dialog_G=true
         }
         else
@@ -259,7 +259,7 @@
                 {
                     headers: {
                         'token': window.sessionStorage.getItem('token')
-                      
+
                     },
                     params:{
                     file_id: this.file_id,
