@@ -41,12 +41,12 @@
           <el-input v-model="loginForm.phone_num" prefix-icon="el-icon-phone" placeholder="手机号应为11位数字"></el-input>
         </el-form-item>
         <el-form-item label="验证码" prop="code">
-          <el-input v-model="loginForm.code" prefix-icon="el-icon-document" placeholder="请输入验证码" @keyup.enter.native="submitForm"></el-input>
+          <el-input v-model="loginForm.code" prefix-icon="el-icon-document" placeholder="请输入验证码" @keyup.enter.native="submitForm" style="width: 50%"></el-input>
+          <img :src="captcha.imageURL" style="vertical-align:middle;max-height: 100%; margin-left: 40px" alt="">
         </el-form-item>
-        <el-form-item>
-          <img :src="captcha.imageURL" style="vertical-align:middle;">
-          <span style="margin-left: 100px"><a @click="getCaptcha" style="cursor: pointer">看不清？换一张</a></span>
-        </el-form-item>
+        <div style="text-align: right; margin-bottom: 30px">
+          <span style="margin-right: 30px; font-size: 15px"><a @click="getCaptcha" style="cursor: pointer;color: #99a9bf;">看不清？换一张</a></span>
+        </div>
 
         <div style="margin-bottom: 30px; text-align: center; margin-left: 45px"><el-button type="primary" @click="submitForm" style="width:300px">注册</el-button></div>
       </el-form>
