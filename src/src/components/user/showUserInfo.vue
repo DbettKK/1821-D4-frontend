@@ -3,11 +3,11 @@
     <el-container class="Info_Container">
         <el-header>
             <el-card class="top" :body-style="{ padding: '0px' }">
-                
+
                 <div class="background">
                     <img src="../../assets/toppic.jpg" width="100%" height="100%" alt="" />
                 </div>
-                
+
                 <div class="topcard_1">
                     <el-avatar :size="50" :src="userdata.avatar" style="margin-right: 20px"></el-avatar>
                     <div>
@@ -296,16 +296,15 @@ export default {
 <style lang="less" scoped>
 .top {
     position: relative;
-    width: 1210px;
     height: 180px;
     .background{
-        width:100%;  
+        width:100%;
         height:100%;  /**宽高100%是为了图片铺满屏幕 */
         //z-index:-1;
         position: absolute;
     }
     .topcard_1 {
-        display: flex; 
+        display: flex;
         justify-content: flex-start;
         z-index:1;
         position: relative;
@@ -316,7 +315,7 @@ export default {
 
 .middle {
     position: relative;
-    width: 1210px;
+
     height: 40px;
     color: #999;
     display: flex;
@@ -340,7 +339,6 @@ export default {
 
 .main {
     position: relative;
-    width: 860px;
     height: 350px;
     margin-top: 20px;
     color: #999;
@@ -367,7 +365,7 @@ export default {
     height: 174px;
     margin-top: 20px;
     color: #999;
-    left: 861px;
+    left: calc(100% - 350px);
     top: -372px;
     .createcenter {
         position: absolute;
@@ -387,8 +385,8 @@ export default {
     height: 174px;
     margin-top: 20px;
     color: #999;
-    left: 861px;
+  left: calc(100% - 350px);
     top: -392px
 }
-    
+
 </style>

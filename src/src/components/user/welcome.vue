@@ -44,11 +44,11 @@
                     <p v-else>地址: 未知</p>
                 </div>
             </el-card>
-            <el-card class="side">
+            <el-card class="side" style="width: 80%">
                 <div class="block">
-                    <el-carousel trigger="click" height="350px">
+                    <el-carousel style="width: 100%" trigger="click" height="350px">
                         <el-carousel-item v-for="(item, index) of piclist" :key="index">
-                            <el-image style="width: 909px; height: 350px" :fit="fits" :src="item.src"></el-image>
+                            <el-image style="max-width: 100%; height: 350px; display: inline" :fit="fits" :src="item.src"></el-image>
                         </el-carousel-item>
                     </el-carousel>
                 </div>
@@ -146,7 +146,7 @@ export default {
                 email:'',
                 create_time:''
             }],
-            fits: 'fill',
+            fits: 'cover',
             piclist: [
                 {src: 'https://i.loli.net/2020/08/19/iVMEWwe8gQO1psB.jpg'},
                 {src: 'https://i.loli.net/2020/08/19/7QrMj2dKXzvP8sm.jpg'},
@@ -264,7 +264,6 @@ export default {
 <style lang="less" scoped>
 .top {
     position: relative;
-    width: 1210px;
     height: 180px;
     .topcard_1 {
         width: 200px;
@@ -305,7 +304,6 @@ export default {
 
 .middle {
     position: relative;
-    width: 1210px;
     height: 40px;
     color: #999;
     display: flex;
@@ -345,27 +343,27 @@ export default {
 
 .side {
     position: relative;
-    width: 909px;
+  width: 100%;
     height: 350px;
     margin-top: 20px;
     left: 302px;
     top: -372px;
     .block {
-        width: 909px;
+        width: 100%;
         height: 350px;
         position: absolute;
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
         .el-carousel {
-            width: 909px;
+            width: 100%;
             height: 350px;
             position: absolute;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
             .el-carousel-item {
-                width: 909px;
+                width: 100%;
                 height: 350px;
                 position: absolute;
                 left: 50%;
